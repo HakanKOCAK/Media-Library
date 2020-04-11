@@ -1,11 +1,23 @@
 import React from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-    </div>
-  );
-}
+//Redux
+import { Provider } from 'react-redux'
+import store from './store'
 
+import './App.css';
+
+const App = () => {
+  useEffect(() => {
+  }, [])
+
+  return (
+    <Provider store={store}>
+      <Router>
+        <Fragment>
+        </Fragment>
+      </Router>
+    </Provider>
+  )
+}
 export default App;
