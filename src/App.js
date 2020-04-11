@@ -15,6 +15,7 @@ const App = () => {
     <Provider store={store}>
       <Router>
         <Fragment>
+          <Route exact path="/" component={Landing} />
         </Fragment>
       </Router>
     </Provider>
