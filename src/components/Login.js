@@ -19,9 +19,6 @@ const Login = ({ }) => {
         setIsAuthenticated(true)
     }
 
-    if (isAuthenticated) {
-        return <Redirect to='/files' />
-    }
     // Redirect if Logged in 
     if (isAuthenticated) {
         return <Redirect to='/files' />
