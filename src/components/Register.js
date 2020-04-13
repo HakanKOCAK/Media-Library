@@ -36,7 +36,7 @@ const Register = ({ }) => {
                             type="text"
                             placeholder="Name"
                             name="name"
-                            valıue={name}
+                            value={name}
                             onChange={e => onChange(e)}
                         />
                     </div>
@@ -45,7 +45,7 @@ const Register = ({ }) => {
                             type="email"
                             placeholder="Email Address"
                             name="email"
-                            valıue={email}
+                            value={email}
                             onChange={e => onChange(e)}
                         />
                     </div>
@@ -54,7 +54,7 @@ const Register = ({ }) => {
                             type="password"
                             placeholder="Password"
                             name="password"
-                            valıue={password}
+                            value={password}
                             onChange={e => onChange(e)}
                         />
                     </div>
@@ -63,7 +63,7 @@ const Register = ({ }) => {
                             type="password"
                             placeholder="Confirm Password"
                             name="password2"
-                            valıue={password2}
+                            value={password2}
                             onChange={e => onChange(e)}
                         />
                     </div>

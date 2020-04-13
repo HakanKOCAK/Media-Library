@@ -35,7 +35,7 @@ const Login = ({ }) => {
                             type="email"
                             placeholder="Email Address"
                             name="email"
-                            valıue={email}
+                            value={email}
                             onChange={e => onChange(e)}
                             required
                         />
@@ -46,7 +46,7 @@ const Login = ({ }) => {
                             placeholder="Password"
                             name="password"
                             minLength="6"
-                            valıue={password}
+                            value={password}
                             onChange={e => onChange(e)}
                         />
                     </div>
