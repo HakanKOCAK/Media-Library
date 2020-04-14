@@ -5,6 +5,7 @@ import Landing from './components/Landing'
 import Login from './components/Login'
 import Register from './components/Register'
 import Files from './components/files/Files'
+import FileDetails from './components/files/FileDetails'
 
 //Redux
 import { Provider } from 'react-redux'
@@ -26,6 +27,7 @@ const App = () => {
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/files" component={Files} />
+              <Route path="/files/:id" component={FileDetails} />
             </Switch>
           </section>
         </Fragment>

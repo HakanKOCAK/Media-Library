@@ -22,6 +22,11 @@
     text-align: left;
 }
 
+.table tr:hover{
+    cursor: pointer;
+    background-color: #f4f4f4;
+}
+
 .table td{
     padding: 1rem;
     text-align: left;

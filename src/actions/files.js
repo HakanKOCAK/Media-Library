@@ -25,18 +25,19 @@ export const getAllFiles = () => async dispatch => {
 
             let obj = {}
             let tagsOfSubmission = []
+            obj['submissionId'] = content[key].id
             obj['uploadDate'] = date
-
+            obj['data'] = {}
             Object.keys(submission).map(key => {
                 if (submission[key].name !== 'mediaLibrary' && submission[key].name !== 'submit') {
                     if (submission[key].name === 'nameSurname') {
-                        obj[submission[key].name] = `${submission[key].answer['first']} ${submission[key].answer['last']}`
+                        obj['data'] = { ...obj['data'], [submission[key].name]: { 'answer': `${submission[key].answer['first']} ${submission[key].answer['last']}`, 'qid': key } }
                     } else if (submission[key].name === 'videoAudioOther' && submission[key].answer.length !== 0) {
-                        obj[submission[key].name] = submission[key].answer
+                        obj['data'] = { ...obj['data'], [submission[key].name]: { 'answer': submission[key].answer, 'qid': key } }
                     } else if (submission[key].name === 'image' && submission[key].answer !== undefined && submission[key].answer !== null) {
-                        obj[submission[key].name] = submission[key].answer
+                        obj['data'] = { ...obj['data'], [submission[key].name]: { 'answer': submission[key].answer, 'qid': key } }
                     } else if (submission[key].name !== 'image' && submission[key].name !== 'videoAudioOther' && submission[key].name !== 'tags') {
-                        obj[submission[key].name] = submission[key].answer
+                        obj['data'] = { ...obj['data'], [submission[key].name]: { 'answer': submission[key].answer, 'qid': key } }
                     } else if (submission[key].name === 'tags' && submission[key].answer !== undefined && submission[key].answer !== null) {
                         let tags = JSON.parse(submission[key].answer)
                         tags.map(tag => {
@@ -44,7 +45,7 @@ export const getAllFiles = () => async dispatch => {
                                 tagsOfSubmission.push(tag[key])
                             })
                         })
-                        obj[submission[key].name] = tagsOfSubmission
+                        obj['data'] = { ...obj['data'], [submission[key].name]: { 'answer': tagsOfSubmission, 'qid': key } }
                     }
                 }
             })

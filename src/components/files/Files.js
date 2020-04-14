@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { connect } from 'react-redux';
-
 import { getAllFiles } from '../../actions/files';
 
 import FileList from './FileList';

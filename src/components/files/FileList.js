@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
-const FileList = () => {
+import '../../styles/Files.css'
+
+const FileList = (props) => {
     const dispatch = useDispatch();
     const files = useSelector(({ files }) => files.entities);
 
+    console.log(files)
     if (!files) {
         return null;
     }
@@ -15,6 +19,10 @@ const FileList = () => {
                 There are no files.
             </div>
         )
+    }
+
+    const handleClick = (item) => {
+        props.history.push('/files/' + item.submissionId, { file: item });
     }
     return (
         <table className="table">
@@ -30,14 +38,14 @@ const FileList = () => {
                 </tr>
             </thead>
             <tbody>
-                {files.map((e, index) => {
+                {files.map(e => {
                     return (
-                        <tr key={`file${index + 1}`}>
+                        <tr key={e.submissionId} onClick={event => handleClick(e)}>
                             <td>
-                                {e.nameSurname}
+                                {e.data.nameSurname.answer}
                             </td>
                             <td>
-                                {e.email}
+                                {e.data.email.answer}
                             </td>
                             <td>
                                 {e.uploadDate}
@@ -46,7 +54,7 @@ const FileList = () => {
                                 -
                             </td>
                             <td>
-                                {e.fileType}
+                                {e.data.fileType.answer}
                             </td>
                             <td>
                                 -
@@ -62,4 +70,4 @@ const FileList = () => {
     )
 }
 
-export default FileList
+export default withRouter(FileList);
