@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Landing from './components/Landing'
 import Login from './components/Login'
 import Register from './components/Register'
-import Files from './components/Files'
+import Files from './components/files/Files'
 
 //Redux
 import { Provider } from 'react-redux'

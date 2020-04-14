@@ -4,7 +4,7 @@ import {
 } from '../actions/types';
 
 const initialState = {
-    files: null
+    entities: null
 }
 
 export default function (state = initialState, action) {
@@ -14,7 +14,7 @@ export default function (state = initialState, action) {
         case GET_FILES_SUCCESS:
             return {
                 ...state,
-                files: payload,
+                entities: payload,
             }
         case GET_FILES_FAIL:
             return {

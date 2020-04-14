@@ -10,13 +10,23 @@ export const getAllFiles = () => async dispatch => {
                 'apiKey': apiKey
             }
         }
-        const res = await (await axios.get(`https://api.jotform.com/form/${formId}/submissions`, config)).data.content
+        const res = await (await axios.get(`https://api.jotform.com/form/${formId}/submissions`, config)).data
+
+        console.log(res)
+        const content = res.content
+
         let answers = []
 
-        Object.keys(res).map(key => {
-            const submission = res[key].answers
+        Object.keys(content).map(key => {
+            const submission = content[key].answers
+
+            const createdAt = content[key].created_at.split(' ')[0].split('-')
+            const date = `${createdAt[2]}/${createdAt[1]}/${createdAt[0]}`
+
             let obj = {}
             let tagsOfSubmission = []
+            obj['uploadDate'] = date
+
             Object.keys(submission).map(key => {
                 if (submission[key].name !== 'mediaLibrary' && submission[key].name !== 'submit') {
                     if (submission[key].name === 'nameSurname') {
@@ -46,10 +56,8 @@ export const getAllFiles = () => async dispatch => {
             payload: answers
         })
     } catch (error) {
-        console.log(error)
         dispatch({
-            type: GET_FILES_FAIL,
-            payload: { status: error.response.status }
+            type: GET_FILES_FAIL
         })
     }
 }
