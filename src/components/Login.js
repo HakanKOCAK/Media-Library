@@ -50,7 +50,7 @@ const Login = ({ }) => {
                             onChange={e => onChange(e)}
                         />
                     </div>
-                    <input type="submit" value="Login" />
+                    <input type="submit" value="Sign In" />
                 </form>
                 <p >
                     Don't have an account? <Link to="/register">Sign Up</Link>
