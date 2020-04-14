@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Landing from './components/Landing'
 import Login from './components/Login'
 import Register from './components/Register'
+import Files from './components/Files'
 
 //Redux
 import { Provider } from 'react-redux'
@@ -24,6 +25,7 @@ const App = () => {
             <Switch >
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Route exact path="/files" component={Files} />
             </Switch>
           </section>
         </Fragment>

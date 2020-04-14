@@ -1,2 +1,2 @@
-export const GET_FILES_SUCCESS = 'GET FILE SUCCESS';
-export const GET_FILES_FAIL = 'GET FILE FAIL';
+export const GET_FILES_SUCCESS = 'GET FILES SUCCESS';
+export const GET_FILES_FAIL = 'GET FILES FAIL';
