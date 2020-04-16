@@ -6,50 +6,89 @@ export const getAllFiles = () => async dispatch => {
     try {
         const config = {
             params: {
-                'Content-Type': 'application/json',
                 'apiKey': apiKey
             }
         }
-        const res = await (await axios.get(`https://api.jotform.com/form/${formId}/submissions`, config)).data
+
+        const res = await axios.get(`https://api.jotform.com/form/${formId}/submissions`, config)
+        const content = res.data.content
 
         console.log(res)
-        const content = res.content
-
-        let answers = []
-
-        Object.keys(content).map(key => {
+        const answers = Object.keys(content).map(key => {
             const submission = content[key].answers
 
             const createdAt = content[key].created_at.split(' ')[0].split('-')
             const date = `${createdAt[2]}/${createdAt[1]}/${createdAt[0]}`
 
-            let obj = {}
-            let tagsOfSubmission = []
-            obj['submissionId'] = content[key].id
-            obj['uploadDate'] = date
-            obj['data'] = {}
+            let submissionDetails = {}
+            submissionDetails['submissionId'] = content[key].id
+            submissionDetails['uploadDate'] = date
+            submissionDetails['data'] = {}
+
             Object.keys(submission).map(key => {
-                if (submission[key].name !== 'mediaLibrary' && submission[key].name !== 'submit') {
-                    if (submission[key].name === 'nameSurname') {
-                        obj['data'] = { ...obj['data'], [submission[key].name]: { 'answer': `${submission[key].answer['first']} ${submission[key].answer['last']}`, 'qid': key } }
-                    } else if (submission[key].name === 'videoAudioOther' && submission[key].answer.length !== 0) {
-                        obj['data'] = { ...obj['data'], [submission[key].name]: { 'answer': submission[key].answer, 'qid': key } }
-                    } else if (submission[key].name === 'image' && submission[key].answer !== undefined && submission[key].answer !== null) {
-                        obj['data'] = { ...obj['data'], [submission[key].name]: { 'answer': submission[key].answer, 'qid': key } }
-                    } else if (submission[key].name !== 'image' && submission[key].name !== 'videoAudioOther' && submission[key].name !== 'tags') {
-                        obj['data'] = { ...obj['data'], [submission[key].name]: { 'answer': submission[key].answer, 'qid': key } }
-                    } else if (submission[key].name === 'tags' && submission[key].answer !== undefined && submission[key].answer !== null) {
-                        let tags = JSON.parse(submission[key].answer)
-                        tags.map(tag => {
+                const question = submission[key];
+                const questionName = question.name
+                const questionAnswer = question.answer
+
+                switch (questionName) {
+                    case 'nameSurname':
+                        submissionDetails['data'] = {
+                            ...submissionDetails['data'],
+                            [questionName]: {
+                                'answer': `${questionAnswer['first']} ${questionAnswer['last']}`,
+                                'qid': key
+                            }
+                        }
+                        break;
+                    case 'videoAudioOther':
+                        if (questionAnswer.length !== 0) {
+                            submissionDetails['data'] = {
+                                ...submissionDetails['data'],
+                                [questionName]: {
+                                    'answer': questionAnswer,
+                                    'qid': key
+                                }
+                            }
+                        }
+                        break;
+                    case 'image':
+                        if (questionAnswer !== undefined && questionAnswer !== null) {
+                            submissionDetails['data'] = {
+                                ...submissionDetails['data'],
+                                [questionName]: {
+                                    'answer': questionAnswer,
+                                    'qid': key
+                                }
+                            }
+                        }
+                        break;
+                    case 'tags':
+                        const tags = JSON.parse(questionAnswer)
+                        const tagsOfSubmission = tags.map(tag => {
                             Object.keys(tag).map(key => {
-                                tagsOfSubmission.push(tag[key])
+                                return tag[key]
                             })
                         })
-                        obj['data'] = { ...obj['data'], [submission[key].name]: { 'answer': tagsOfSubmission, 'qid': key } }
-                    }
+
+                        submissionDetails['data'] = {
+                            ...submissionDetails['data'],
+                            [questionName]: {
+                                'answer': tagsOfSubmission,
+                                'qid': key
+                            }
+                        }
+                        break;
+                    default:
+                        if (questionName !== 'mediaLibrary' && questionName !== 'submit') {
+                            submissionDetails['data'] = {
+                                ...submissionDetails['data'],
+                                [questionName]: { 'answer': questionAnswer, 'qid': key }
+                            }
+                        }
+                        break;
                 }
             })
-            answers.push(obj)
+            return submissionDetails;
         })
 
         dispatch({

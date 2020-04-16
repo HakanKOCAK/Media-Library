@@ -8,7 +8,6 @@ const FileList = (props) => {
     const dispatch = useDispatch();
     const files = useSelector(({ files }) => files.entities);
 
-    console.log(files)
     if (!files) {
         return null;
     }
@@ -26,6 +25,7 @@ const FileList = (props) => {
     }
     return (
         <table className="table">
+
             <thead>
                 <tr>
                     <th>Name Surname</th>
