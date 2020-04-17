@@ -1,26 +1,33 @@
 import React, { Fragment, useState } from 'react'
 import { Link, Redirect } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
+import { submitLogin } from '../actions/login';
 
-const Login = ({ }) => {
-    const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-    })
+const Login = () => {
+    const [email, setEmail] = useState('');
+    const dispatch = useDispatch();
+    const [password, setPassword] = useState('');
+    const login = useSelector(({ login }) => login.success);
+    const token = localStorage.getItem('medialibrary.user.token') || login || "";
 
-    const [isAuthenticated, setIsAuthenticated] = useState();
+    const onChange = event => {
+        const { name, value } = event.currentTarget;
 
-    const { email, password } = formData
-
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
-
-    const onSubmit = async e => {
-        e.preventDefault()
-        setIsAuthenticated(true)
+        if (name === 'userEmail') {
+            setEmail(value);
+        }
+        else if (name === 'userPassword') {
+            setPassword(value);
+        }
     }
 
-    // Redirect if Logged in 
-    if (isAuthenticated) {
+    const onSubmit = async (event, email, password) => {
+        event.preventDefault();
+        dispatch(submitLogin(email, password));
+    }
+
+    //Redirect if Logged in 
+    if (token) {
         return <Redirect to='/files' />
     }
 
@@ -29,14 +36,14 @@ const Login = ({ }) => {
             <section >
                 <h1 >Sign In</h1>
                 <p><i className="fas fa-user"></i> Sign Into Your Account</p>
-                <form onSubmit={e => onSubmit(e)}>
+                <form onSubmit={event => onSubmit(event, email, password)}>
                     <div >
                         <input
                             type="email"
                             placeholder="Email Address"
-                            name="email"
+                            name="userEmail"
                             value={email}
-                            onChange={e => onChange(e)}
+                            onChange={event => onChange(event)}
                             required
                         />
                     </div>
@@ -44,10 +51,10 @@ const Login = ({ }) => {
                         <input
                             type="password"
                             placeholder="Password"
-                            name="password"
+                            name="userPassword"
                             minLength="6"
                             value={password}
-                            onChange={e => onChange(e)}
+                            onChange={event => onChange(event)}
                         />
                     </div>
                     <input type="submit" value="Sign In" />
@@ -60,8 +67,4 @@ const Login = ({ }) => {
     )
 }
 
-const mapStateToProps = state => ({
-
-})
-
-export default connect(mapStateToProps, {})(Login)
+export default Login
