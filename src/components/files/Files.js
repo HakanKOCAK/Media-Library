@@ -28,7 +28,7 @@ const Files = ({ getAllFiles, isAuthenticated }) => {
 }
 
 const mapStateToProps = state => ({
-    isAuthenticated: true
+
 })
 
 export default connect(mapStateToProps, { getAllFiles })(Files)

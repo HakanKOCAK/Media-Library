@@ -1,18 +1,27 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
+
+import '../styles/Landing.css';
 
 const Landing = () => {
+
+    const token = localStorage.getItem('medialibrary.user.token')
+
+    //Redirect if logged in
+    if (token) {
+        return <Redirect to='/files' />
+    }
     return (
-        <section >
-            <div >
-                <div >
-                    <h1>Media Library</h1>
-                    <p>
-                        Create/edit tags added to the uploaded file.
-                     </p>
-                    <div >
-                        <Link to="/register">Sign Up</Link>
-                        <Link to="/login">Sign In</Link>
+        <section className="landing">
+            <div className="dark-overlay">
+                <div className="landing-inner">
+                    <h1 className="x-large">Media Library</h1>
+                    <p className="lead">
+                        Create/Update/Delete tags added to files.
+                    </p>
+                    <div>
+                        <Link to="/register" className="btn btn-primary">Sign Up</Link>
+                        <Link to="/login" className="btn btn-light">Sign In</Link>
                     </div>
                 </div>
             </div>
