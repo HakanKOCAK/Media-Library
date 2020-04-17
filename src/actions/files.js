@@ -41,14 +41,18 @@ const normalizeResponse = (submission, submissionDetails, key) => {
             break;
         case 'tags':
             if (questionAnswer) {
-                const tags = JSON.parse(questionAnswer)
                 const tagsOfSubmission = []
-
-                tags.map(tag => {
-                    Object.keys(tag).map(key => {
-                        tagsOfSubmission.push(tag[key])
+                try {
+                    const tags = JSON.parse(questionAnswer)
+                    tags.map(tag => {
+                        Object.keys(tag).map(key => {
+                            tagsOfSubmission.push(tag[key])
+                        })
                     })
-                })
+
+                } catch (error) {
+
+                }
 
                 submissionDetails.data = {
                     ...submissionDetails.data,
