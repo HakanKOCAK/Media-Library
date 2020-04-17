@@ -1,5 +1,2 @@
 export const GET_FILES_SUCCESS = 'GET FILES SUCCESS';
 export const GET_FILES_FAIL = 'GET FILES FAIL';
-
-export const LOGIN_ERROR = 'LOGIN_ERROR';
-export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';

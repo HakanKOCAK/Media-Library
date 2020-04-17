@@ -5,7 +5,7 @@ import { getAllFiles } from '../../actions/files';
 import FileList from './FileList';
 import '../../styles/Files.css';
 
-const Files = ({ getAllFiles }) => {
+const Files = ({ getAllFiles, isAuthenticated }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -22,6 +22,7 @@ const Files = ({ getAllFiles }) => {
 }
 
 const mapStateToProps = state => ({
+    isAuthenticated: true
 })
 
 export default connect(mapStateToProps, { getAllFiles })(Files)
