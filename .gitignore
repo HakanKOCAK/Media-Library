@@ -2,7 +2,7 @@
 node_modules
 scripts/flow/*/.flowconfig
 src/config/config.js
-Src/services/firebase/js
+src/services/firebase/js
 *~
 *.pyc
 .grunt
