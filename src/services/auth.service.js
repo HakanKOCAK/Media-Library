@@ -1,9 +1,25 @@
 import { auth } from './firebase';
 
 class service {
+    createUserWithEmailAndPassword = (email, password) => {
+        return new Promise((resolve, reject) => {
+            auth.createUserWithEmailAndPassword(email.trim(), password)
+                .then(resp => {
+                    resp.user.getIdToken(true).then(token => {
+                        this.setSession(token);
+                        resolve({ "token": token })
+                    })
+                })
+                .catch(error => {
+                    console.log(error)
+                    reject(error)
+                })
+        });
+    }
+
     signInWithEmailAndPassword = (email, password) => {
         return new Promise((resolve, reject) => {
-            auth.signInWithEmailAndPassword(email, password)
+            auth.signInWithEmailAndPassword(email.trim(), password)
                 .then(resp => {
                     resp.user.getIdToken(true).then(token => {
                         this.setSession(token);

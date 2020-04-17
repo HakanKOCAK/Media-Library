@@ -1,27 +1,42 @@
 import React, { Fragment, useState } from 'react'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom'
+import { submitRegister } from '../actions/register';
 
-const Register = ({ }) => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        password2: ''
-    })
+const Register = () => {
+    const dispatch = useDispatch();
 
-    const { name, email, password, password2 } = formData
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [password2, setPassword2] = useState('');
 
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
+    const register = useSelector(({ register }) => register.success);
+    const token = localStorage.getItem('medialibrary.user.token') || register;
 
-    const [isAuthenticated, setIsAuthenticated] = useState();
+    const onChange = event => {
+        const { name, value } = event.currentTarget;
 
-    const onSubmit = async e => {
-        e.preventDefault()
-        setIsAuthenticated(true)
+        if (name === 'userEmail') {
+            setEmail(value);
+        } else if (name === 'userPassword') {
+            setPassword(value);
+        } else if (name === 'userPassword2') {
+            setPassword2(value);
+        }
     }
 
-    if (isAuthenticated) {
+    const onSubmit = async (event, email, password, password2) => {
+        event.preventDefault()
+
+        if (password === password2) {
+            dispatch(submitRegister(email, password));
+        } else {
+            console.log('passwords do not match')
+        }
+
+    }
+
+    if (token) {
         return <Redirect to='/files' />
     }
 
@@ -30,41 +45,32 @@ const Register = ({ }) => {
             <section >
                 <h1 >Sign Up</h1>
                 <p ><i className="fas fa-user"></i> Create Your Account</p>
-                <form onSubmit={e => onSubmit(e)}>
-                    <div >
-                        <input
-                            type="text"
-                            placeholder="Name"
-                            name="name"
-                            value={name}
-                            onChange={e => onChange(e)}
-                        />
-                    </div>
+                <form onSubmit={event => onSubmit(event, email, password, password2)}>
                     <div >
                         <input
                             type="email"
                             placeholder="Email Address"
-                            name="email"
+                            name="userEmail"
                             value={email}
-                            onChange={e => onChange(e)}
+                            onChange={event => onChange(event)}
                         />
                     </div>
                     <div>
                         <input
                             type="password"
                             placeholder="Password"
-                            name="password"
+                            name="userPassword"
                             value={password}
-                            onChange={e => onChange(e)}
+                            onChange={event => onChange(event)}
                         />
                     </div>
                     <div >
                         <input
                             type="password"
                             placeholder="Confirm Password"
-                            name="password2"
+                            name="userPassword2"
                             value={password2}
-                            onChange={e => onChange(e)}
+                            onChange={event => onChange(event)}
                         />
                     </div>
                     <input type="submit" value="Register" />
@@ -81,4 +87,4 @@ const mapStateToProps = state => ({
 
 })
 
-export default connect(mapStateToProps, {})(Register)
+export default Register
