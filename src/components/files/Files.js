@@ -7,10 +7,15 @@ import '../../styles/Files.css';
 
 const Files = ({ getAllFiles, isAuthenticated }) => {
     const dispatch = useDispatch();
-
+    const token = localStorage.getItem('medialibrary.user.token') || login || "";
     useEffect(() => {
         getAllFiles();
     }, [])
+
+    //Redirect if not Logged in 
+    if (!token) {
+        return <Redirect to='/' />
+    }
 
     return (
 
