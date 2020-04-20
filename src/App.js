@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-
+import Auth from './auth/Auth';
 import Landing from './components/Landing'
 import Login from './components/Login'
 import Register from './components/Register'
@@ -19,8 +19,8 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <Router>
-        <Fragment>
+      <Auth>
+        <Router>
           <Route exact path="/" component={Landing} />
           <section>
             <Switch >
@@ -30,8 +30,8 @@ const App = () => {
               <Route path="/files/:id" component={FileDetails} />
             </Switch>
           </section>
-        </Fragment>
-      </Router>
+        </Router>
+      </Auth>
     </Provider>
   )
 }

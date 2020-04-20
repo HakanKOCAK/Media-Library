@@ -6,3 +6,9 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 
 export const REGISTER_ERROR = 'REGISTER_ERROR';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
+
+export const SET_USER_DATA = 'SET USER DATA';
+export const REMOVE_USER_DATA = 'REMOVED USER DATA';
+export const USER_LOGGED_OUT = 'USER LOGGED OUT';
+
+

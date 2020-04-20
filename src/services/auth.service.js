@@ -1,19 +1,27 @@
 import { auth } from './firebase';
 
 class service {
+
+    onAuthStateChanged = (callback) => {
+        if (!auth) {
+            return;
+        }
+        auth.onAuthStateChanged(callback);
+    };
+
     createUserWithEmailAndPassword = (email, password) => {
         return new Promise((resolve, reject) => {
             auth.createUserWithEmailAndPassword(email.trim(), password)
                 .then(resp => {
                     resp.user.getIdToken(true).then(token => {
-                        this.setSession(token);
-                        resolve({ "token": token })
+                        resolve(token);
                     })
                 })
                 .catch(error => {
                     console.log(error)
                     reject(error)
                 })
+            resolve();
         });
     }
 
@@ -22,8 +30,7 @@ class service {
             auth.signInWithEmailAndPassword(email.trim(), password)
                 .then(resp => {
                     resp.user.getIdToken(true).then(token => {
-                        this.setSession(token);
-                        resolve({ "token": token })
+                        resolve(token);
                     })
                 })
                 .catch(error => {
@@ -33,16 +40,16 @@ class service {
         });
     }
 
-    setSession = (token) => {
-        if (token !== null) {
-            console.log(token)
-            localStorage.setItem('medialibrary.user.token', token);
-            localStorage.setItem('medialibrary.user.token.expiresAt', Date.now() + 3600000);
-        } else {
-            localStorage.removeItem('medialibrary.user.token');
-            localStorage.removeItem('medialibrary.user.token.expiresAt');
-        }
-    };
+    // setSession = (token) => {
+    //     if (token !== null) {
+    //         console.log(token)
+    //         localStorage.setItem('medialibrary.user.token', token);
+    //         localStorage.setItem('medialibrary.user.token.expiresAt', Date.now() + 3600000);
+    //     } else {
+    //         localStorage.removeItem('medialibrary.user.token');
+    //         localStorage.removeItem('medialibrary.user.token.expiresAt');
+    //     }
+    // };
 }
 
 const authService = new service();

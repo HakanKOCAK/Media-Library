@@ -11,6 +11,7 @@ const Landing = () => {
     if (token) {
         return <Redirect to='/files' />
     }
+    
     return (
         <section className="landing">
             <div className="dark-overlay">
