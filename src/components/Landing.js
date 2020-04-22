@@ -4,9 +4,7 @@ import { Link, Redirect } from 'react-router-dom'
 import '../styles/Landing.css';
 
 const Landing = (props) => {
-
     const token = localStorage.getItem('medialibrary.user.token')
-
     //Redirect if logged in
     if (token) {
         return <Redirect to='/files' />

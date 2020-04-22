@@ -15,10 +15,10 @@ const Navbar = ({ user: { isAuthenticated, loading } }) => {
     const authLinks = (
         <ul>
             <li>
-                <a onClick={event => logout(event)} href='/'>
+                <Link to='/' onClick={event => logout(event)}>
                     <i className='fas fa-sign-out-alt'></i>{' '}
                     <span>Signout</span>
-                </a>
+                </Link>
             </li>
         </ul>
     )

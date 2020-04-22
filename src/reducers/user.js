@@ -1,4 +1,4 @@
-import { SET_USER_DATA, USER_LOGGED_OUT } from '../actions/types';
+import { SET_USER_DATA, REMOVE_USER_DATA, USER_LOGGED_OUT } from '../actions/types';
 
 const initialState = {
     isAuthenticated: false
@@ -13,6 +13,7 @@ const user = function (state = initialState, action) {
                     isAuthenticated: action.payload
                 };
             }
+        case REMOVE_USER_DATA:
         case USER_LOGGED_OUT:
             {
                 return {

@@ -31,12 +31,12 @@ export function removeUserData() {
 
 export function logoutUser() {
 
-    return (dispatch, getState) => {
-        removeUserData();
+    return (dispatch) => {
         authService.signOut();
-
+        dispatch(removeUserData());
         dispatch({
-            type: USER_LOGGED_OUT
+            type: USER_LOGGED_OUT,
+            payload: false
         })
     }
 }
