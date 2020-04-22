@@ -39,11 +39,11 @@ const Register = ({ isAuthenticated }) => {
 
     return (
         <Fragment>
-            <section >
-                <h1 >Sign Up</h1>
-                <p ><i className="fas fa-user"></i> Create Your Account</p>
-                <form onSubmit={event => onSubmit(event, email, password, password2)}>
-                    <div >
+            <section className="container">
+                <h1 className="large text-primary">Sign Up</h1>
+                <p className="lead"><i className="fas fa-user"></i> Create Your Account</p>
+                <form className="form" onSubmit={event => onSubmit(event, email, password, password2)}>
+                    <div className="form-group">
                         <input
                             type="email"
                             placeholder="Email Address"
@@ -52,7 +52,7 @@ const Register = ({ isAuthenticated }) => {
                             onChange={event => onChange(event)}
                         />
                     </div>
-                    <div>
+                    <div className="form-group">
                         <input
                             type="password"
                             placeholder="Password"
@@ -61,7 +61,7 @@ const Register = ({ isAuthenticated }) => {
                             onChange={event => onChange(event)}
                         />
                     </div>
-                    <div >
+                    <div className="form-group">
                         <input
                             type="password"
                             placeholder="Confirm Password"
@@ -70,9 +70,9 @@ const Register = ({ isAuthenticated }) => {
                             onChange={event => onChange(event)}
                         />
                     </div>
-                    <input type="submit" value="Register" />
+                    <input className="btn btn-primary" type="submit" value="Register" />
                 </form>
-                <p>
+                <p className="my-1">
                     Already have an account? <Link to="/login">Sign In</Link>
                 </p>
             </section>
