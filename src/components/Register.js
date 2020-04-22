@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import React, { Fragment, useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom'
 import { submitRegister } from '../actions/register';
 
@@ -9,9 +9,15 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
+    const [isLoggedin, setStatus] = useState()
+    const [success, setSuccess] = useState();
+    const [error, setError] = useState();
 
-    const register = useSelector(({ register }) => register.success);
-    const token = localStorage.getItem('medialibrary.user.token') || register;
+    useEffect(() => {
+        const token = localStorage.getItem('medialibrary.user.token') || success;
+
+        setStatus(token);
+    }, [success])
 
     const onChange = event => {
         const { name, value } = event.currentTarget;
@@ -29,14 +35,17 @@ const Register = () => {
         event.preventDefault()
 
         if (password === password2) {
-            dispatch(submitRegister(email, password));
+            dispatch(submitRegister(email, password)).then(response => {
+                setSuccess(response.success);
+                setError(response.error);
+            });
         } else {
             console.log('passwords do not match')
         }
 
     }
 
-    if (token) {
+    if (isLoggedin) {
         return <Redirect to='/files' />
     }
 

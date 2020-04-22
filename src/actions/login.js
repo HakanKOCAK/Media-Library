@@ -7,14 +7,9 @@ export function submitLogin(email, password) {
         authService.signInWithEmailAndPassword(email, password)
             .then((token) => {
                 dispatch(setUserData(token));
-                return dispatch({
-                    type: LOGIN_SUCCESS
-                });
+                return { success: true, error: null };
             })
             .catch(error => {
-                return dispatch({
-                    type: LOGIN_ERROR,
-                    payload: error
-                });
+                return { success: false, error: error };
             });
 }

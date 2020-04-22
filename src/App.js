@@ -22,14 +22,12 @@ const App = () => {
       <Auth>
         <Router>
           <Route exact path="/" component={Landing} />
-          <section>
-            <Switch >
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/files" component={Files} />
-              <Route path="/files/:id" component={FileDetails} />
-            </Switch>
-          </section>
+          <Switch >
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/files" component={Files} />
+            <Route path="/files/:id" component={FileDetails} />
+          </Switch>
         </Router>
       </Auth>
     </Provider>

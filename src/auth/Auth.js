@@ -41,7 +41,7 @@ class Auth extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         setUserData: userActions.setUserData,
-        removeUserData: userActions.removeUserData,
+        removeUserData: userActions.removeUserData
     },
         dispatch);
 }

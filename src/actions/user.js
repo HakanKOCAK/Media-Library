@@ -23,3 +23,15 @@ export function removeUserData() {
         })
     }
 }
+
+export function logoutUser() {
+
+    return (dispatch, getState) => {
+        removeUserData();
+        authService.signOut();
+
+        dispatch({
+            type: USER_LOGGED_OUT
+        })
+    }
+}

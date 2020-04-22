@@ -1,15 +1,21 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { Link, Redirect } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { submitLogin } from '../actions/login';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
     const dispatch = useDispatch();
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const login = useSelector(({ login }) => login.success);
-    const token = localStorage.getItem('medialibrary.user.token') || login || "";
+    const [isLoggedin, setStatus] = useState()
+    const [success, setSuccess] = useState();
+    const [error, setError] = useState();
 
+    useEffect(() => {
+        const token = localStorage.getItem('medialibrary.user.token') || success;
+
+        setStatus(token);
+    }, [success])
     const onChange = event => {
         const { name, value } = event.currentTarget;
 
@@ -23,11 +29,14 @@ const Login = () => {
 
     const onSubmit = async (event, email, password) => {
         event.preventDefault();
-        dispatch(submitLogin(email, password));
+        dispatch(submitLogin(email, password)).then(response => {
+            setSuccess(response.success);
+            setError(response.error);
+        });
     }
 
     //Redirect if Logged in 
-    if (token) {
+    if (isLoggedin) {
         return <Redirect to='/files' />
     }
 

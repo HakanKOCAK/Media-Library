@@ -40,16 +40,12 @@ class service {
         });
     }
 
-    // setSession = (token) => {
-    //     if (token !== null) {
-    //         console.log(token)
-    //         localStorage.setItem('medialibrary.user.token', token);
-    //         localStorage.setItem('medialibrary.user.token.expiresAt', Date.now() + 3600000);
-    //     } else {
-    //         localStorage.removeItem('medialibrary.user.token');
-    //         localStorage.removeItem('medialibrary.user.token.expiresAt');
-    //     }
-    // };
+    signOut = () => {
+        if (!auth) {
+            return;
+        }
+        auth.signOut();
+    }
 }
 
 const authService = new service();

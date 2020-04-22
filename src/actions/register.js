@@ -7,14 +7,9 @@ export function submitRegister(email, password) {
         authService.createUserWithEmailAndPassword(email, password)
             .then((token) => {
                 dispatch(setUserData(token));
-                return dispatch({
-                    type: REGISTER_SUCCESS
-                });
+                return { success: true, error: null };
             })
             .catch(error => {
-                return dispatch({
-                    type: REGISTER_ERROR,
-                    payload: error
-                });
+                return { success: false, error: error };
             });
 }
