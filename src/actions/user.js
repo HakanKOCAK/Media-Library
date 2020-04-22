@@ -1,7 +1,7 @@
 import authService from '../services/auth.service';
 import { SET_USER_DATA, REMOVE_USER_DATA, USER_LOGGED_OUT } from './types';
 
-export function setUserData(token) {
+export function setUserData(email, token) {
     return (dispatch) => {
 
         const token = localStorage.getItem('medialibrary.user.token');
@@ -13,7 +13,7 @@ export function setUserData(token) {
         }
         dispatch({
             type: SET_USER_DATA,
-            payload: true
+            payload: {email: email, isAuthenticated: true}
         })
     }
 }

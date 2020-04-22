@@ -1,6 +1,7 @@
 import { SET_USER_DATA, REMOVE_USER_DATA, USER_LOGGED_OUT } from '../actions/types';
 
 const initialState = {
+    email: '',
     isAuthenticated: false
 };
 
@@ -10,7 +11,8 @@ const user = function (state = initialState, action) {
             {
                 return {
                     ...initialState,
-                    isAuthenticated: action.payload
+                    email: action.payload.email,
+                    isAuthenticated: action.payload.isAuthenticated
                 };
             }
         case REMOVE_USER_DATA:
@@ -18,6 +20,7 @@ const user = function (state = initialState, action) {
             {
                 return {
                     ...initialState,
+                    email: '',
                     isAuthenticated: action.payload
                 };
             }
