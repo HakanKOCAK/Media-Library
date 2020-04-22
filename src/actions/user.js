@@ -4,8 +4,13 @@ import { SET_USER_DATA, REMOVE_USER_DATA, USER_LOGGED_OUT } from './types';
 export function setUserData(token) {
     return (dispatch) => {
 
-        localStorage.setItem('medialibrary.user.token', token);
-        localStorage.setItem('medialibrary.user.token.expiresAt', Date.now() + 3600000);
+        const token = localStorage.getItem('medialibrary.user.token');
+
+        if (!token) {
+            localStorage.setItem('medialibrary.user.token', token);
+            // Set 24 min expire time.
+            localStorage.setItem('medialibrary.user.token.expiresAt', Date.now() + 60 * 1000 * 24);
+        }
         dispatch({
             type: SET_USER_DATA,
             payload: true

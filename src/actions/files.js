@@ -73,42 +73,44 @@ const normalizeResponse = (submission, submissionDetails, key) => {
             break;
     }
 }
-export const getAllFiles = () => async dispatch => {
-    try {
-        const config = {
-            params: {
-                'apiKey': apiKey
+export const getAllFiles = (dispatch) => {
+    return async (dispatch) => {
+        try {
+            const config = {
+                params: {
+                    'apiKey': apiKey
+                }
             }
-        }
 
-        const res = await axios.get(`https://api.jotform.com/form/${formId}/submissions`, config)
-        const content = res.data.content
+            const res = await axios.get(`https://api.jotform.com/form/${formId}/submissions`, config)
+            const content = res.data.content
 
-        const answers = Object.keys(content).map(key => {
-            const submission = content[key].answers
+            const answers = Object.keys(content).map(key => {
+                const submission = content[key].answers
 
-            const createdAt = content[key].created_at.split(' ')[0].split('-')
-            const date = `${createdAt[2]}/${createdAt[1]}/${createdAt[0]}`
+                const createdAt = content[key].created_at.split(' ')[0].split('-')
+                const date = `${createdAt[2]}/${createdAt[1]}/${createdAt[0]}`
 
-            const submissionDetails = {
-                submissionId: content[key].id,
-                uploadDate: date,
-                data: {}
-            };
+                const submissionDetails = {
+                    submissionId: content[key].id,
+                    uploadDate: date,
+                    data: {}
+                };
 
-            Object.keys(submission).map(key => {
-                normalizeResponse(submission, submissionDetails, key);
+                Object.keys(submission).map(key => {
+                    normalizeResponse(submission, submissionDetails, key);
+                })
+                return submissionDetails;
             })
-            return submissionDetails;
-        })
 
-        dispatch({
-            type: GET_FILES_SUCCESS,
-            payload: answers
-        })
-    } catch (error) {
-        dispatch({
-            type: GET_FILES_FAIL
-        })
+            dispatch({
+                type: GET_FILES_SUCCESS,
+                payload: answers
+            })
+        } catch (error) {
+            dispatch({
+                type: GET_FILES_FAIL
+            })
+        }
     }
 }
