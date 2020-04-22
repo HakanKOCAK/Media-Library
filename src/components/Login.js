@@ -1,21 +1,12 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { Fragment, useState } from 'react'
 import { Link, Redirect } from 'react-router-dom'
-import { useDispatch } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 import { submitLogin } from '../actions/login';
 
-const Login = () => {
+const Login = ({ isAuthenticated }) => {
     const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isLoggedin, setStatus] = useState()
-    const [success, setSuccess] = useState();
-    const [error, setError] = useState();
-
-    useEffect(() => {
-        const token = localStorage.getItem('medialibrary.user.token') || success;
-
-        setStatus(token);
-    }, [success])
     const onChange = event => {
         const { name, value } = event.currentTarget;
 
@@ -29,14 +20,11 @@ const Login = () => {
 
     const onSubmit = async (event, email, password) => {
         event.preventDefault();
-        dispatch(submitLogin(email, password)).then(response => {
-            setSuccess(response.success);
-            setError(response.error);
-        });
+        dispatch(submitLogin(email, password))
     }
 
     //Redirect if Logged in 
-    if (isLoggedin) {
+    if (isAuthenticated) {
         return <Redirect to='/files' />
     }
 
@@ -76,4 +64,8 @@ const Login = () => {
     )
 }
 
-export default Login
+const mapStateToProps = state => ({
+    isAuthenticated: state.user.isAuthenticated
+})
+
+export default connect(mapStateToProps, {})(Login)

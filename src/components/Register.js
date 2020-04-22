@@ -1,23 +1,14 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom'
 import { submitRegister } from '../actions/register';
 
-const Register = () => {
+const Register = ({ isAuthenticated }) => {
     const dispatch = useDispatch();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
-    const [isLoggedin, setStatus] = useState()
-    const [success, setSuccess] = useState();
-    const [error, setError] = useState();
-
-    useEffect(() => {
-        const token = localStorage.getItem('medialibrary.user.token') || success;
-
-        setStatus(token);
-    }, [success])
 
     const onChange = event => {
         const { name, value } = event.currentTarget;
@@ -35,17 +26,14 @@ const Register = () => {
         event.preventDefault()
 
         if (password === password2) {
-            dispatch(submitRegister(email, password)).then(response => {
-                setSuccess(response.success);
-                setError(response.error);
-            });
+            dispatch(submitRegister(email, password))
         } else {
             console.log('passwords do not match')
         }
 
     }
 
-    if (isLoggedin) {
+    if (isAuthenticated) {
         return <Redirect to='/files' />
     }
 
@@ -93,7 +81,7 @@ const Register = () => {
 }
 
 const mapStateToProps = state => ({
-
+    isAuthenticated: state.user.isAuthenticated
 })
 
-export default Register
+export default connect(mapStateToProps, {})(Register)

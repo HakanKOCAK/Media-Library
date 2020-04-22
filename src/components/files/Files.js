@@ -6,15 +6,14 @@ import { logoutUser } from '../../actions/user';
 import FileList from './FileList';
 import '../../styles/Files.css';
 
-const Files = () => {
+const Files = ({ isAuthenticated }) => {
     const dispatch = useDispatch();
-    const token = localStorage.getItem('medialibrary.user.token');
     useEffect(() => {
         dispatch(getAllFiles());
     }, [])
 
     //Redirect if not Logged in 
-    if (!token) {
+    if (!isAuthenticated) {
         return <Redirect to='/' />
     }
 
@@ -29,7 +28,7 @@ const Files = () => {
 }
 
 const mapStateToProps = state => ({
-
+    isAuthenticated: state.user.isAuthenticated
 })
 
 export default connect(mapStateToProps, {})(Files)
