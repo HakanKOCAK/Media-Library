@@ -20,7 +20,6 @@ const Files = ({ isAuthenticated }) => {
     return (
 
         <section className='container'>
-            <button onClick={() => { dispatch(logoutUser()) }}>Logout</button>
             <h1 className='h1'>Files</h1>
             <FileList />
         </section>
