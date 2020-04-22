@@ -1,5 +1,6 @@
 :root {
   --primary-color: #17a2b8;
+   --dark-color: #343a40;
   --light-color: #f4f4f4;
 }
 
@@ -35,6 +36,11 @@ body {
 .lead {
     font-size: 1rem;
     margin-bottom: 1rem;
+}
+
+.bg-dark {
+  background: var(--dark-color);
+  color: #fff;
 }
 
 .btn {
