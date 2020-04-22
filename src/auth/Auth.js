@@ -26,7 +26,7 @@ class Auth extends Component {
             const isLoggedIn = localStorage.getItem('medialibrary.user.token')
             const isExpired = Date.now() > localStorage.getItem('medialibrary.user.token.expiresAt')
             if (isLoggedIn && !isExpired) {
-                this.props.setUserData();
+                this.props.setUserData(authUser.email);
                 resolve();
             } else {
                 this.props.removeUserData();
