@@ -32,7 +32,7 @@ const Login = ({ isAuthenticated }) => {
         <Fragment>
             <section className="container">
                 <h1 className="large text-primary">Sign In</h1>
-                <p><i className="fas fa-user"></i> Sign Into Your Account</p>
+                <p className="lead"><i className="fas fa-user"></i> Sign Into Your Account</p>
                 <form className="form" onSubmit={event => onSubmit(event, email, password)}>
                     <div className="form-group">
                         <input
