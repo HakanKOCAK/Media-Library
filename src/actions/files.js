@@ -85,9 +85,9 @@ export const getAllFiles = (dispatch) => {
             const res = await axios.get(`https://api.jotform.com/form/${formId}/submissions`, config)
             const content = res.data.content
 
-            const answers = Object.keys(content).map(key => {
+            const answers = {}
+            Object.keys(content).map(key => {
                 const submission = content[key].answers
-
                 const createdAt = content[key].created_at.split(' ')[0].split('-')
                 const date = `${createdAt[2]}/${createdAt[1]}/${createdAt[0]}`
 
@@ -100,7 +100,7 @@ export const getAllFiles = (dispatch) => {
                 Object.keys(submission).map(key => {
                     normalizeResponse(submission, submissionDetails, key);
                 })
-                return submissionDetails;
+                answers[content[key].id] = submissionDetails
             })
 
             dispatch({

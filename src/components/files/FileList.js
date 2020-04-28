@@ -8,6 +8,7 @@ const FileList = (props) => {
     const dispatch = useDispatch();
     const files = useSelector(({ files }) => files.entities);
 
+    const filesArray = Object.values(files)
     if (!files) {
         return null;
     }
@@ -21,7 +22,7 @@ const FileList = (props) => {
     }
 
     const handleClick = (item) => {
-        props.history.push('/files/' + item.submissionId, { file: item });
+        props.history.push('/files/' + item.submissionId);
     }
     return (
         <table className="table">
@@ -38,7 +39,7 @@ const FileList = (props) => {
                 </tr>
             </thead>
             <tbody>
-                {files.map(e => {
+                {filesArray.map((e) => {
                     return (
                         <tr key={e.submissionId} onClick={event => handleClick(e)}>
                             <td>
