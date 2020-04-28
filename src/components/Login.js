@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from 'react'
-import { Link, Redirect } from 'react-router-dom'
-import { useDispatch, connect } from 'react-redux';
+import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
 import { submitLogin } from '../actions/login';
 
-const Login = ({ isAuthenticated }) => {
+const Login = () => {
     const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -21,11 +21,6 @@ const Login = ({ isAuthenticated }) => {
     const onSubmit = async (event, email, password) => {
         event.preventDefault();
         dispatch(submitLogin(email, password))
-    }
-
-    //Redirect if Logged in 
-    if (isAuthenticated) {
-        return <Redirect to='/files' />
     }
 
     return (
@@ -64,8 +59,4 @@ const Login = ({ isAuthenticated }) => {
     )
 }
 
-const mapStateToProps = state => ({
-    isAuthenticated: state.user.isAuthenticated
-})
-
-export default connect(mapStateToProps, {})(Login)
+export default Login

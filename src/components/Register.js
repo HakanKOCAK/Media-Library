@@ -1,9 +1,9 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import { useDispatch, connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom'
 import { submitRegister } from '../actions/register';
 
-const Register = ({ isAuthenticated }) => {
+const Register = () => {
     const dispatch = useDispatch();
 
     const [email, setEmail] = useState('');
@@ -31,10 +31,6 @@ const Register = ({ isAuthenticated }) => {
             console.log('passwords do not match')
         }
 
-    }
-
-    if (isAuthenticated) {
-        return <Redirect to='/files' />
     }
 
     return (
@@ -84,4 +80,4 @@ const mapStateToProps = state => ({
     isAuthenticated: state.user.isAuthenticated
 })
 
-export default connect(mapStateToProps, {})(Register)
+export default Register
