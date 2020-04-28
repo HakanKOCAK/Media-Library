@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Link, useLocation } from 'react-router-dom';
 import { useDispatch, connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTape, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { logoutUser } from '../actions/user';
 
 import '../styles/Navbar.css'
@@ -22,7 +24,7 @@ const Navbar = ({ user: { isAuthenticated, loading } }) => {
         <ul>
             <li>
                 <Link to='/' onClick={event => logout(event)}>
-                    <i className='fas fa-sign-out-alt'></i>{' '}
+                    <FontAwesomeIcon icon={faSignOutAlt} /> {' '}
                     <span>Signout</span>
                 </Link>
             </li>
@@ -43,7 +45,7 @@ const Navbar = ({ user: { isAuthenticated, loading } }) => {
         <nav className="navbar bg-dark">
             <h1>
                 <Link to="/">
-                    <i className="fas fa-tape" /> Media Library
+                    <FontAwesomeIcon icon={faTape} /> Media Library
                 </Link>
             </h1>
             {!loading && (<Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>)}
