@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { BrowserRouter as Router, Link, useLocation } from 'react-router-dom';
 import { useDispatch, connect } from 'react-redux';
 import { logoutUser } from '../actions/user';
 
@@ -7,11 +7,17 @@ import '../styles/Navbar.css'
 
 const Navbar = ({ user: { isAuthenticated, loading } }) => {
     const dispatch = useDispatch();
-
     const logout = (event) => {
         event.preventDefault();
         dispatch(logoutUser());
     }
+
+    const location = useLocation()
+
+    if (location.pathname === '/error-404') {
+        return null;
+    }
+
     const authLinks = (
         <ul>
             <li>
