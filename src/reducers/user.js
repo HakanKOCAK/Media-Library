@@ -2,7 +2,8 @@ import { SET_USER_DATA, REMOVE_USER_DATA, USER_LOGGED_OUT } from '../actions/typ
 
 const initialState = {
     email: '',
-    isAuthenticated: false
+    isAuthenticated: false,
+    loading: true,
 };
 
 const user = function (state = initialState, action) {
@@ -12,6 +13,7 @@ const user = function (state = initialState, action) {
                 return {
                     ...initialState,
                     email: action.payload.email,
+                    loading: false,
                     isAuthenticated: action.payload.isAuthenticated
                 };
             }
@@ -21,7 +23,8 @@ const user = function (state = initialState, action) {
                 return {
                     ...initialState,
                     email: '',
-                    isAuthenticated: action.payload
+                    loading: false,
+                    isAuthenticated: false
                 };
             }
         default:
