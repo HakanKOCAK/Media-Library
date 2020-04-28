@@ -6,16 +6,11 @@ import { logoutUser } from '../../actions/user';
 import FileList from './FileList';
 import '../../styles/Files.css';
 
-const Files = ({ isAuthenticated }) => {
+const Files = (props) => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getAllFiles());
     }, [])
-
-    //Redirect if not Logged in 
-    if (!isAuthenticated) {
-        return <Redirect to='/' />
-    }
 
     return (
 
@@ -26,8 +21,4 @@ const Files = ({ isAuthenticated }) => {
     )
 }
 
-const mapStateToProps = state => ({
-    isAuthenticated: state.user.isAuthenticated
-})
-
-export default connect(mapStateToProps, {})(Files)
+export default Files
