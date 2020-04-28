@@ -1,8 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import FileList from './FileList';
+import Spinner from '../spinner/Spinner';
 import '../../styles/Files.css';
 
-const Files = (props) => {
+const Files = ({ loading }) => {
+
+    if (loading) {
+        return <Spinner />
+    }
 
     return (
 
@@ -12,5 +18,8 @@ const Files = (props) => {
         </section>
     )
 }
+const mapStateToProps = state => ({
+    loading: state.files.loading
+});
 
-export default Files
+export default connect(mapStateToProps)(Files);

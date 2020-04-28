@@ -4,6 +4,7 @@ import {
 } from '../actions/types';
 
 const initialState = {
+    loading: true,
     entities: null
 }
 
@@ -14,11 +15,13 @@ export default function (state = initialState, action) {
         case GET_FILES_SUCCESS:
             return {
                 ...state,
+                loading: false,
                 entities: payload,
             }
         case GET_FILES_FAIL:
             return {
                 ...state,
+                loading: false,
                 error: payload
             }
         default:

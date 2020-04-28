@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Spinner from '../spinner/Spinner';
 
 const PublicRoute = ({
     component: Component,
@@ -12,7 +13,7 @@ const PublicRoute = ({
             {...rest}
             render={props =>
                 loading ? (
-                    <div>loading...</div>
+                    <Spinner />
                 ) : !isAuthenticated ? (
                     <Component {...props} />
                 ) : (

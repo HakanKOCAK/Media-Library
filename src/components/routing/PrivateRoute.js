@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Spinner from '../spinner/Spinner';
 
 const PrivateRoute = ({
     component: Component,
@@ -12,7 +13,7 @@ const PrivateRoute = ({
             {...rest}
             render={props =>
                 loading ? (
-                    <div>loading...</div>
+                    <Spinner />
                 ) : isAuthenticated ? (
                     <Component {...props} />
                 ) : (
