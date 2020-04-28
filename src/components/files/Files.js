@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch, connect } from 'react-redux';
-import { Redirect } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
 import { getAllFiles } from '../../actions/files';
 import { logoutUser } from '../../actions/user';
 import FileList from './FileList';
