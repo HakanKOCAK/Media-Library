@@ -3,9 +3,9 @@ import spinner from './spinner.gif';
 
 const styles = {
     'height': '100vh',
-    'justify-content': 'center',
-    'align-items': 'center',
-    'flex-direction': 'column',
+    'justifyContent': 'center',
+    'alignItems': 'center',
+    'flexDirection': 'column',
     'display': 'flex'
 }
 export default () => (
