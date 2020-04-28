@@ -150,3 +150,12 @@ button {
 .my-1 {
   margin: 1rem 0;
 }
+
+.mx-05 {
+  margin: 0 0.5rem;
+}
+
+.p1{
+    text-align: center;
+    font-size: 1rem;
+}
