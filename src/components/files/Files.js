@@ -1,15 +1,8 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { getAllFiles } from '../../actions/files';
-import { logoutUser } from '../../actions/user';
+import React from 'react';
 import FileList from './FileList';
 import '../../styles/Files.css';
 
 const Files = (props) => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(getAllFiles());
-    }, [])
 
     return (
 
