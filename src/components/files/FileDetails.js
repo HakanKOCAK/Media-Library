@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
+import { faLongArrowAltLeft, faTrashAlt, faSave, faEdit } from '@fortawesome/free-solid-svg-icons'
 import ReactPlayer from 'react-player'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -17,29 +17,72 @@ const FileDetails = (props) => {
     const [details, setDetails] = useState(null);
 
     const [name, setName] = useState('')
-    const [nameId, setNameId] = useState('')
 
+    const [edit, setEdit] = useState([true]);
+
+    const [originalTags, setOriginalTags] = useState([])
     const [tags, setTags] = useState([])
     const [tagsId, setTagsId] = useState('')
 
+    const [visible, setVisible] = useState([]);
+
     useEffect(() => {
-        setFile(files[id])
-        setDetails(files[id].data)
+        if (files) {
+            setFile(files[id])
+            setDetails(files[id].data)
+        }
     }, [files])
 
     useEffect(() => {
         if (details) {
-            console.log(details)
             setName(details.nameSurname.answer)
-            setNameId(details.nameSurname.qid)
             setTags(details.tags.answer)
+            setOriginalTags(details.tags.answer)
             setTagsId(details.tags.qid)
         }
     }, [details])
 
+    const onEnter = (index) => {
+        const arr = [];
+        arr[index] = true;
+        setVisible(arr);
+    }
+
+    const onLeave = (index) => {
+        const arr = [];
+        arr[index] = false;
+        edit[index] = true;
+        setVisible(arr);
+    }
+
+    const onChange = (event, index) => {
+        const arr = [...tags];
+        const { name, value } = event.currentTarget;
+        arr[index] = value;
+        setTags(arr);
+    }
+
+    const onDelete = (index) => {
+        const arr = [...tags];
+        arr.splice(index, 1);
+        setTags(arr);
+        setOriginalTags(arr);
+    }
+
+    const onSave = () => {
+        setOriginalTags(tags);
+    }
+
+    const onDoubleClick = (index) => {
+        const arr = [...edit]
+        arr[index] = false
+        setEdit(arr)
+    }
+
     if (!details) {
         return <Spinner />
     }
+
     return (
         <div>
             <Link to="/files" className="link">
@@ -53,6 +96,44 @@ const FileDetails = (props) => {
                 <ReactPlayer url={details.videoAudioOther.answer[0]} controls={true} />
             }
             </div>
+            <fieldset className='main'>
+                <legend className='label'>Tags</legend>
+                <div className='tagsContainer'>
+                    {tags.map((t, index) => {
+                        return (
+                            <div key={index}
+                                className='tag'
+                                onMouseEnter={() => onEnter(index)}
+                                onMouseLeave={() => onLeave(index)}
+                                onDoubleClick={() => onDoubleClick(index)}
+                            >
+                                {
+                                    !edit[index]
+                                        ?
+                                        <FontAwesomeIcon icon={faEdit} size='xs' />
+                                        :
+                                        null
+                                }
+                                <input disabled={edit[index]} className='tagInput ' name={`tag${index}`} type='text' value={t} onChange={event => onChange(event, index)} />
+                                <div className='iconContainer'>
+                                    {
+                                        visible[index]
+                                            ?
+                                            <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => onDelete(index)} /> :
+                                            null
+                                    }
+                                    {
+                                        originalTags[index] !== tags[index]
+                                            ? <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave()} />
+                                            :
+                                            null
+                                    }
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
+            </fieldset>
         </div>
     )
 }
