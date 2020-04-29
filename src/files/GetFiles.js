@@ -20,7 +20,7 @@ const GetFiles = (props) => {
 }
 
 GetFiles.propTypes = {
-    children: PropTypes.element.isRequired
+    children: PropTypes.array.isRequired
 };
 
 export default GetFiles

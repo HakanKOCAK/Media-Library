@@ -12,11 +12,19 @@ const PrivateRoute = ({
         <Route
             {...rest}
             render={props =>
-                loading ? (
-                    <Spinner />
-                ) : isAuthenticated ? (
-                    <Component {...props} />
-                ) : (
+                loading
+                    ?
+                    (
+                        <Spinner />
+                    )
+                    :
+                    isAuthenticated
+                        ?
+                        (
+                            <Component {...props} />
+                        )
+                        :
+                        (
                             <Redirect to="/" />
                         )
             }
@@ -25,7 +33,7 @@ const PrivateRoute = ({
 
 PrivateRoute.propTypes = {
     user: PropTypes.object.isRequired,
-    component: PropTypes.element.isRequired
+    component: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

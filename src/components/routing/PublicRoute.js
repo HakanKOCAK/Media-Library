@@ -12,11 +12,19 @@ const PublicRoute = ({
         <Route
             {...rest}
             render={props =>
-                loading ? (
-                    <Spinner />
-                ) : !isAuthenticated ? (
-                    <Component {...props} />
-                ) : (
+                loading
+                    ?
+                    (
+                        <Spinner />
+                    )
+                    :
+                    !isAuthenticated
+                        ?
+                        (
+                            <Component {...props} />
+                        )
+                        :
+                        (
                             <Redirect to="/files" />
                         )
             }
@@ -25,7 +33,7 @@ const PublicRoute = ({
 
 PublicRoute.propTypes = {
     user: PropTypes.object.isRequired,
-    component: PropTypes.element.isRequired
+    component: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
