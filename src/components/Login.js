@@ -19,11 +19,13 @@ const Login = () => {
         setFlag(0);
         const { name, value } = event.currentTarget;
 
-        if (name === 'userEmail') {
-            setEmail(value);
-        }
-        else if (name === 'userPassword') {
-            setPassword(value);
+        if (!value.includes(' ')) {
+            if (name === 'userEmail') {
+                setEmail(value);
+            }
+            else if (name === 'userPassword') {
+                setPassword(value);
+            }
         }
     }
 
