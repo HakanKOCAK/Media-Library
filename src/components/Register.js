@@ -17,7 +17,6 @@ const Register = () => {
             flag 2 = password lenght is smaller than 6
             flag 3 = user already exist
             flag 4 = email format is not correct
-            flag 5 = empty fields
         */
     const [flag, setFlag] = useState(0);
 
@@ -66,9 +65,6 @@ const Register = () => {
     const onSubmit = async (event, email, password, password2) => {
         event.preventDefault()
 
-        if (email === '' || password === '' || password2 === '') {
-            setFlag(5);
-        }
         if (password === password2) {
             dispatch(submitRegister(email, password)).then(response => {
                 if (response.error.code === 'auth/email-already-in-use') {
@@ -101,6 +97,7 @@ const Register = () => {
                             value={email}
                             onChange={event => onChange(event)
                             }
+                            required
                         />
                         <div className="error-div">
                             {
@@ -126,6 +123,7 @@ const Register = () => {
                             }
                             value={password}
                             onChange={event => onChange(event)}
+                            required
                         />
                         <div className={`hint-div ${flag === 2 ? 'red' : ''}`}>
                             <p className="my-1">
@@ -147,6 +145,7 @@ const Register = () => {
                             }
                             value={password2}
                             onChange={event => onChange(event)}
+                            required
                         />
                     </div>
                     <div className="error-div">
@@ -161,13 +160,6 @@ const Register = () => {
                             flag === 3
                                 ?
                                 <p className="my-1">User already exist.</p>
-                                :
-                                null
-                        }
-                        {
-                            flag === 5
-                                ?
-                                <p className="my-1">Please fill the empty fields.</p>
                                 :
                                 null
                         }
