@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLongArrowAltLeft, faTrashAlt, faSave, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faLongArrowAltLeft, faTrashAlt, faSave, faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import ReactPlayer from 'react-player'
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
@@ -19,10 +19,11 @@ const FileDetails = (props) => {
 
     const [name, setName] = useState('')
 
-    const [edit, setEdit] = useState([true]);
+    const [edit, setEdit] = useState([]);
 
     const [originalTags, setOriginalTags] = useState([])
     const [tags, setTags] = useState([])
+    // eslint-disable-next-line no-unused-vars
     const [tagsId, setTagsId] = useState('')
 
     const [visible, setVisible] = useState([]);
@@ -52,7 +53,7 @@ const FileDetails = (props) => {
     const onLeave = (index) => {
         const arr = [];
         arr[index] = false;
-        edit[index] = true;
+        setEdit(arr)
         setVisible(arr);
     }
 
@@ -74,9 +75,9 @@ const FileDetails = (props) => {
         setOriginalTags(tags);
     }
 
-    const onDoubleClick = (index) => {
+    const onEdit = (index) => {
         const arr = [...edit]
-        arr[index] = false
+        arr[index] = true
         setEdit(arr)
     }
 
@@ -103,36 +104,60 @@ const FileDetails = (props) => {
                     {tags.map((t, index) => {
                         return (
                             <div key={index}
-                                className='tag'
+                                className={`tag 
+                                ${edit[index]
+                                        ?
+                                        'edit'
+                                        : ''
+                                    }`
+                                }
                                 onMouseEnter={() => onEnter(index)}
                                 onMouseLeave={() => onLeave(index)}
-                                onDoubleClick={() => onDoubleClick(index)}
                             >
                                 {
-                                    !edit[index]
+                                    originalTags[index] !== tags[index]
                                         ?
-                                        <FontAwesomeIcon icon={faEdit} size='xs' />
+                                        <div className='iconContainer right'>
+                                            <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave()} />
+                                        </div>
                                         :
                                         null
                                 }
-                                <input disabled={edit[index]} className='tagInput ' name={`tag${index}`} type='text' value={t} onChange={event => onChange(event, index)} />
-                                <div className='iconContainer'>
-                                    {
-                                        visible[index]
-                                            ?
-                                            <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => onDelete(index)} /> :
-                                            null
-                                    }
-                                    {
-                                        originalTags[index] !== tags[index]
-                                            ? <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave()} />
-                                            :
-                                            null
-                                    }
-                                </div>
+                                <input disabled={!edit[index]} className={`tagInput 
+                                ${edit[index]
+                                        ?
+                                        'edit'
+                                        :
+                                        ''
+                                    }`
+                                }
+                                    name={`tag${index}`}
+                                    type='text'
+                                    value={t}
+                                    onChange={event => onChange(event, index)}
+                                />
+                                {
+                                    visible[index]
+                                        ?
+                                        <div className='iconContainer left'>
+                                            {
+                                                !edit[index]
+                                                    ?
+                                                    <FontAwesomeIcon className='icon' icon={faEdit}
+                                                        size='1x' onClick={() => onEdit(index)} />
+
+                                                    :
+                                                    null
+                                            }
+                                            <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => onDelete(index)} />
+                                        </div>
+                                        :
+                                        null
+                                }
                             </div>
                         )
                     })}
+                    <FontAwesomeIcon style={{ marginTop: '5px' }} icon={faPlusCircle} size="lg" />
                 </div>
             </fieldset>
         </div>

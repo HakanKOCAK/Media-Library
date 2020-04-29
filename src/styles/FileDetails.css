@@ -39,7 +39,7 @@
 
 .tag{
     display: flex;
-    width: 190px;
+    width: 200px;
     padding: 5px;
     height: 30px;
     align-items: center;
@@ -50,16 +50,31 @@
     background: var(--light-color);
 }
 
+.edit{
+    background: var(--dark-color);
+    color: white;
+    cursor: text;
+}
+
 .tagInput{
     flex:1;
+    height: 29px;
     background: transparent;
+    border-radius: 20px;
     border:none;
     text-align: center;
 }
 
 .iconContainer{
     display: flex;
+}
+
+.left{
     border-left: 1px solid black;
+}
+
+.right{
+    border-right: 1px solid black;
 }
 
 .icon{
