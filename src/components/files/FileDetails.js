@@ -23,6 +23,7 @@ const FileDetails = (props) => {
 
     const [originalTags, setOriginalTags] = useState([])
     const [tags, setTags] = useState([])
+
     // eslint-disable-next-line no-unused-vars
     const [tagsId, setTagsId] = useState('')
 
@@ -58,10 +59,15 @@ const FileDetails = (props) => {
     }
 
     const onChange = (event, index) => {
-        const arr = [...tags];
-        const { value } = event.currentTarget;
-        arr[index] = value;
-        setTags(arr);
+
+        let arr = []
+        const { name, value } = event.currentTarget;
+
+        if (name.includes('tag')) {
+            arr = [...tags];
+            arr[index] = value;
+            setTags(arr);
+        }
     }
 
     const onDelete = (index) => {
@@ -81,6 +87,13 @@ const FileDetails = (props) => {
         setEdit(arr)
     }
 
+    const onAdd = () => {
+        const arr = [...tags];
+        arr.push('')
+        setTags(arr);
+        setOriginalTags(arr);
+    }
+
     if (!details) {
         return <Spinner />
     }
@@ -93,10 +106,15 @@ const FileDetails = (props) => {
             </Link>
             <h1 className='h1'>Details</h1>
             <p className='p1'>Submitted by {name} at {file.uploadDate}</p>
-            <div className='mediaContainer'>{details.image ?
-                <img className='media' src={details.image.answer} /> :
-                <ReactPlayer url={details.videoAudioOther.answer[0]} controls={true} />
-            }
+            <div className='mediaContainer'>
+                {
+                    details.image
+                        ?
+                        <img className='media' src={details.image.answer} />
+                        :
+                        <ReactPlayer url={details.videoAudioOther.answer[0]} controls={true}
+                        />
+                }
             </div>
             <fieldset className='main'>
                 <legend className='label'>Tags</legend>
@@ -107,7 +125,7 @@ const FileDetails = (props) => {
                                 className={`tag 
                                 ${edit[index]
                                         ?
-                                        'edit'
+                                        'editTag'
                                         : ''
                                     }`
                                 }
@@ -126,7 +144,7 @@ const FileDetails = (props) => {
                                 <input disabled={!edit[index]} className={`tagInput 
                                 ${edit[index]
                                         ?
-                                        'edit'
+                                        'editInput'
                                         :
                                         ''
                                     }`
@@ -154,10 +172,41 @@ const FileDetails = (props) => {
                                         :
                                         null
                                 }
+                                {
+                                    edit[index]
+                                        ?
+                                        details.videoAudioOther
+                                            ?
+                                            <div className='intervalContainer'>
+                                                <input className='intervalInput'
+                                                    name={`start${index}`}
+                                                    type='text'
+                                                    value='00:00'
+                                                    onChange={event => onChange(event, index)}
+                                                />
+                                                /
+                                                <input className='intervalInput'
+                                                    name={`end${index}`}
+                                                    type='text'
+                                                    value='00:00'
+                                                    onChange={event => onChange(event, index)}
+                                                />
+                                            </div>
+                                            : null
+                                        :
+                                        null
+                                }
                             </div>
                         )
                     })}
-                    <FontAwesomeIcon style={{ marginTop: '5px' }} icon={faPlusCircle} size="lg" />
+                    <div style={{ width: '210px', display: 'flex', justifyContent: 'center' }}>
+                        <FontAwesomeIcon
+                            style={{ marginTop: '5px' }}
+                            icon={faPlusCircle}
+                            size="lg"
+                            onClick={() => onAdd()}
+                        />
+                    </div>
                 </div>
             </fieldset>
         </div>
