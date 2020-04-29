@@ -24,7 +24,8 @@ const PublicRoute = ({
     );
 
 PublicRoute.propTypes = {
-    user: PropTypes.object.isRequired
+    user: PropTypes.object.isRequired,
+    component: PropTypes.element.isRequired
 };
 
 const mapStateToProps = state => ({

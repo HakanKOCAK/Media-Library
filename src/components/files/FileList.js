@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-
+import PropTypes from 'prop-types';
 import '../../styles/Files.css'
 
 const FileList = (props) => {
-    const dispatch = useDispatch();
     const files = useSelector(({ files }) => files.entities);
 
     const filesArray = Object.values(files)
@@ -21,7 +20,8 @@ const FileList = (props) => {
         )
     }
 
-    const handleClick = (item) => {
+    const handleClick = (event, item) => {
+        event.preventDefault()
         props.history.push('/files/' + item.submissionId);
     }
     return (
@@ -39,23 +39,23 @@ const FileList = (props) => {
                 </tr>
             </thead>
             <tbody>
-                {filesArray.map((e) => {
+                {filesArray.map((item) => {
                     return (
-                        <tr key={e.submissionId} onClick={event => handleClick(e)}>
+                        <tr key={item.submissionId} onClick={event => handleClick(event, item)}>
                             <td>
-                                {e.data.nameSurname.answer}
+                                {item.data.nameSurname.answer}
                             </td>
                             <td>
-                                {e.data.email.answer}
+                                {item.data.email.answer}
                             </td>
                             <td>
-                                {e.uploadDate}
+                                {item.uploadDate}
                             </td>
                             <td>
                                 -
                             </td>
                             <td>
-                                {e.data.fileType.answer}
+                                {item.data.fileType.answer}
                             </td>
                             <td>
                                 -
@@ -70,5 +70,11 @@ const FileList = (props) => {
         </table>
     )
 }
+
+FileList.propTypes = {
+    history: PropTypes.shape({
+        push: PropTypes.func.isRequired
+    }),
+};
 
 export default withRouter(FileList);

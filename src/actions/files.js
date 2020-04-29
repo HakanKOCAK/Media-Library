@@ -51,7 +51,7 @@ const normalizeResponse = (submission, submissionDetails, key) => {
                     })
 
                 } catch (error) {
-
+                    console.log(error)
                 }
 
                 submissionDetails.data = {
@@ -73,7 +73,7 @@ const normalizeResponse = (submission, submissionDetails, key) => {
             break;
     }
 }
-export const getAllFiles = (dispatch) => {
+export const getAllFiles = () => {
     return async (dispatch) => {
         try {
             const config = {

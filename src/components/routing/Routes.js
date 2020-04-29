@@ -9,7 +9,7 @@ import FileDetails from '../files/FileDetails'
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
-const Routes = props => {
+const Routes = () => {
     return (
         <section className="container">
             <Switch>

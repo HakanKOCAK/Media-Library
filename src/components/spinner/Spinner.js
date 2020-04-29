@@ -8,7 +8,7 @@ const styles = {
     'flexDirection': 'column',
     'display': 'flex'
 }
-export default () => (
+const Spinner = () => (
     <Fragment>
         <div style={styles}>
             <img
@@ -19,3 +19,5 @@ export default () => (
         </div>
     </Fragment>
 );
+
+export default Spinner;

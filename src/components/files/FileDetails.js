@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltLeft, faTrashAlt, faSave, faEdit } from '@fortawesome/free-solid-svg-icons'
 import ReactPlayer from 'react-player'
+import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Spinner from '../spinner/Spinner';
@@ -57,7 +58,7 @@ const FileDetails = (props) => {
 
     const onChange = (event, index) => {
         const arr = [...tags];
-        const { name, value } = event.currentTarget;
+        const { value } = event.currentTarget;
         arr[index] = value;
         setTags(arr);
     }
@@ -137,5 +138,13 @@ const FileDetails = (props) => {
         </div>
     )
 }
+
+FileDetails.propTypes = {
+    match: PropTypes.shape({
+        params: PropTypes.shape({
+            id: PropTypes.string.isRequired
+        })
+    }),
+};
 
 export default FileDetails

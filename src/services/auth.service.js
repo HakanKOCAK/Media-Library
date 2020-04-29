@@ -2,14 +2,14 @@ import { auth } from './firebase';
 
 class service {
 
-    onAuthStateChanged = (callback) => {
+    onAuthStateChanged(callback) {
         if (!auth) {
             return;
         }
         auth.onAuthStateChanged(callback);
-    };
+    }
 
-    createUserWithEmailAndPassword = (email, password) => {
+    createUserWithEmailAndPassword(email, password) {
         return new Promise((resolve, reject) => {
             auth.createUserWithEmailAndPassword(email.trim(), password)
                 .then(resp => {
@@ -25,7 +25,7 @@ class service {
         });
     }
 
-    signInWithEmailAndPassword = (email, password) => {
+    signInWithEmailAndPassword(email, password) {
         return new Promise((resolve, reject) => {
             auth.signInWithEmailAndPassword(email.trim(), password)
                 .then(resp => {
@@ -40,7 +40,7 @@ class service {
         });
     }
 
-    signOut = () => {
+    signOut() {
         if (!auth) {
             return;
         }

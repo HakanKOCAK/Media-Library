@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { Fragment, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { submitRegister } from '../actions/register';
@@ -75,9 +75,5 @@ const Register = () => {
         </Fragment>
     )
 }
-
-const mapStateToProps = state => ({
-    isAuthenticated: state.user.isAuthenticated
-})
 
 export default Register

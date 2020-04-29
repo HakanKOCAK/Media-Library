@@ -52,7 +52,7 @@ const Login = () => {
                     <input type="submit" className="btn btn-primary" value="Sign In" />
                 </form>
                 <p className="my-1">
-                    Don't have an account? <Link to="/register">Sign Up</Link>
+                    Do not have an account? <Link to="/register">Sign Up</Link>
                 </p>
             </section>
         </Fragment>

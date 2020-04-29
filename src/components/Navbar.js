@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
-import { BrowserRouter as Router, Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { useDispatch, connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTape, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
@@ -52,6 +53,10 @@ const Navbar = ({ user: { isAuthenticated, loading } }) => {
         </nav>
     )
 }
+
+Navbar.propTypes = {
+    user: PropTypes.object.isRequired
+};
 
 const mapStateToProp = state => ({
     user: state.user
