@@ -164,10 +164,15 @@ const FileDetails = (props) => {
                         return (
                             <div key={index}
                                 className={`tag 
-                                ${edit[index]
+                                    ${edit[index]
                                         ?
-                                        'editTag'
-                                        : ''
+                                        details.videoAudio
+                                            ?
+                                            'editTagExtended'
+                                            :
+                                            'editTag'
+                                        :
+                                        ''
                                     }`
                                 }
                                 onMouseEnter={() => onEnter(index)}
@@ -186,14 +191,15 @@ const FileDetails = (props) => {
                                         :
                                         null
                                 }
-                                <input disabled={!edit[index]} className={`tagInput 
-                                ${edit[index]
-                                        ?
-                                        'editInput'
-                                        :
-                                        ''
-                                    }`
-                                }
+                                <input disabled={!edit[index]}
+                                    className={`tagInput 
+                                    ${edit[index]
+                                            ?
+                                            'editInput'
+                                            :
+                                            ''
+                                        }`
+                                    }
                                     name={`tag${index}`}
                                     type='text'
                                     value={t}

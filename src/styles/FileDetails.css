@@ -51,8 +51,7 @@
 }
 
 .editTag{
-    background: var(--dark-color);
-    height: 60px;
+   background: var(--dark-color);
     color: white;
     cursor: text;
 }
@@ -66,7 +65,13 @@
 .editInput{
     background: var(--dark-color);
     color: white;
-    height: 25px;
+    cursor: text;
+}
+
+.editTagExtended{
+    background: var(--dark-color);
+    height: 60px;
+    color: white;
     cursor: text;
 }
 
