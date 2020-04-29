@@ -17,7 +17,8 @@ const normalizeResponse = (submission, submissionDetails, key) => {
                 }
             }
             break;
-        case 'videoAudioOther':
+        case 'otherDoc':
+        case 'videoAudio':
             if (questionAnswer.length) {
                 submissionDetails.data = {
                     ...submissionDetails.data,
@@ -39,7 +40,7 @@ const normalizeResponse = (submission, submissionDetails, key) => {
                 }
             }
             break;
-        case 'tags':
+        case 'tagsImageOther':
             if (questionAnswer) {
                 const tagsOfSubmission = []
                 try {
@@ -56,7 +57,45 @@ const normalizeResponse = (submission, submissionDetails, key) => {
 
                 submissionDetails.data = {
                     ...submissionDetails.data,
-                    [questionName]: {
+                    'tags': {
+                        'answer': tagsOfSubmission,
+                        'qid': key
+                    }
+                }
+            }
+            break;
+        case 'tagsVideoAudio':
+            if (questionAnswer) {
+                const tagsOfSubmission = []
+                try {
+                    const tags = JSON.parse(questionAnswer);
+                    tags.map(tag => {
+                        const data = {}
+                        Object.keys(tag).map(key => {
+                            const answer = tag[key];
+                            if (key === 'Tag') {
+                                data.tag = answer
+                            } else {
+                                const trimmed = answer.trim();
+                                const intervals = trimmed.split('/')
+                                const start = intervals[0];
+                                const end = intervals[1];
+                                const startMinSec = start.split('-');
+                                const endMinSec = end.split('-');
+                                data.start = `${startMinSec[0]}:${startMinSec[1]}`;
+                                data.end = `${endMinSec[0]}:${endMinSec[1]}`;
+                            }
+                        })
+                        tagsOfSubmission.push(data);
+                    })
+
+                } catch (error) {
+                    console.log(error);
+                }
+
+                submissionDetails.data = {
+                    ...submissionDetails.data,
+                    'tags': {
                         'answer': tagsOfSubmission,
                         'qid': key
                     }

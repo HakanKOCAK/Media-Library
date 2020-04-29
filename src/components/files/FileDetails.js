@@ -24,6 +24,13 @@ const FileDetails = (props) => {
     const [originalTags, setOriginalTags] = useState([])
     const [tags, setTags] = useState([])
 
+    const [originalStart, setOriginalStart] = useState([])
+    const [start, setStart] = useState([])
+
+    const [originalEnd, setOriginalEnd] = useState([])
+    const [end, setEnd] = useState([])
+
+
     // eslint-disable-next-line no-unused-vars
     const [tagsId, setTagsId] = useState('')
 
@@ -39,9 +46,31 @@ const FileDetails = (props) => {
     useEffect(() => {
         if (details) {
             setName(details.nameSurname.answer)
-            setTags(details.tags.answer)
-            setOriginalTags(details.tags.answer)
-            setTagsId(details.tags.qid)
+            if (details.tags) {
+                if (details.fileType.answer === 'Video/Audio') {
+                    const fileTags = details.tags.answer
+                    const tagsArray = []
+                    const startArray = []
+                    const endArray = []
+                    fileTags.map(tag => {
+                        tagsArray.push(tag.tag)
+                        startArray.push(tag.start.trim())
+                        endArray.push(tag.end.trim())
+                    })
+                    setTags(tagsArray)
+                    setOriginalTags(tagsArray)
+
+                    setStart(startArray)
+                    setOriginalStart(startArray)
+
+                    setEnd(endArray)
+                    setOriginalEnd(endArray)
+                } else {
+                    setTags(details.tags.answer)
+                    setOriginalTags(details.tags.answer)
+                }
+                setTagsId(details.tags.qid)
+            }
         }
     }, [details])
 
@@ -67,6 +96,14 @@ const FileDetails = (props) => {
             arr = [...tags];
             arr[index] = value;
             setTags(arr);
+        } else if (name.includes('start')) {
+            arr = [...start];
+            arr[index] = value;
+            setStart(arr);
+        } else {
+            arr = [...end];
+            arr[index] = value;
+            setEnd(arr);
         }
     }
 
@@ -112,8 +149,12 @@ const FileDetails = (props) => {
                         ?
                         <img className='media' src={details.image.answer} />
                         :
-                        <ReactPlayer url={details.videoAudioOther.answer[0]} controls={true}
-                        />
+                        details.videoAudio
+                            ?
+                            <ReactPlayer url={details.videoAudio.answer[0]} controls={true}
+                            />
+                            :
+                            <div>DOOOC</div>
                 }
             </div>
             <fieldset className='main'>
@@ -134,6 +175,10 @@ const FileDetails = (props) => {
                             >
                                 {
                                     originalTags[index] !== tags[index]
+                                        ||
+                                        originalStart[index] !== start[index]
+                                        ||
+                                        originalEnd[index] !== end[index]
                                         ?
                                         <div className='iconContainer right'>
                                             <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave()} />
@@ -173,26 +218,23 @@ const FileDetails = (props) => {
                                         null
                                 }
                                 {
-                                    edit[index]
+                                    edit[index] && details.videoAudio
                                         ?
-                                        details.videoAudioOther
-                                            ?
-                                            <div className='intervalContainer'>
-                                                <input className='intervalInput'
-                                                    name={`start${index}`}
-                                                    type='text'
-                                                    value='00:00'
-                                                    onChange={event => onChange(event, index)}
-                                                />
+                                        <div className='intervalContainer'>
+                                            <input className='intervalInput'
+                                                name={`start${index}`}
+                                                type='text'
+                                                value={start[index]}
+                                                onChange={event => onChange(event, index)}
+                                            />
                                                 /
                                                 <input className='intervalInput'
-                                                    name={`end${index}`}
-                                                    type='text'
-                                                    value='00:00'
-                                                    onChange={event => onChange(event, index)}
-                                                />
-                                            </div>
-                                            : null
+                                                name={`end${index}`}
+                                                type='text'
+                                                value={end[index]}
+                                                onChange={event => onChange(event, index)}
+                                            />
+                                        </div>
                                         :
                                         null
                                 }
