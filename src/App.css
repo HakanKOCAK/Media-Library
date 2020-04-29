@@ -122,6 +122,10 @@ body {
    color:#c4302b !important;
 }
 
+.red{
+   color:#c4302b !important;
+}
+
 .form input[type='submit'],
 button {
   font: inherit;

@@ -18,10 +18,9 @@ class service {
                     })
                 })
                 .catch(error => {
-                    console.log(error)
-                    reject(error)
+                    reject(error);
                 })
-            resolve();
+            Promise.resolve();
         });
     }
 
