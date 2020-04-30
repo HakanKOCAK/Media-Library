@@ -14,26 +14,35 @@ const FileDetails = (props) => {
 
     const files = useSelector(({ files }) => files.entities)
 
+    //File and its details
     const [file, setFile] = useState(null);
     const [details, setDetails] = useState(null);
 
-    const [name, setName] = useState('')
+    //Submitter name
+    const [name, setName] = useState('');
 
+    //To check if a tag is editing 
     const [edit, setEdit] = useState([]);
 
-    const [originalTags, setOriginalTags] = useState([])
-    const [tags, setTags] = useState([])
+    //Set tags and their default value
+    const [originalTags, setOriginalTags] = useState([]);
+    const [tags, setTags] = useState([]);
 
-    const [originalStart, setOriginalStart] = useState([])
-    const [start, setStart] = useState([])
+    //Check the start interval of a tag (video, audio)
+    const [originalStart, setOriginalStart] = useState([]);
+    const [start, setStart] = useState([]);
 
-    const [originalEnd, setOriginalEnd] = useState([])
-    const [end, setEnd] = useState([])
+    //Check the end interval of a tag (video, audio)
+    const [originalEnd, setOriginalEnd] = useState([]);
+    const [end, setEnd] = useState([]);
 
+    //to check if image completely loaded
+    const [loaded, setLoaded] = useState(false);
 
     // eslint-disable-next-line no-unused-vars
-    const [tagsId, setTagsId] = useState('')
+    const [tagsId, setTagsId] = useState('');
 
+    //To display edit and delete options of tags
     const [visible, setVisible] = useState([]);
 
     useEffect(() => {
@@ -119,18 +128,21 @@ const FileDetails = (props) => {
     }
 
     const onEdit = (index) => {
-        const arr = [...edit]
-        arr[index] = true
-        setEdit(arr)
+        const arr = [...edit];
+        arr[index] = true;
+        setEdit(arr);
     }
 
     const onAdd = () => {
         const arr = [...tags];
-        arr.push('')
+        arr.push('');
         setTags(arr);
         setOriginalTags(arr);
     }
 
+    const handleImageLoaded = () => {
+        setLoaded(true);
+    }
     if (!details) {
         return <Spinner />
     }
@@ -147,7 +159,17 @@ const FileDetails = (props) => {
                 {
                     details.image
                         ?
-                        <img className='media' src={details.image.answer} />
+                        <><img className='media' src={details.image.answer}
+                            style={loaded ? {} : { display: 'none' }}
+                            onLoad={() => handleImageLoaded()} />
+                            {
+                                !loaded
+                                    ?
+                                    <Spinner styled={true} />
+                                    :
+                                    null
+                            }
+                        </>
                         :
                         details.videoAudio
                             ?

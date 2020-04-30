@@ -8,16 +8,18 @@ const styles = {
     'flexDirection': 'column',
     'display': 'flex'
 }
-const Spinner = () => (
-    <Fragment>
-        <div style={styles}>
-            <img
-                src={spinner}
-                style={{ width: '200px', margin: 'auto', display: 'block' }}
-                alt='Loading...'
-            />
-        </div>
-    </Fragment>
-);
+const Spinner = (props) => {
+    return (
+        <Fragment>
+            <div style={!props ? { styles } : {}}>
+                <img
+                    src={spinner}
+                    style={{ width: '200px', margin: 'auto', display: 'block' }}
+                    alt='Loading...'
+                />
+            </div>
+        </Fragment>
+    )
+};
 
 export default Spinner;
