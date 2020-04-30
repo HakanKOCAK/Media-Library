@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
 import { submitLogin } from '../actions/login';
@@ -11,12 +11,30 @@ const Login = () => {
     /*
                 flag = 1 no account with given email
                 flag = 2 inccorrect password
+                flag = 3 user disabled
+                flag = 4 password lenght is smaller than 6
+                flag = 5 email format is not correct
         */
 
     const [flag, setFlag] = useState(0);
 
+    useEffect(() => {
+        if (!/^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/.test(email) && email.length) {
+            setFlag(5)
+        } else {
+            setFlag(0)
+        }
+    }, [email])
+
+    useEffect(() => {
+        if (password.length < 6 && password.length) {
+            setFlag(4);
+        } else {
+            setFlag(0);
+        }
+    }, [password])
+
     const onChange = event => {
-        setFlag(0);
         const { name, value } = event.currentTarget;
 
         if (!value.includes(' ')) {
@@ -32,10 +50,21 @@ const Login = () => {
     const onSubmit = async (event, email, password) => {
         event.preventDefault();
         dispatch(submitLogin(email, password)).then(response => {
-            if (response.error && response.error.code === 'auth/wrong-password') {
-                setFlag(2);
-            } else if (response.error && response.error.code === 'auth/user-not-found') {
-                setFlag(1);
+            if (response.error) {
+                switch (response.error.code) {
+                    case 'auth/wrong-password':
+                        setFlag(2);
+                        break;
+                    case 'auth/user-not-found':
+                        setFlag(2);
+                        break;
+                    case 'auth/user-disabled':
+                        setFlag(3);
+                        break;
+                    default:
+                        setFlag(0);
+                        break;
+                }
             }
         })
     }
@@ -51,7 +80,7 @@ const Login = () => {
                             type="email"
                             placeholder="Email Address"
                             className={
-                                flag === 1
+                                flag === 1 || flag === 5
                                     ?
                                     'error'
                                     :
@@ -62,12 +91,21 @@ const Login = () => {
                             onChange={event => onChange(event)}
                             required
                         />
+                        <div className="error-div">
+                            {
+                                flag === 5
+                                    ?
+                                    <p className="my-1">Wrong email format</p>
+                                    :
+                                    null
+                            }
+                        </div>
                     </div>
                     <div className="form-group">
                         <input
                             type="password"
                             className={
-                                flag === 2
+                                flag === 2 || flag === 4
                                     ?
                                     'error'
                                     :
@@ -79,6 +117,11 @@ const Login = () => {
                             value={password}
                             onChange={event => onChange(event)}
                         />
+                        <div className={`hint-div ${flag === 4 ? 'red' : ''}`}>
+                            <p className="my-1">
+                                Minimum password lenght is 6.
+                            </p>
+                        </div>
                     </div>
                     <div className='error-div'>
                         {
@@ -95,6 +138,15 @@ const Login = () => {
                                 ?
                                 <p className="my-1">
                                     Invalid Password.
+                                </p>
+                                :
+                                null
+                        }
+                        {
+                            flag === 3
+                                ?
+                                <p className="my-1">
+                                    Sorry, it seems like the account has been disabled by an administrator.
                                 </p>
                                 :
                                 null

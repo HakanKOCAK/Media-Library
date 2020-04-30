@@ -3,8 +3,6 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { submitRegister } from '../actions/register';
 
-import '../styles/Register.css';
-
 const Register = () => {
     const dispatch = useDispatch();
 
@@ -123,6 +121,7 @@ const Register = () => {
                             }
                             value={password}
                             onChange={event => onChange(event)}
+                            minLength='6'
                             required
                         />
                         <div className={`hint-div ${flag === 2 ? 'red' : ''}`}>
