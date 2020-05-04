@@ -10,53 +10,62 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
 
-    /*
-            flag 1 = passwords do not match
-            flag 2 = password lenght is smaller than 6
-            flag 3 = user already exist
-            flag 4 = email format is not correct
-        */
-    const [flag, setFlag] = useState(0);
+    const config = {
+        PASSWORDS_DO_NOT_MATCH: false,
+        PASSWORD_LENGHT: false,
+        USER_EXIST: false,
+        EMAIL_FORMAT: false
+    }
+
+    const errorMessages = {
+        PASSWORDS_DO_NOT_MATCH: 'Passwords do not match.',
+        PASSWORD_LENGHT: 'Minimum password lenght is 6.',
+        EMAIL_FORMAT: 'Wrong email format.',
+        USER_EXIST: 'User already exist.'
+    }
+
+
+    const [flags, setFlag] = useState(config);
 
     useEffect(() => {
         if (!/^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/.test(email)) {
-            setFlag(4)
+            setFlag({ ...flags, EMAIL_FORMAT: true })
         } else {
-            setFlag(0)
+            setFlag({ ...flags, EMAIL_FORMAT: false })
         }
     }, [email])
 
     useEffect(() => {
         if (password.length < 6) {
-            setFlag(2);
+            setFlag({ ...flags, PASSWORD_LENGHT: true })
         } else {
-            setFlag(0);
+            setFlag({ ...flags, PASSWORD_LENGHT: false });
         }
     }, [password])
 
     useEffect(() => {
         if (password2 !== password) {
-            setFlag(1);
+            setFlag({ ...flags, PASSWORDS_DO_NOT_MATCH: true })
         } else {
-            setFlag(0);
+            setFlag({ ...flags, PASSWORDS_DO_NOT_MATCH: false });
         }
     }, [password2])
 
     const onChange = event => {
         const { name, value } = event.currentTarget;
 
-        if (!value.includes(' ')) {
-            switch (name) {
-                case 'userEmail':
+        switch (name) {
+            case 'userEmail':
+                if (!value.includes(' ')) {
                     setEmail(value);
-                    break;
-                case 'userPassword':
-                    setPassword(value);
-                    break;
-                case 'userPassword2':
-                    setPassword2(value);
-                    break;
-            }
+                }
+                break;
+            case 'userPassword':
+                setPassword(value);
+                break;
+            case 'userPassword2':
+                setPassword2(value);
+                break;
         }
     }
 
@@ -66,11 +75,11 @@ const Register = () => {
         if (password === password2) {
             dispatch(submitRegister(email, password)).then(response => {
                 if (response.error.code === 'auth/email-already-in-use') {
-                    setFlag(3)
+                    setFlag({ ...flags, USER_EXIST: true })
                 }
             })
         } else {
-            setFlag(1);
+            setFlag({ ...flags, PASSWORDS_DO_NOT_MATCH: true });
         }
     }
 
@@ -85,7 +94,7 @@ const Register = () => {
                             type="email"
                             placeholder="Email Address"
                             name="userEmail"
-                            className={flag === 3 || flag === 4 ? 'error' : ''}
+                            className={flags.USER_EXIST || flags.EMAIL_FORMAT ? 'error' : ''}
                             value={email}
                             onChange={event => onChange(event)
                             }
@@ -93,7 +102,7 @@ const Register = () => {
                         />
                         <div className="error-div">
                             {
-                                flag === 4 ? <p className="my-1">Wrong email format</p> : null
+                                flags.EMAIL_FORMAT ? <p className="my-1">{errorMessages.EMAIL_FORMAT}</p> : null
                             }
                         </div>
                     </div>
@@ -102,15 +111,15 @@ const Register = () => {
                             type="password"
                             placeholder="Password"
                             name="userPassword"
-                            className={flag === 1 ? 'error' : ''}
+                            className={flags.PASSWORDS_DO_NOT_MATCH ? 'error' : ''}
                             value={password}
                             onChange={event => onChange(event)}
                             minLength='6'
                             required
                         />
-                        <div className={`hint-div ${flag === 2 ? 'red' : ''}`}>
+                        <div className={`hint-div ${flags.PASSWORD_LENGHT ? 'red' : ''}`}>
                             <p className="my-1">
-                                Minimum password lenght is 6.
+                                {errorMessages.PASSWORD_LENGHT}
                             </p>
                         </div>
                     </div>
@@ -119,7 +128,7 @@ const Register = () => {
                             type="password"
                             placeholder="Confirm Password"
                             name="userPassword2"
-                            className={flag === 1 ? 'error' : ''}
+                            className={flags.PASSWORDS_DO_NOT_MATCH ? 'error' : ''}
                             value={password2}
                             onChange={event => onChange(event)}
                             required
@@ -127,10 +136,10 @@ const Register = () => {
                     </div>
                     <div className="error-div">
                         {
-                            flag === 1 ? <p className="my-1">Passwords do not match</p> : null
+                            flags.PASSWORDS_DO_NOT_MATCH ? <p className="my-1">{errorMessages.PASSWORDS_DO_NOT_MATCH}</p> : null
                         }
                         {
-                            flag === 3 ? <p className="my-1">User already exist.</p> : null
+                            flags.USER_EXIST ? <p className="my-1">{errorMessages.USER_EXIST}</p> : null
                         }
                     </div>
                     <input className="btn btn-primary" type="submit" value="Register" />

@@ -8,43 +8,49 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    /*
-                flag = 1 no account with given email
-                flag = 2 inccorrect password
-                flag = 3 user disabled
-                flag = 4 password lenght is smaller than 6
-                flag = 5 email format is not correct
-        */
+    const config = {
+        NO_ACCOUNT: false,
+        USER_DISABLED: false,
+        PASSWORD_LENGHT: false,
+        EMAIL_FORMAT: false
+    }
 
-    const [flag, setFlag] = useState(0);
+    const errorMessages = {
+        NO_ACCOUNT: 'User Not Found. Please check your credentials.',
+        USER_DISABLED: 'Sorry, it seems like the account has been disabled by an administrator.',
+        PASSWORD_LENGHT: 'Minimum password lenght is 6.',
+        EMAIL_FORMAT: 'Wrong email format.'
+    }
+
+    const [flags, setFlag] = useState(config);
 
     useEffect(() => {
         if (!/^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/.test(email) && email.length) {
-            setFlag(5)
+            setFlag({ ...flags, EMAIL_FORMAT: true })
         } else {
-            setFlag(0)
+            setFlag({ ...flags, EMAIL_FORMAT: false })
         }
     }, [email])
 
     useEffect(() => {
         if (password.length < 6 && password.length) {
-            setFlag(4);
+            setFlag({ ...flags, PASSWORD_LENGHT: true });
         } else {
-            setFlag(0);
+            setFlag({ ...flags, PASSWORD_LENGHT: false });
         }
     }, [password])
 
     const onChange = event => {
         const { name, value } = event.currentTarget;
 
-        if (!value.includes(' ')) {
-            if (name === 'userEmail') {
+        if (name === 'userEmail') {
+            if (!value.includes(' ')) {
                 setEmail(value);
             }
-            else if (name === 'userPassword') {
-                setPassword(value);
-            }
+        } else if (name === 'userPassword') {
+            setPassword(value);
         }
+
     }
 
     const onSubmit = async (event, email, password) => {
@@ -53,16 +59,16 @@ const Login = () => {
             if (response.error) {
                 switch (response.error.code) {
                     case 'auth/wrong-password':
-                        setFlag(2);
+                        setFlag({ ...flags, INCORRECT_PASSWORD: true, NO_ACCOUNT: true });
                         break;
                     case 'auth/user-not-found':
-                        setFlag(2);
+                        setFlag({ ...flags, NO_ACCOUNT: true, USER_DISABLED: false });
                         break;
                     case 'auth/user-disabled':
-                        setFlag(3);
+                        setFlag({ ...flags, USER_DISABLED: true, NO_ACCOUNT: false });
                         break;
                     default:
-                        setFlag(0);
+                        setFlag(config);
                         break;
                 }
             }
@@ -79,7 +85,7 @@ const Login = () => {
                         <input
                             type="email"
                             placeholder="Email Address"
-                            className={flag === 1 || flag === 5 ? 'error' : ''}
+                            className={flags.EMAIL_FORMAT || flags.NO_ACCOUNT ? 'error' : ''}
                             name="userEmail"
                             value={email}
                             onChange={event => onChange(event)}
@@ -87,35 +93,32 @@ const Login = () => {
                         />
                         <div className="error-div">
                             {
-                                flag === 5 ? <p className="my-1">Wrong email format</p> : null
+                                flags.EMAIL_FORMAT ? <p className="my-1">{errorMessages.EMAIL_FORMAT}</p> : null
                             }
                         </div>
                     </div>
                     <div className="form-group">
                         <input
                             type="password"
-                            className={flag === 2 || flag === 4 ? 'error' : ''}
+                            className={flags.INCORRECT_PASSWORD || flags.PASSWORD_LENGHT ? 'error' : ''}
                             placeholder="Password"
                             name="userPassword"
                             minLength="6"
                             value={password}
                             onChange={event => onChange(event)}
                         />
-                        <div className={`hint-div ${flag === 4 ? 'red' : ''}`}>
+                        <div className={`hint-div ${flags.PASSWORD_LENGHT ? 'red' : ''}`}>
                             <p className="my-1">
-                                Minimum password lenght is 6.
+                                {errorMessages.PASSWORD_LENGHT}
                             </p>
                         </div>
                     </div>
                     <div className='error-div'>
                         {
-                            flag === 1 ? <p className="my-1">User Not Found. Please check your email.</p> : null
+                            flags.NO_ACCOUNT ? <p className="my-1">{errorMessages.NO_ACCOUNT}</p> : null
                         }
                         {
-                            flag === 2 ? <p className="my-1">Invalid Password. </p> : null
-                        }
-                        {
-                            flag === 3 ? <p className="my-1">Sorry, it seems like the account has been disabled by an administrator.</p> : null
+                            flags.USER_DISABLED ? <p className="my-1">{errorMessages.USER_DISABLED}</p> : null
                         }
 
                     </div>
