@@ -85,13 +85,7 @@ const Register = () => {
                             type="email"
                             placeholder="Email Address"
                             name="userEmail"
-                            className={
-                                flag === 3 || flag === 4
-                                    ?
-                                    'error'
-                                    :
-                                    ''
-                            }
+                            className={flag === 3 || flag === 4 ? 'error' : ''}
                             value={email}
                             onChange={event => onChange(event)
                             }
@@ -99,11 +93,7 @@ const Register = () => {
                         />
                         <div className="error-div">
                             {
-                                flag === 4
-                                    ?
-                                    <p className="my-1">Wrong email format</p>
-                                    :
-                                    null
+                                flag === 4 ? <p className="my-1">Wrong email format</p> : null
                             }
                         </div>
                     </div>
@@ -112,13 +102,7 @@ const Register = () => {
                             type="password"
                             placeholder="Password"
                             name="userPassword"
-                            className={
-                                flag === 1
-                                    ?
-                                    'error'
-                                    :
-                                    ''
-                            }
+                            className={flag === 1 ? 'error' : ''}
                             value={password}
                             onChange={event => onChange(event)}
                             minLength='6'
@@ -135,13 +119,7 @@ const Register = () => {
                             type="password"
                             placeholder="Confirm Password"
                             name="userPassword2"
-                            className={
-                                flag === 1
-                                    ?
-                                    'error'
-                                    :
-                                    ''
-                            }
+                            className={flag === 1 ? 'error' : ''}
                             value={password2}
                             onChange={event => onChange(event)}
                             required
@@ -149,18 +127,10 @@ const Register = () => {
                     </div>
                     <div className="error-div">
                         {
-                            flag === 1
-                                ?
-                                <p className="my-1">Passwords do not match</p>
-                                :
-                                null
+                            flag === 1 ? <p className="my-1">Passwords do not match</p> : null
                         }
                         {
-                            flag === 3
-                                ?
-                                <p className="my-1">User already exist.</p>
-                                :
-                                null
+                            flag === 3 ? <p className="my-1">User already exist.</p> : null
                         }
                     </div>
                     <input className="btn btn-primary" type="submit" value="Register" />

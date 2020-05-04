@@ -79,13 +79,7 @@ const Login = () => {
                         <input
                             type="email"
                             placeholder="Email Address"
-                            className={
-                                flag === 1 || flag === 5
-                                    ?
-                                    'error'
-                                    :
-                                    ''
-                            }
+                            className={flag === 1 || flag === 5 ? 'error' : ''}
                             name="userEmail"
                             value={email}
                             onChange={event => onChange(event)}
@@ -93,24 +87,14 @@ const Login = () => {
                         />
                         <div className="error-div">
                             {
-                                flag === 5
-                                    ?
-                                    <p className="my-1">Wrong email format</p>
-                                    :
-                                    null
+                                flag === 5 ? <p className="my-1">Wrong email format</p> : null
                             }
                         </div>
                     </div>
                     <div className="form-group">
                         <input
                             type="password"
-                            className={
-                                flag === 2 || flag === 4
-                                    ?
-                                    'error'
-                                    :
-                                    ''
-                            }
+                            className={flag === 2 || flag === 4 ? 'error' : ''}
                             placeholder="Password"
                             name="userPassword"
                             minLength="6"
@@ -125,31 +109,13 @@ const Login = () => {
                     </div>
                     <div className='error-div'>
                         {
-                            flag === 1
-                                ?
-                                <p className="my-1">
-                                    User Not Found. Please check your email.
-                                </p>
-                                :
-                                null
+                            flag === 1 ? <p className="my-1">User Not Found. Please check your email.</p> : null
                         }
                         {
-                            flag === 2
-                                ?
-                                <p className="my-1">
-                                    Invalid Password.
-                                </p>
-                                :
-                                null
+                            flag === 2 ? <p className="my-1">Invalid Password. </p> : null
                         }
                         {
-                            flag === 3
-                                ?
-                                <p className="my-1">
-                                    Sorry, it seems like the account has been disabled by an administrator.
-                                </p>
-                                :
-                                null
+                            flag === 3 ? <p className="my-1">Sorry, it seems like the account has been disabled by an administrator.</p> : null
                         }
 
                     </div>
