@@ -51,13 +51,7 @@ const FileList = (props) => {
                                 {item.uploadDate}
                             </td>
                             <td>
-                                {
-                                    item.data.fileType.answer !== 'Image'
-                                        ?
-                                        item.data.fileName
-                                        :
-                                        '-'
-                                }
+                                {item.data.fileName}
                             </td>
                             <td>
                                 {item.data.fileType.answer}
