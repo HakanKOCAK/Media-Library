@@ -189,14 +189,12 @@ const getFileSizes = async (files) => {
             if (Math.round(size / 1000000000) > 1) {
                 file.size = `${Math.round(size / 1000000000)} GB`
             } else if (Math.round(size / 1000000) > 1) {
-                console.log('here mb')
                 file.size = `${Math.round(size / 1000000)} MB`
             } else if (Math.round(size / 1000) > 1) {
-                console.log('here kb')
                 file.size = `${Math.round(size / 1000)} KB`
             } else {
-                console.log('here kb')
-                file.size = `${Math.round(size / 1000)} KB`
+                console.log('here')
+                file.size = `${size} Byte`
             }
         })
     )
