@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltLeft, faTrashAlt, faSave, faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import ReactPlayer from 'react-player'
@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 import Spinner from '../spinner/Spinner';
 
 import '../../styles/FileDetails.css';
+
+const Image = lazy(() => import('../Image'));
 
 const FileDetails = (props) => {
     const { id } = props.match.params
@@ -159,17 +161,9 @@ const FileDetails = (props) => {
                 {
                     details.image
                         ?
-                        <><img className='media' src={details.image.answer}
-                            style={loaded ? {} : { display: 'none' }}
-                            onLoad={() => handleImageLoaded()} />
-                            {
-                                !loaded
-                                    ?
-                                    <Spinner styled={true} />
-                                    :
-                                    null
-                            }
-                        </>
+                        <Suspense fallback={<Spinner styled={true} />}>
+                            <Image image={details.image.answer} />
+                        </Suspense>
                         :
                         details.videoAudio
                             ?
