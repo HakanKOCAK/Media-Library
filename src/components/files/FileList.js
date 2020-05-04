@@ -6,8 +6,8 @@ import '../../styles/Files.css'
 
 const FileList = (props) => {
     const files = useSelector(({ files }) => files.entities);
-
     const filesArray = Object.values(files)
+    console.log(filesArray)
     if (!files) {
         return null;
     }
@@ -26,7 +26,6 @@ const FileList = (props) => {
     }
     return (
         <table className="table">
-
             <thead>
                 <tr>
                     <th>Name Surname</th>
@@ -52,13 +51,19 @@ const FileList = (props) => {
                                 {item.uploadDate}
                             </td>
                             <td>
-                                -
+                                {
+                                    item.data.fileType.answer !== 'Image'
+                                        ?
+                                        item.data.fileName
+                                        :
+                                        '-'
+                                }
                             </td>
                             <td>
                                 {item.data.fileType.answer}
                             </td>
                             <td>
-                                -
+                                {item.data.size}
                             </td>
                             <td>
                                 -
