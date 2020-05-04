@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useDispatch, connect } from 'react-redux';
@@ -22,25 +22,25 @@ const Navbar = ({ user: { isAuthenticated, loading } }) => {
     }
 
     const authLinks = (
-        <ul>
+        <>
             <li>
                 <Link to='/' onClick={event => logout(event)}>
                     <FontAwesomeIcon icon={faSignOutAlt} /> {' '}
                     <span>Signout</span>
                 </Link>
             </li>
-        </ul>
+        </>
     )
 
     const guestLinks = (
-        <ul>
+        <>
             <li>
                 <Link to="/register">Sign Up</Link>
             </li>
             <li>
                 <Link to="/login">Sign In</Link>
             </li>
-        </ul>
+        </>
     )
     return (
         <nav className="navbar bg-dark">
@@ -49,7 +49,7 @@ const Navbar = ({ user: { isAuthenticated, loading } }) => {
                     <FontAwesomeIcon icon={faTape} /> Media Library
                 </Link>
             </h1>
-            {!loading && (<Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>)}
+            {!loading && (<ul>{isAuthenticated ? authLinks : guestLinks}</ul>)}
         </nav>
     )
 }
@@ -62,4 +62,4 @@ const mapStateToProp = state => ({
     user: state.user
 })
 
-export default connect(mapStateToProp, {})(Navbar)
+export default connect(mapStateToProp)(Navbar)
