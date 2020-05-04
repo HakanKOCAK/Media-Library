@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import FileList from './FileList';
+import PropTypes from 'prop-types';
 import Spinner from '../spinner/Spinner';
 import '../../styles/Files.css';
 
@@ -18,6 +19,11 @@ const Files = ({ loading }) => {
         </section>
     )
 }
+
+Files.propTypes = {
+    loading: PropTypes.bool.isRequired
+}
+
 const mapStateToProps = state => ({
     loading: state.files.loading
 });
