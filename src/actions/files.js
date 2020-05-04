@@ -142,6 +142,8 @@ export const getAllFiles = () => {
                 answers[content[key].id] = submissionDetails
             })
 
+            await getFileSizes(answers);
+
             dispatch({
                 type: GET_FILES_SUCCESS,
                 payload: answers
@@ -152,4 +154,50 @@ export const getAllFiles = () => {
             })
         }
     }
+}
+
+const getFileName = (url) => {
+    return url.split('/')[url.split('/').length - 1]
+}
+const getFileSizes = async (files) => {
+
+    return Promise.all(
+        Object.keys(files).map(async (key) => {
+            const file = files[key].data
+            const url =
+                file.videoAudio
+                    ?
+                    file.videoAudio.answer[0]
+                    :
+                    file.otherDoc
+                        ?
+                        file.otherDoc.answer[0]
+                        :
+                        file.image.answer
+
+            const name = getFileName(url);
+            file.fileName = name
+
+            const resp = await axios({
+                method: 'get',
+                url: url,
+                responseType: 'blob'
+            })
+
+            const size = resp.data.size
+
+            if (Math.round(size / 1000000000) > 1) {
+                file.size = `${Math.round(size / 1000000000)} GB`
+            } else if (Math.round(size / 1000000) > 1) {
+                console.log('here mb')
+                file.size = `${Math.round(size / 1000000)} MB`
+            } else if (Math.round(size / 1000) > 1) {
+                console.log('here kb')
+                file.size = `${Math.round(size / 1000)} KB`
+            } else {
+                console.log('here kb')
+                file.size = `${Math.round(size / 1000)} KB`
+            }
+        })
+    )
 }

@@ -1,6 +1,7 @@
 .table{
     width: 100%;
     margin: 1.2rem auto;
+    overflow: scroll;
 }
 
 .table tr{
