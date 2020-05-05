@@ -19,33 +19,28 @@ export const loadUser = () => (dispatch) => {
 }
 
 export function setUserData(email, token) {
-    return (dispatch) => {
-        const localToken = localStorage.getItem('medialibrary.user.token');
-        if (!localToken) {
-            localStorage.setItem('medialibrary.user.token', token);
-            // Set 24 min expire time.
-            localStorage.setItem('medialibrary.user.token.expiresAt', Date.now() + 60 * 1000 * 24);
-        }
-        dispatch({
-            type: SET_USER_DATA,
-            payload: { email: email, isAuthenticated: true }
-        })
+    const localToken = localStorage.getItem('medialibrary.user.token');
+    if (!localToken) {
+        localStorage.setItem('medialibrary.user.token', token);
+        // Set 24 min expire time.
+        localStorage.setItem('medialibrary.user.token.expiresAt', Date.now() + 60 * 1000 * 24);
+    }
+    return {
+        type: SET_USER_DATA,
+        payload: { email: email, isAuthenticated: true }
     }
 }
 
 export function removeUserData() {
-    return (dispatch) => {
-        localStorage.removeItem('medialibrary.user.token');
-        localStorage.removeItem('medialibrary.user.token.expiresAt');
-        dispatch({
-            type: REMOVE_USER_DATA,
-            payload: false
-        })
+    localStorage.removeItem('medialibrary.user.token');
+    localStorage.removeItem('medialibrary.user.token.expiresAt');
+    return {
+        type: REMOVE_USER_DATA,
+        payload: false
     }
 }
 
 export function logoutUser() {
-
     return (dispatch) => {
         authService.signOut();
         dispatch(removeUserData());
