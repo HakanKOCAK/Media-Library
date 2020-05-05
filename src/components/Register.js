@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react'
+import Error from './Error';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { submitRegister } from '../actions/register';
@@ -12,34 +13,26 @@ const Register = () => {
 
     const config = {
         PASSWORDS_DO_NOT_MATCH: false,
-        PASSWORD_LENGHT: false,
+        PASSWORD_LENGTH: false,
         USER_EXIST: false,
         EMAIL_FORMAT: false
     }
-
-    const errorMessages = {
-        PASSWORDS_DO_NOT_MATCH: 'Passwords do not match.',
-        PASSWORD_LENGHT: 'Minimum password lenght is 6.',
-        EMAIL_FORMAT: 'Wrong email format.',
-        USER_EXIST: 'User already exist.'
-    }
-
 
     const [flags, setFlag] = useState(config);
 
     useEffect(() => {
         if (!/^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/.test(email)) {
-            setFlag({ ...flags, EMAIL_FORMAT: true })
+            setFlag({ ...flags, EMAIL_FORMAT: true, USER_EXIST: false })
         } else {
-            setFlag({ ...flags, EMAIL_FORMAT: false })
+            setFlag({ ...flags, EMAIL_FORMAT: false, USER_EXIST: false })
         }
     }, [email])
 
     useEffect(() => {
         if (password.length < 6) {
-            setFlag({ ...flags, PASSWORD_LENGHT: true })
+            setFlag({ ...flags, PASSWORD_LENGTH: true })
         } else {
-            setFlag({ ...flags, PASSWORD_LENGHT: false });
+            setFlag({ ...flags, PASSWORD_LENGTH: false });
         }
     }, [password])
 
@@ -100,11 +93,6 @@ const Register = () => {
                             }
                             required
                         />
-                        <div className="error-div">
-                            {
-                                flags.EMAIL_FORMAT ? <p className="my-1">{errorMessages.EMAIL_FORMAT}</p> : null
-                            }
-                        </div>
                     </div>
                     <div className="form-group">
                         <input
@@ -117,11 +105,6 @@ const Register = () => {
                             minLength='6'
                             required
                         />
-                        <div className={`hint-div ${flags.PASSWORD_LENGHT ? 'red' : ''}`}>
-                            <p className="my-1">
-                                {errorMessages.PASSWORD_LENGHT}
-                            </p>
-                        </div>
                     </div>
                     <div className="form-group">
                         <input
@@ -134,14 +117,7 @@ const Register = () => {
                             required
                         />
                     </div>
-                    <div className="error-div">
-                        {
-                            flags.PASSWORDS_DO_NOT_MATCH ? <p className="my-1">{errorMessages.PASSWORDS_DO_NOT_MATCH}</p> : null
-                        }
-                        {
-                            flags.USER_EXIST ? <p className="my-1">{errorMessages.USER_EXIST}</p> : null
-                        }
-                    </div>
+                    <Error flags={flags} />
                     <input className="btn btn-primary" type="submit" value="Register" />
                 </form>
                 <p className="my-1">

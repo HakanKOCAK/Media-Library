@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react'
+import Error from './Error';
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
 import { submitLogin } from '../actions/login';
@@ -11,15 +12,8 @@ const Login = () => {
     const config = {
         NO_ACCOUNT: false,
         USER_DISABLED: false,
-        PASSWORD_LENGHT: false,
+        PASSWORD_LENGTH: false,
         EMAIL_FORMAT: false
-    }
-
-    const errorMessages = {
-        NO_ACCOUNT: 'User Not Found. Please check your credentials.',
-        USER_DISABLED: 'Sorry, it seems like the account has been disabled by an administrator.',
-        PASSWORD_LENGHT: 'Minimum password lenght is 6.',
-        EMAIL_FORMAT: 'Wrong email format.'
     }
 
     const [flags, setFlag] = useState(config);
@@ -34,9 +28,9 @@ const Login = () => {
 
     useEffect(() => {
         if (password.length < 6 && password.length) {
-            setFlag({ ...flags, PASSWORD_LENGHT: true });
+            setFlag({ ...flags, PASSWORD_LENGTH: true });
         } else {
-            setFlag({ ...flags, PASSWORD_LENGHT: false });
+            setFlag({ ...flags, PASSWORD_LENGTH: false });
         }
     }, [password])
 
@@ -59,13 +53,13 @@ const Login = () => {
             if (response.error) {
                 switch (response.error.code) {
                     case 'auth/wrong-password':
-                        setFlag({ ...flags, INCORRECT_PASSWORD: true, NO_ACCOUNT: true });
+                        setFlag({ ...flags, INCORRECT_PASSWORD: true, NO_ACCOUNT: true, USER_DISABLED: false });
                         break;
                     case 'auth/user-not-found':
-                        setFlag({ ...flags, NO_ACCOUNT: true, USER_DISABLED: false });
+                        setFlag({ ...flags, NO_ACCOUNT: true, USER_DISABLED: false, INCORRECT_PASSWORD: true });
                         break;
                     case 'auth/user-disabled':
-                        setFlag({ ...flags, USER_DISABLED: true, NO_ACCOUNT: false });
+                        setFlag({ ...flags, USER_DISABLED: true, NO_ACCOUNT: false, INCORRECT_PASSWORD: false });
                         break;
                     default:
                         setFlag(config);
@@ -91,11 +85,6 @@ const Login = () => {
                             onChange={event => onChange(event)}
                             required
                         />
-                        <div className="error-div">
-                            {
-                                flags.EMAIL_FORMAT ? <p className="my-1">{errorMessages.EMAIL_FORMAT}</p> : null
-                            }
-                        </div>
                     </div>
                     <div className="form-group">
                         <input
@@ -107,21 +96,8 @@ const Login = () => {
                             value={password}
                             onChange={event => onChange(event)}
                         />
-                        <div className={`hint-div ${flags.PASSWORD_LENGHT ? 'red' : ''}`}>
-                            <p className="my-1">
-                                {errorMessages.PASSWORD_LENGHT}
-                            </p>
-                        </div>
                     </div>
-                    <div className='error-div'>
-                        {
-                            flags.NO_ACCOUNT ? <p className="my-1">{errorMessages.NO_ACCOUNT}</p> : null
-                        }
-                        {
-                            flags.USER_DISABLED ? <p className="my-1">{errorMessages.USER_DISABLED}</p> : null
-                        }
-
-                    </div>
+                    <Error flags={flags} />
                     <input type="submit" className="btn btn-primary" value="Sign In" />
                 </form>
                 <p className="my-1">
