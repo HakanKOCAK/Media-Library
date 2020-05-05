@@ -20,7 +20,7 @@ class service {
                 .catch(error => {
                     reject(error);
                 })
-            Promise.resolve();
+            return Promise.resolve();
         });
     }
 

@@ -1,11 +1,10 @@
 import authService from '../services/auth.service';
 import { SET_USER_DATA, REMOVE_USER_DATA, USER_LOGGED_OUT } from './types';
 
-export const loadUser = () => (dispatch) => new Promise(resolve => {
+export const loadUser = () => (dispatch) => {
     authService.onAuthStateChanged(authUser => {
         if (!authUser) {
             dispatch(removeUserData());
-            resolve();
         }
 
         const isLoggedIn = localStorage.getItem('medialibrary.user.token')
@@ -13,21 +12,15 @@ export const loadUser = () => (dispatch) => new Promise(resolve => {
 
         if (isLoggedIn && !isExpired) {
             dispatch(setUserData(authUser.email));
-            resolve();
         } else {
             dispatch(removeUserData());
-            resolve();
         }
-        resolve();
     })
-    return Promise.resolve();
-})
+}
 
 export function setUserData(email, token) {
     return (dispatch) => {
-
         const localToken = localStorage.getItem('medialibrary.user.token');
-
         if (!localToken) {
             localStorage.setItem('medialibrary.user.token', token);
             // Set 24 min expire time.

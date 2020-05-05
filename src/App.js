@@ -13,6 +13,7 @@ import './App.css';
 
 const App = () => {
   useEffect(() => {
+    console.log('app.jss')
     store.dispatch(loadUser());
   }, [])
 
