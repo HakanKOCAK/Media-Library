@@ -161,9 +161,12 @@ const FileDetails = (props) => {
                 {
                     details.image
                         ?
-                        <Suspense fallback={<Spinner styled={true} />}>
-                            <Image image={details.image.answer} />
-                        </Suspense>
+                        <>
+                            <Spinner styled={false} />
+                            <img className='media' src={details.image.answer}
+                                style={loaded ? { opacity: '1' } : { opacity: '0' }}
+                                onLoad={() => handleImageLoaded()} />
+                        </>
                         :
                         details.videoAudio
                             ?

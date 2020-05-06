@@ -14,15 +14,24 @@
 }
 
 .mediaContainer{
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
     margin-top:15px;
     margin-bottom: 30px;
-    display: flex;
-    justify-content: center;
+    width: 500px;
+    height: 500px;
 }
 
 .media{
     max-width: 500px;
     max-height: 500px;
+    position: absolute;
+    left: 0; 
+    right: 0; 
+    top:0;
+    margin-left: auto; 
+    margin-right: auto; 
 }
 
 .tagsContainer{

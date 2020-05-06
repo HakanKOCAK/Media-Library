@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import spinner from './spinner.gif';
+import PropTypes from 'prop-types';
 
 const styles = {
     'height': '100vh',
@@ -9,9 +10,10 @@ const styles = {
     'display': 'flex'
 }
 const Spinner = (props) => {
+    const { styled } = props
     return (
         <Fragment>
-            <div style={!props ? { styles } : {}}>
+            <div style={!styled ? {} : { styles }}>
                 <img
                     src={spinner}
                     style={{ width: '200px', margin: 'auto', display: 'block' }}
@@ -21,5 +23,9 @@ const Spinner = (props) => {
         </Fragment>
     )
 };
+
+Spinner.propTypes = {
+    styled: PropTypes.bool.isRequired
+}
 
 export default Spinner;
