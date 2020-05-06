@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { apiKey, formId } from '../config/config';
 import { GET_FILES_SUCCESS, GET_FILES_FAIL } from './types';
-
+const pretty = require('prettysize');
 
 const normalizeResponse = (submission, submissionDetails, key) => {
     const question = submission[key];
@@ -186,16 +186,7 @@ const getFileSizes = async (files) => {
 
             const size = resp.data.size
 
-            if (Math.round(size / 1000000000) > 1) {
-                file.size = `${Math.round(size / 1000000000)} GB`
-            } else if (Math.round(size / 1000000) > 1) {
-                file.size = `${Math.round(size / 1000000)} MB`
-            } else if (Math.round(size / 1000) > 1) {
-                file.size = `${Math.round(size / 1000)} KB`
-            } else {
-                console.log('here')
-                file.size = `${size} Byte`
-            }
+            file.size = pretty(size, false, false, 2);
         })
     )
 }
