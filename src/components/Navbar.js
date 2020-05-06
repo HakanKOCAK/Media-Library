@@ -12,7 +12,7 @@ const Navbar = ({ user: { isAuthenticated, loading } }) => {
     const dispatch = useDispatch();
     const logout = (event) => {
         event.preventDefault();
-        dispatch(logoutUser());
+        logoutUser()(dispatch);
     }
 
     const location = useLocation()
