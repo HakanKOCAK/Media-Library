@@ -1,31 +1,22 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import FileList from './FileList';
 import PropTypes from 'prop-types';
-import Spinner from '../spinner/Spinner';
 import '../../styles/Files.css';
 
-const Files = ({ loading }) => {
+const Files = (props) => {
 
-    if (loading) {
-        return <Spinner />
-    }
-
+    const { files } = props
     return (
 
         <section className='container'>
             <h1 className='h1'>Files</h1>
-            <FileList />
+            <FileList files={files} />
         </section>
     )
 }
 
 Files.propTypes = {
-    loading: PropTypes.bool.isRequired
+    files: PropTypes.object.isRequired
 }
 
-const mapStateToProps = state => ({
-    loading: state.files.loading
-});
-
-export default connect(mapStateToProps)(Files);
+export default Files;

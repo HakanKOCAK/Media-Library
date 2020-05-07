@@ -6,13 +6,14 @@ import Spinner from '../spinner/Spinner';
 
 const PublicRoute = ({
     component: Component,
-    user: { isAuthenticated, loading },
+    app: { userLoaded, filesLoaded },
+    user: { isAuthenticated },
     ...rest
 }) => (
         <Route
             {...rest}
             render={props =>
-                loading
+                !userLoaded || !filesLoaded
                     ?
                     (
                         <Spinner />
@@ -33,11 +34,13 @@ const PublicRoute = ({
 
 PublicRoute.propTypes = {
     user: PropTypes.object.isRequired,
+    app: PropTypes.object.isRequired,
     component: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    user: state.user
+    user: state.user,
+    app: state.app
 });
 
 export default connect(mapStateToProps)(PublicRoute);

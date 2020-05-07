@@ -1,13 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import '../../styles/Files.css'
 
 const FileList = (props) => {
-    const files = useSelector(({ files }) => files.entities);
+    const { files } = props
     const filesArray = Object.values(files)
-    console.log(filesArray)
     if (!files) {
         return null;
     }
@@ -71,6 +69,7 @@ const FileList = (props) => {
 }
 
 FileList.propTypes = {
+    files: PropTypes.object.isRequired,
     history: PropTypes.shape({
         push: PropTypes.func.isRequired
     }),

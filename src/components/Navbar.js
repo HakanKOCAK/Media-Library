@@ -8,7 +8,7 @@ import { logoutUser } from '../actions/user';
 
 import '../styles/Navbar.css'
 
-const Navbar = ({ user: { isAuthenticated, loading } }) => {
+const Navbar = ({ user: { isAuthenticated } }) => {
     const dispatch = useDispatch();
     const logout = (event) => {
         event.preventDefault();
@@ -49,7 +49,7 @@ const Navbar = ({ user: { isAuthenticated, loading } }) => {
                     <FontAwesomeIcon icon={faTape} /> Media Library
                 </Link>
             </h1>
-            {!loading && (<ul>{isAuthenticated ? authLinks : guestLinks}</ul>)}
+            {<ul>{isAuthenticated ? authLinks : guestLinks}</ul>}
         </nav>
     )
 }

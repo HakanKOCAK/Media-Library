@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { apiKey, formId } from '../config/config';
 import { GET_FILES_SUCCESS, GET_FILES_FAIL } from './types';
+import { setFilesLoaded } from './app';
 const pretty = require('prettysize');
 
 const normalizeResponse = (submission, submissionDetails, key) => {
@@ -142,16 +143,19 @@ export const getAllFiles = () => {
                 answers[content[key].id] = submissionDetails
             })
 
-            await getFileSizes(answers);
+            await getFileSizes(answers)
 
             dispatch({
                 type: GET_FILES_SUCCESS,
                 payload: answers
             })
+            dispatch(setFilesLoaded(true));
         } catch (error) {
+            console.log(error)
             dispatch({
                 type: GET_FILES_FAIL
             })
+            dispatch(setFilesLoaded(true));
         }
     }
 }
@@ -189,4 +193,5 @@ const getFileSizes = async (files) => {
             file.size = pretty(size, false, false, 2);
         })
     )
+
 }

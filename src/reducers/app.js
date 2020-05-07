@@ -1,25 +1,26 @@
 import {
-    GET_FILES_SUCCESS,
-    GET_FILES_FAIL
+    USER_STATUS,
+    FILES_STATUS
 } from '../actions/types';
 
 const initialState = {
-    entities: null
+    userLoaded: false,
+    filesLoaded: false
 }
 
 export default function (state = initialState, action) {
     const { type, payload } = action;
 
     switch (type) {
-        case GET_FILES_SUCCESS:
+        case USER_STATUS:
             return {
                 ...state,
-                entities: payload,
+                userLoaded: payload.userLoaded,
             }
-        case GET_FILES_FAIL:
+        case FILES_STATUS:
             return {
                 ...state,
-                error: payload
+                filesLoaded: payload.filesLoaded,
             }
         default:
             return state;

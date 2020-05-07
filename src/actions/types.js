@@ -3,4 +3,6 @@ export const GET_FILES_FAIL = 'GET FILES FAIL';
 
 export const SET_USER_DATA = 'SET USER DATA';
 export const REMOVE_USER_DATA = 'REMOVED USER DATA';
-export const USER_LOGGED_OUT = 'USER LOGGED OUT';
+
+export const USER_STATUS = 'USER STATUS';
+export const FILES_STATUS = 'FILES STATUS';

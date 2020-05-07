@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Spinner from '../spinner/Spinner';
 import Video from './details/Video';
@@ -15,74 +14,49 @@ import '../../styles/FileDetails.css';
 const FileDetails = (props) => {
     const { id } = props.match.params
 
-    const files = useSelector(({ files }) => files.entities)
+    const file = props.files[id];
 
-    //File and its details
-    const [file, setFile] = useState(null);
-    const [details, setDetails] = useState(null);
+    console.log('details ', file)
+    //Upload date
+    const uploadDate = file.uploadDate
+
+    //Details
+    const details = file.data;
+
+    //Qid for the tags to be updated later
+    const tagsQid = details.tags.qid
 
     //Submitter name
-    const [name, setName] = useState('');
+    const name = details.nameSurname.answer
 
-    //Set tags and their default value
-    const [submittedTags, setSubmittedTags] = useState([]);
+    //File Type
+    const type = details.fileType.answer
 
-    const [url, setUrl] = useState('')
+    console.log('Type is:', type)
+    //Set submitted tags
+    const submittedTags = type === 'Video/Audio' ? details.tags.answer.map(element => { return element.tag }) : details.tags.answer
 
-    //Check the start interval of a tag (video, audio)
-    const [submittedStart, setSubmittedStart] = useState([]);
+    //Start & end intervals for video/audio
+    const submittedStartIntervals = []
+    const submittedEndIntervals = []
 
-    //Check the end interval of a tag (video, audio)
-    const [submittedEnd, setSubmittedEnd] = useState([]);
+    if (type === 'Video/Audio') {
+        const fileTags = details.tags.answer
+        fileTags.map(tag => {
+            submittedStartIntervals.push(tag.start.trim())
+            submittedEndIntervals.push(tag.end.trim())
+        })
+    }
 
-    // eslint-disable-next-line no-unused-vars
-    const [tagsId, setTagsId] = useState('');
-
-    const [type, setType] = useState('');
-
-    useEffect(() => {
-        if (files) {
-            setFile(files[id])
-            setDetails(files[id].data)
-        }
-    }, [files])
-
-    useEffect(() => {
-        if (details) {
-            setName(details.nameSurname.answer)
-            setType(details.fileType.answer)
-
-            details.videoAudio
-                ?
-                setUrl(details.videoAudio.answer[0])
-                :
-                details.otherDoc
-                    ?
-                    setUrl(details.otherDoc.answer[0])
-                    :
-                    setUrl(details.image.answer)
-
-            if (details.tags) {
-                const fileTags = details.tags.answer
-                if (details.fileType.answer === 'Video/Audio') {
-                    const tagsArray = []
-                    const startArray = []
-                    const endArray = []
-                    fileTags.map(tag => {
-                        tagsArray.push(tag.tag)
-                        startArray.push(tag.start.trim())
-                        endArray.push(tag.end.trim())
-                    })
-                    setSubmittedTags(tagsArray)
-                    setSubmittedStart(startArray)
-                    setSubmittedEnd(endArray)
-                } else {
-                    setSubmittedTags(fileTags)
-                }
-                setTagsId(details.tags.qid)
-            }
-        }
-    }, [details])
+    const url = type === 'Video/Audio'
+        ?
+        details.videoAudio.answer[0]
+        :
+        type === 'Other'
+            ?
+            details.otherDoc.answer[0]
+            :
+            details.image.answer
 
     // const onEnter = (index) => {
     //     const arr = [];
@@ -152,7 +126,7 @@ const FileDetails = (props) => {
                 <span className="mx-05">Back to Files</span>
             </Link>
             <h1 className='h1'>Details</h1>
-            <p className='p1'>Submitted by {name} at {file.uploadDate}</p>
+            <p className='p1'>Submitted by {name} at {uploadDate}</p>
             {
                 type === 'Image'
                     ?
@@ -164,12 +138,13 @@ const FileDetails = (props) => {
                         :
                         <Other url={url} />
             }
-            <EditableTags submittedTags={submittedTags} submittedStart={submittedStart} submittedEnd={submittedEnd} type={type} />
+            <EditableTags submittedTags={submittedTags} submittedStart={submittedStartIntervals} submittedEnd={submittedEndIntervals} type={type} />
         </div>
     )
 }
 
 FileDetails.propTypes = {
+    files: PropTypes.object.isRequired,
     match: PropTypes.shape({
         params: PropTypes.shape({
             id: PropTypes.string.isRequired

@@ -1,9 +1,8 @@
-import { SET_USER_DATA, REMOVE_USER_DATA, USER_LOGGED_OUT } from '../actions/types';
+import { SET_USER_DATA, REMOVE_USER_DATA } from '../actions/types';
 
 const initialState = {
     email: '',
-    isAuthenticated: false,
-    loading: true,
+    isAuthenticated: false
 };
 
 const user = function (state = initialState, action) {
@@ -13,17 +12,14 @@ const user = function (state = initialState, action) {
                 return {
                     ...initialState,
                     email: action.payload.email,
-                    loading: false,
                     isAuthenticated: action.payload.isAuthenticated
                 };
             }
         case REMOVE_USER_DATA:
-        case USER_LOGGED_OUT:
             {
                 return {
                     ...initialState,
                     email: '',
-                    loading: false,
                     isAuthenticated: false
                 };
             }

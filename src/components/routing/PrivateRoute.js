@@ -6,38 +6,50 @@ import Spinner from '../spinner/Spinner';
 
 const PrivateRoute = ({
     component: Component,
-    user: { isAuthenticated, loading },
+    app: { userLoaded, filesLoaded },
+    files: { entities },
+    user: { isAuthenticated },
     ...rest
 }) => (
         <Route
             {...rest}
             render={props =>
-                loading
+                !userLoaded || !filesLoaded
                     ?
                     (
                         <Spinner />
                     )
                     :
-                    isAuthenticated
+                    !isAuthenticated
                         ?
-                        (
-                            <Component {...props} />
-                        )
-                        :
                         (
                             <Redirect to="/" />
                         )
+                        :
+                        entities
+                            ?
+                            (
+                                <Component {...props} files={entities} />
+                            )
+                            :
+                            (
+                                <Spinner />
+                            )
             }
         />
     );
 
 PrivateRoute.propTypes = {
     user: PropTypes.object.isRequired,
+    app: PropTypes.object.isRequired,
+    files: PropTypes.object.isRequired,
     component: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    user: state.user
+    user: state.user,
+    app: state.app,
+    files: state.files
 });
 
 export default connect(mapStateToProps)(PrivateRoute);
