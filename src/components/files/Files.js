@@ -10,13 +10,17 @@ const Files = (props) => {
 
         <section className='container'>
             <h1 className='h1'>Files</h1>
-            <FileList files={files} />
+            <FileList files={files.entities} />
         </section>
     )
 }
 
 Files.propTypes = {
-    files: PropTypes.object.isRequired
+    files: PropTypes.shape({})
+}
+
+Files.defaultProps = {
+    files: {}
 }
 
 export default Files;

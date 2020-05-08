@@ -75,4 +75,9 @@ FileList.propTypes = {
     }),
 };
 
+
+FileList.defaultProps = {
+    files: {}
+}
+
 export default withRouter(FileList);

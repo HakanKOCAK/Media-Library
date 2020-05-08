@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
@@ -138,7 +138,12 @@ const FileDetails = (props) => {
                         :
                         <Other url={url} />
             }
-            <EditableTags submittedTags={submittedTags} submittedStart={submittedStartIntervals} submittedEnd={submittedEndIntervals} type={type} />
+            <EditableTags
+                submittedTags={submittedTags}
+                submittedStart={submittedStartIntervals}
+                submittedEnd={submittedEndIntervals}
+                type={type}
+            />
         </div>
     )
 }
@@ -151,5 +156,10 @@ FileDetails.propTypes = {
         })
     }),
 };
+
+
+FileDetails.defaultProps = {
+    files: {}
+}
 
 export default FileDetails

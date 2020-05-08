@@ -6,38 +6,42 @@ import Spinner from '../spinner/Spinner';
 
 const PrivateRoute = ({
     component: Component,
-    app: { userLoaded, filesLoaded },
-    files: { entities },
-    user: { isAuthenticated },
+    files,
+    app,
+    user,
+    // app: { userLoaded, filesLoaded },
+    // files: { entities },
+    // user: { isAuthenticated },
     ...rest
-}) => (
-        <Route
-            {...rest}
-            render={props =>
-                !userLoaded || !filesLoaded
+}) => {
+    const storeProps = { files, app, user }
+    return (<Route
+        {...rest}
+        render={props =>
+            !app.userLoaded || !app.filesLoaded
+                ?
+                (
+                    <Spinner />
+                )
+                :
+                !user.isAuthenticated
                     ?
                     (
-                        <Spinner />
+                        <Redirect to="/" />
                     )
                     :
-                    !isAuthenticated
+                    files.entities
                         ?
                         (
-                            <Redirect to="/" />
+                            <Component {...props} {...storeProps} />
                         )
                         :
-                        entities
-                            ?
-                            (
-                                <Component {...props} files={entities} />
-                            )
-                            :
-                            (
-                                <Spinner />
-                            )
-            }
-        />
-    );
+                        (
+                            <Spinner />
+                        )
+        }
+    />)
+};
 
 PrivateRoute.propTypes = {
     user: PropTypes.object.isRequired,
@@ -46,10 +50,13 @@ PrivateRoute.propTypes = {
     component: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-    user: state.user,
-    app: state.app,
-    files: state.files
-});
+const mapStateToProps = state => {
+    console.log('state:', state)
+    return {
+        user: state.user,
+        app: state.app,
+        files: state.files
+    }
+};
 
 export default connect(mapStateToProps)(PrivateRoute);
