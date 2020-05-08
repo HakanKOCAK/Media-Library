@@ -7,6 +7,17 @@ const pretty = require('prettysize');
 const normalizeResponse = (question, submissionDetails, key) => {
     const { name: questionName, answer: questionAnswer } = question;
 
+    if (submissionDetails.data && submissionDetails.data.videoAudio && questionName === 'tagsVideoAudio') {
+        submissionDetails.data.tags = {
+            'answers': [],
+            'qid': key
+        }
+    } else if (submissionDetails.data && questionName === 'tagsImageOther' && (submissionDetails.data.image || submissionDetails.data.otherDoc)) {
+        submissionDetails.data.tags = {
+            'answers': [],
+            'qid': key
+        }
+    }
     switch (questionName) {
         case 'nameSurname':
             return submissionDetails.data = {
@@ -61,14 +72,6 @@ const normalizeResponse = (question, submissionDetails, key) => {
                         'qid': key
                     }
                 }
-            } else if (!submissionDetails.data.tags) {
-                return submissionDetails.data.tags = {
-                    ...submissionDetails.data,
-                    'tags': {
-                        'answer': [],
-                        'qid': key
-                    }
-                }
             }
             return submissionDetails.data;
         case 'tagsVideoAudio':
@@ -107,14 +110,6 @@ const normalizeResponse = (question, submissionDetails, key) => {
                         'qid': key
                     }
                 }
-            } else if (!submissionDetails.data.tags) {
-                return submissionDetails.data.tags = {
-                    ...submissionDetails.data,
-                    'tags': {
-                        'answer': [],
-                        'qid': key
-                    }
-                }
             }
             return submissionDetails.data;
         default:
@@ -148,10 +143,11 @@ export const getAllFiles = () => {
                     const submissionDetails = Object.entries(submission).reduce((submissionDetails, value) => {
                         const key = value[0]
                         const question = value[1]
-                        submissionDetails.submissionId = item.id
-                        submissionDetails.uploadDate = date
-                        submissionDetails.data = normalizeResponse(question, Object.create(submissionDetails), key);
-                        return submissionDetails;
+                        return {
+                            submissionId: item.id,
+                            uploadDate: date,
+                            data: normalizeResponse(question, { ...submissionDetails }, key)
+                        };
                     }, {})
                     answers[item.id] = submissionDetails
                     return answers
