@@ -4,24 +4,22 @@ import { GET_FILES_SUCCESS, GET_FILES_FAIL } from './types';
 import { setFilesLoaded } from './app';
 const pretty = require('prettysize');
 
-const normalizeResponse = (submission, submissionDetails, key) => {
-    const question = submission[key];
+const normalizeResponse = (question, submissionDetails, key) => {
     const { name: questionName, answer: questionAnswer } = question;
 
     switch (questionName) {
         case 'nameSurname':
-            submissionDetails.data = {
+            return submissionDetails.data = {
                 ...submissionDetails.data,
                 [questionName]: {
                     'answer': `${questionAnswer['first']} ${questionAnswer['last']}`,
                     'qid': key
                 }
             }
-            break;
         case 'otherDoc':
         case 'videoAudio':
             if (questionAnswer.length) {
-                submissionDetails.data = {
+                return submissionDetails.data = {
                     ...submissionDetails.data,
                     [questionName]: {
                         'answer': questionAnswer,
@@ -29,10 +27,10 @@ const normalizeResponse = (submission, submissionDetails, key) => {
                     }
                 }
             }
-            break;
+            return submissionDetails.data;
         case 'image':
             if (questionAnswer) {
-                submissionDetails.data = {
+                return submissionDetails.data = {
                     ...submissionDetails.data,
                     [questionName]: {
                         'answer': questionAnswer,
@@ -40,7 +38,7 @@ const normalizeResponse = (submission, submissionDetails, key) => {
                     }
                 }
             }
-            break;
+            return submissionDetails.data;
         case 'tagsImageOther':
             if (questionAnswer) {
                 const tagsOfSubmission = []
@@ -56,15 +54,23 @@ const normalizeResponse = (submission, submissionDetails, key) => {
                     console.log(error)
                 }
 
-                submissionDetails.data = {
+                return submissionDetails.data = {
                     ...submissionDetails.data,
                     'tags': {
                         'answer': tagsOfSubmission,
                         'qid': key
                     }
                 }
+            } else if (!submissionDetails.data.tags) {
+                return submissionDetails.data.tags = {
+                    ...submissionDetails.data,
+                    'tags': {
+                        'answer': [],
+                        'qid': key
+                    }
+                }
             }
-            break;
+            return submissionDetails.data;
         case 'tagsVideoAudio':
             if (questionAnswer) {
                 const tagsOfSubmission = []
@@ -94,23 +100,31 @@ const normalizeResponse = (submission, submissionDetails, key) => {
                     console.log(error);
                 }
 
-                submissionDetails.data = {
+                return submissionDetails.data = {
                     ...submissionDetails.data,
                     'tags': {
                         'answer': tagsOfSubmission,
                         'qid': key
                     }
                 }
+            } else if (!submissionDetails.data.tags) {
+                return submissionDetails.data.tags = {
+                    ...submissionDetails.data,
+                    'tags': {
+                        'answer': [],
+                        'qid': key
+                    }
+                }
             }
-            break;
+            return submissionDetails.data;
         default:
             if (questionName !== 'mediaLibrary' && questionName !== 'submit') {
-                submissionDetails.data = {
+                return submissionDetails.data = {
                     ...submissionDetails.data,
                     [questionName]: { 'answer': questionAnswer, 'qid': key }
                 }
             }
-            break;
+            return submissionDetails.data;
     }
 }
 export const getAllFiles = () => {
@@ -125,24 +139,25 @@ export const getAllFiles = () => {
             const res = await axios.get(`https://api.jotform.com/form/${formId}/submissions`, config)
             const content = res.data.content
 
-            const answers = {}
-            Object.keys(content).map(key => {
-                const submission = content[key].answers
-                const createdAt = content[key].created_at.split(' ')[0].split('-')
-                const date = `${createdAt[2]}/${createdAt[1]}/${createdAt[0]}`
+            const getAnswers = data =>
+                data.reduce((answers, item) => {
+                    const submission = item.answers
+                    const createdAt = item.created_at.split(' ')[0].split('-')
+                    const date = `${createdAt[2]}/${createdAt[1]}/${createdAt[0]}`
 
-                const submissionDetails = {
-                    submissionId: content[key].id,
-                    uploadDate: date,
-                    data: {}
-                };
+                    const submissionDetails = Object.entries(submission).reduce((submissionDetails, value) => {
+                        const key = value[0]
+                        const question = value[1]
+                        submissionDetails.submissionId = item.id
+                        submissionDetails.uploadDate = date
+                        submissionDetails.data = normalizeResponse(question, Object.create(submissionDetails), key);
+                        return submissionDetails;
+                    }, {})
+                    answers[item.id] = submissionDetails
+                    return answers
+                }, {})
 
-                Object.keys(submission).map(key => {
-                    normalizeResponse(submission, submissionDetails, key);
-                })
-                answers[content[key].id] = submissionDetails
-            })
-
+            const answers = getAnswers(Object.values(content))
             await getFileSizes(answers)
 
             dispatch({
@@ -164,7 +179,6 @@ const getFileName = (url) => {
     return url.split('/')[url.split('/').length - 1]
 }
 const getFileSizes = async (files) => {
-
     return Promise.all(
         Object.keys(files).map(async (key) => {
             const file = files[key].data
@@ -190,7 +204,7 @@ const getFileSizes = async (files) => {
 
             const size = resp.data.size
 
-            file.size = pretty(size, false, false, 2);
+            return file.size = pretty(size, false, false, 2);
         })
     )
 
