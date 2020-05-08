@@ -78,52 +78,50 @@ const Register = () => {
 
     return (
         <Fragment>
-            <section className="container">
-                <h1 className="large text-primary">Sign Up</h1>
-                <p className="lead"><i className="fas fa-user"></i> Create Your Account</p>
-                <form className="form" onSubmit={event => onSubmit(event, email, password, password2)}>
-                    <div className="form-group">
-                        <input
-                            type="email"
-                            placeholder="Email Address"
-                            name="userEmail"
-                            className={flags.USER_EXIST || flags.EMAIL_FORMAT ? 'error' : ''}
-                            value={email}
-                            onChange={event => onChange(event)
-                            }
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            name="userPassword"
-                            className={flags.PASSWORDS_DO_NOT_MATCH ? 'error' : ''}
-                            value={password}
-                            onChange={event => onChange(event)}
-                            minLength='6'
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            type="password"
-                            placeholder="Confirm Password"
-                            name="userPassword2"
-                            className={flags.PASSWORDS_DO_NOT_MATCH ? 'error' : ''}
-                            value={password2}
-                            onChange={event => onChange(event)}
-                            required
-                        />
-                    </div>
-                    <Error flags={flags} />
-                    <input className="btn btn-primary" type="submit" value="Register" />
-                </form>
-                <p className="my-1">
-                    Already have an account? <Link to="/login">Sign In</Link>
-                </p>
-            </section>
+            <h1 className="large text-primary">Sign Up</h1>
+            <p className="lead"><i className="fas fa-user"></i> Create Your Account</p>
+            <form className="form" onSubmit={event => onSubmit(event, email, password, password2)}>
+                <div className="form-group">
+                    <input
+                        type="email"
+                        placeholder="Email Address"
+                        name="userEmail"
+                        className={flags.USER_EXIST || flags.EMAIL_FORMAT ? 'error' : ''}
+                        value={email}
+                        onChange={event => onChange(event)
+                        }
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        name="userPassword"
+                        className={flags.PASSWORDS_DO_NOT_MATCH ? 'error' : ''}
+                        value={password}
+                        onChange={event => onChange(event)}
+                        minLength='6'
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <input
+                        type="password"
+                        placeholder="Confirm Password"
+                        name="userPassword2"
+                        className={flags.PASSWORDS_DO_NOT_MATCH ? 'error' : ''}
+                        value={password2}
+                        onChange={event => onChange(event)}
+                        required
+                    />
+                </div>
+                <Error flags={flags} />
+                <input className="btn btn-primary" type="submit" value="Register" />
+            </form>
+            <p className="my-1">
+                Already have an account? <Link to="/login">Sign In</Link>
+            </p>
         </Fragment >
     )
 }

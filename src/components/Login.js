@@ -71,39 +71,37 @@ const Login = () => {
 
     return (
         <Fragment>
-            <section className="container">
-                <h1 className="large text-primary">Sign In</h1>
-                <p className="lead"><i className="fas fa-user"></i> Sign Into Your Account</p>
-                <form className="form" onSubmit={event => onSubmit(event, email, password)}>
-                    <div className="form-group">
-                        <input
-                            type="email"
-                            placeholder="Email Address"
-                            className={flags.EMAIL_FORMAT || flags.NO_ACCOUNT ? 'error' : ''}
-                            name="userEmail"
-                            value={email}
-                            onChange={event => onChange(event)}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            type="password"
-                            className={flags.INCORRECT_PASSWORD || flags.PASSWORD_LENGHT ? 'error' : ''}
-                            placeholder="Password"
-                            name="userPassword"
-                            minLength="6"
-                            value={password}
-                            onChange={event => onChange(event)}
-                        />
-                    </div>
-                    <Error flags={flags} />
-                    <input type="submit" className="btn btn-primary" value="Sign In" />
-                </form>
-                <p className="my-1">
-                    Do not have an account? <Link to="/register">Sign Up</Link>
-                </p>
-            </section>
+            <h1 className="large text-primary">Sign In</h1>
+            <p className="lead"><i className="fas fa-user"></i> Sign Into Your Account</p>
+            <form className="form" onSubmit={event => onSubmit(event, email, password)}>
+                <div className="form-group">
+                    <input
+                        type="email"
+                        placeholder="Email Address"
+                        className={flags.EMAIL_FORMAT || flags.NO_ACCOUNT ? 'error' : ''}
+                        name="userEmail"
+                        value={email}
+                        onChange={event => onChange(event)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <input
+                        type="password"
+                        className={flags.INCORRECT_PASSWORD || flags.PASSWORD_LENGHT ? 'error' : ''}
+                        placeholder="Password"
+                        name="userPassword"
+                        minLength="6"
+                        value={password}
+                        onChange={event => onChange(event)}
+                    />
+                </div>
+                <Error flags={flags} />
+                <input type="submit" className="btn btn-primary" value="Sign In" />
+            </form>
+            <p className="my-1">
+                Do not have an account? <Link to="/register">Sign Up</Link>
+            </p>
         </Fragment>
     )
 }

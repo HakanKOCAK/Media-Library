@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
@@ -14,7 +14,7 @@ import '../../styles/FileDetails.css';
 const FileDetails = (props) => {
     const { id } = props.match.params
 
-    const file = props.files[id];
+    const file = props.files.entities[id];
 
     console.log('details ', file)
     //Upload date
@@ -120,7 +120,7 @@ const FileDetails = (props) => {
     }
 
     return (
-        <div>
+        <Fragment>
             <Link to="/files" className="link">
                 <FontAwesomeIcon icon={faLongArrowAltLeft} size="lg" />
                 <span className="mx-05">Back to Files</span>
@@ -144,12 +144,14 @@ const FileDetails = (props) => {
                 submittedEnd={submittedEndIntervals}
                 type={type}
             />
-        </div>
+        </Fragment>
     )
 }
 
 FileDetails.propTypes = {
-    files: PropTypes.object.isRequired,
+    files: PropTypes.shape({
+        entities: PropTypes.object.isRequired
+    }),
     match: PropTypes.shape({
         params: PropTypes.shape({
             id: PropTypes.string.isRequired

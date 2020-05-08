@@ -10,7 +10,7 @@ const FileList = (props) => {
         return null;
     }
 
-    if (files.length === 0) {
+    if (filesArray.length === 0) {
         return (
             <div>
                 There are no files.
