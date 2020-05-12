@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 const EditableTags = (props) => {
 
-    const { submittedStart, submittedTags, submittedEnd, type } = props;
+    const { submittedTags, type } = props;
 
     //To check if a tag is editing 
     const [edit, setEdit] = useState([]);
@@ -78,11 +78,11 @@ const EditableTags = (props) => {
     }
 
     useEffect(() => {
-        setTags(submittedTags)
-        setStart(submittedStart)
-        setEnd(submittedEnd)
+        setTags(submittedTags.map(tag => { return tag.tag }))
+        setStart(submittedTags.map(tag => { return tag.start }))
+        setEnd(submittedTags.map(tag => { return tag.end }))
     }, [props])
-    
+
     return (
         <fieldset className='main'>
             <legend className='label'>Tags</legend>
@@ -102,17 +102,27 @@ const EditableTags = (props) => {
                             onMouseLeave={() => onLeave(index)}
                         >
                             {
-                                submittedTags[index] !== tags[index]
-                                    ||
-                                    submittedStart[index] !== start[index]
-                                    ||
-                                    submittedEnd[index] !== end[index]
+                                type === 'Other' || type === 'Image'
                                     ?
-                                    <div className='iconContainer right'>
-                                        <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave()} />
-                                    </div>
+                                    submittedTags[index].tag !== tags[index]
+                                        ?
+                                        <div className='iconContainer right'>
+                                            <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave()} />
+                                        </div>
+                                        :
+                                        null
                                     :
-                                    null
+                                    submittedTags[index].tag !== tags[index]
+                                        ||
+                                        submittedTags[index].start !== start[index]
+                                        ||
+                                        submittedTags[index].end !== end[index]
+                                        ?
+                                        <div className='iconContainer right'>
+                                            <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave()} />
+                                        </div>
+                                        :
+                                        null
                             }
                             <input disabled={!edit[index]}
                                 className={`tagInput 

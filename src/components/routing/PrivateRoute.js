@@ -51,7 +51,6 @@ PrivateRoute.propTypes = {
 };
 
 const mapStateToProps = state => {
-    console.log('state:', state)
     return {
         user: state.user,
         app: state.app,

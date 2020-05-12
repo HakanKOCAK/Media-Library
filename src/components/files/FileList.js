@@ -6,6 +6,7 @@ import '../../styles/Files.css'
 const FileList = (props) => {
     const { files } = props
     const filesArray = Object.values(files)
+
     if (!files) {
         return null;
     }
@@ -40,22 +41,22 @@ const FileList = (props) => {
                     return (
                         <tr key={item.submissionId} onClick={event => handleClick(event, item)}>
                             <td>
-                                {item.data.nameSurname.answer}
+                                {item.nameSurname}
                             </td>
                             <td>
-                                {item.data.email.answer}
+                                {item.email}
                             </td>
                             <td>
                                 {item.uploadDate}
                             </td>
                             <td>
-                                {item.data.fileName}
+                                {item.entity.fileName}
                             </td>
                             <td>
-                                {item.data.fileType.answer}
+                                {item.fileType}
                             </td>
                             <td>
-                                {item.data.size}
+                                {item.entity.size}
                             </td>
                             <td>
                                 -

@@ -16,47 +16,22 @@ const FileDetails = (props) => {
 
     const file = props.files.entities[id];
 
-    console.log('details ', file)
     //Upload date
     const uploadDate = file.uploadDate
 
-    //Details
-    const details = file.data;
-
     //Qid for the tags to be updated later
-    const tagsQid = details.tags.qid
+    const tagsQid = file.entity.qid
 
     //Submitter name
-    const name = details.nameSurname.answer
+    const name = file.nameSurname
 
     //File Type
-    const type = details.fileType.answer
+    const type = file.fileType
 
-    console.log('Type is:', type)
     //Set submitted tags
-    const submittedTags = type === 'Video/Audio' ? details.tags.answer.map(element => { return element.tag }) : details.tags.answer
+    const submittedTags = file.entity.tags
 
-    //Start & end intervals for video/audio
-    const submittedStartIntervals = []
-    const submittedEndIntervals = []
-
-    if (type === 'Video/Audio') {
-        const fileTags = details.tags.answer
-        fileTags.map(tag => {
-            submittedStartIntervals.push(tag.start.trim())
-            submittedEndIntervals.push(tag.end.trim())
-        })
-    }
-
-    const url = type === 'Video/Audio'
-        ?
-        details.videoAudio.answer[0]
-        :
-        type === 'Other'
-            ?
-            details.otherDoc.answer[0]
-            :
-            details.image.answer
+    const url = file.entity.url
 
     // const onEnter = (index) => {
     //     const arr = [];
@@ -115,7 +90,7 @@ const FileDetails = (props) => {
     //     setOriginalTags(arr);
     // }
 
-    if (!details) {
+    if (!file) {
         return <Spinner />
     }
 
@@ -140,8 +115,6 @@ const FileDetails = (props) => {
             }
             <EditableTags
                 submittedTags={submittedTags}
-                submittedStart={submittedStartIntervals}
-                submittedEnd={submittedEndIntervals}
                 type={type}
             />
         </Fragment>
