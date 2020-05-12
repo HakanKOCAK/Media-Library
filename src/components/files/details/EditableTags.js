@@ -91,11 +91,15 @@ const EditableTags = (props) => {
                     return (
                         <div key={index}
                             className={`tag 
-                                    ${edit[index]
+                                    ${edit[index] && type === 'Video/Audio'
                                     ?
                                     'editTagExtended'
                                     :
-                                    ''
+                                    edit[index]
+                                        ?
+                                        'editInput'
+                                        :
+                                        ''
                                 }`
                             }
                             onMouseEnter={() => onEnter(index)}
