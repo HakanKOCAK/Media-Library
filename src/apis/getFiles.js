@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { apiKey, formId } from '../config/config';
+import { v4 as uuidv4 } from 'uuid';
 import pretty from 'prettysize';
 const normalizeResponse = (question, submissionDetails, key) => {
     const { name: questionName, answer: questionAnswer } = question;
@@ -32,9 +33,9 @@ const normalizeResponse = (question, submissionDetails, key) => {
                 try {
                     const submittedTags = JSON.parse(questionAnswer);
                     const tagsOfSubmission = tags => {
-                        const newTags = tags.reduce((newTags, item, index) => {
+                        const newTags = tags.reduce((newTags, item) => {
                             const keys = Object.keys(item)
-                            newTags[index] =
+                            newTags[uuidv4()] =
                                 keys.reduce((newObject, key) => {
                                     const answer = item[key]
                                     return { ...newObject, tag: answer }
@@ -69,9 +70,9 @@ const normalizeResponse = (question, submissionDetails, key) => {
                 try {
                     const submittedTags = JSON.parse(questionAnswer);
                     const tagsOfSubmission = tags => {
-                        const newTags = tags.reduce((newTags, item, index) => {
+                        const newTags = tags.reduce((newTags, item) => {
                             const keys = Object.keys(item)
-                            newTags[index] =
+                            newTags[uuidv4()] =
                                 keys.reduce((newObject, key) => {
                                     const answer = item[key]
                                     if (key === 'Tag') {

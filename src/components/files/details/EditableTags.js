@@ -1,19 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faSave, faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 
 const EditableTags = (props) => {
 
     const { tags, type, onTagDelete, onTagAdd, onTagSave } = props;
 
-    console.log(tags)
     //To check if a tag is editing 
     const [edit, setEdit] = useState([]);
 
     //tags and  value
-    const [displayTags, setTags] = useState({ ...tags })
-    console.log('display', displayTags)
+    const [displayTags, setTags] = useState(tags)
+
     //To display edit and delete options of tags
     const [visible, setVisible] = useState([]);
 
@@ -36,25 +36,26 @@ const EditableTags = (props) => {
         const { name, value } = event.currentTarget;
 
         if (name.includes('tag')) {
-            arr[key].tag = value;
+            tags[key].tag = value;
         } else if (name.includes('start')) {
-            arr[key].start = value;
+            tags[key].start = value;
         } else {
-            arr[key].end = value;
+            tags[key].end = value;
         }
 
         setTags(arr);
     }
 
     const onDelete = (tagId) => {
-        const obj = { ...displayTags }
-        delete obj[tagId]
-        setTags(obj)
         onTagDelete(tagId);
     }
 
-    const onSave = () => {
-        console.log('saved')
+    const onSave = (key) => {
+        const data = { tagId: key, tag: tags[key] }
+        onTagSave(data)
+        const arr = []
+        arr[key] = false
+        setEdit(arr)
     }
 
     const onEdit = (index) => {
@@ -64,20 +65,20 @@ const EditableTags = (props) => {
     }
 
     const onAdd = () => {
+        let obj = {}
         if (type === 'Video/Audio') {
-            const obj = { ...displayTags, [Object.keys(tags).length]: { tag: '', start: '00:00', end: '00:00' } };
-            setTags(obj);
+            obj = { tagId: [uuidv4()], tag: { tag: '', start: '00:00', end: '00:00' } };
         } else {
-            const obj = { ...displayTags, [Object.keys(tags).length]: { tag: '' } };
-            setTags(obj);
+            obj = { tagId: [uuidv4()], tag: { tag: '' } };
         }
+        onTagSave(obj)
     }
 
     return (
         <fieldset className='main'>
             <legend className='label'>Tags</legend>
             <div className='tagsContainer'>
-                {Object.entries(displayTags).map(item => {
+                {Object.entries(tags).map(item => {
                     const key = item[0];
                     const tag = item[1].tag;
                     const start = item[1].start;
@@ -103,7 +104,7 @@ const EditableTags = (props) => {
                                 edit[key]
                                     ?
                                     < div className='iconContainer right'>
-                                        <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave()} />
+                                        <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave(key)} />
                                     </div>
                                     :
                                     null

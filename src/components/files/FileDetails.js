@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
@@ -9,6 +9,7 @@ import Video from './details/Video';
 import Image from './details/Image';
 import Other from './details/Other';
 import EditableTags from './details/EditableTags';
+import { deleteTag, saveTag } from '../../actions/files';
 
 import '../../styles/FileDetails.css';
 
@@ -16,7 +17,8 @@ const FileDetails = (props) => {
     const dispatch = useDispatch()
     const { id } = props.match.params
 
-    const file = props.files.entities[id];
+    const files = props.files
+    const file = files.entities[id];
 
     //Upload date
     const uploadDate = file.uploadDate
@@ -31,21 +33,17 @@ const FileDetails = (props) => {
     const type = file.fileType
 
     //Set submitted tags
-    const submittedTags = file.entity.tags
+    const tags = file.entity.tags
 
     const url = file.entity.url
 
 
-    const onDelete = (index) => {
-        dispatch({ type: 'TAG_DELETED', payload: { index: index, submissionId: id } })
+    const onDelete = (tagId) => {
+        dispatch(deleteTag({ submissionId: id, tagId: tagId }))
     }
 
-    const onSave = () => {
-
-    }
-
-    const onAdd = () => {
-
+    const onSave = (data) => {
+        dispatch(saveTag({ submissionId: id, data: data }))
     }
 
     if (!file) {
@@ -72,9 +70,8 @@ const FileDetails = (props) => {
                         <Other url={url} />
             }
             <EditableTags
-                tags={submittedTags}
+                tags={tags}
                 onTagDelete={onDelete}
-                onTagAdd={onAdd}
                 onTagSave={onSave}
                 type={type}
             />
@@ -98,4 +95,4 @@ FileDetails.defaultProps = {
     files: {}
 }
 
-export default FileDetails
+export default FileDetails;

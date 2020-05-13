@@ -1,6 +1,8 @@
 import {
     GET_FILES_SUCCESS,
-    GET_FILES_FAIL
+    GET_FILES_FAIL,
+    DELETE_TAG,
+    SAVE_TAG
 } from '../actions/types';
 
 const initialState = {
@@ -22,10 +24,24 @@ export default function (state = initialState, action) {
                 error: payload
             }
 
-        case 'TAG_DELETED':
-            console.log(state, payload)
-            return {
-                ...state
+        case DELETE_TAG:
+            {
+                const { submissionId, tagId } = payload
+                let entities = { ...state.entities }
+                delete entities[submissionId].entity.tags[tagId]
+                return {
+                    entities
+                }
+            }
+        case SAVE_TAG:
+            {
+                const { submissionId, data } = payload
+                const { tagId, tag } = data
+                let entities = { ...state.entities }
+                entities[submissionId].entity.tags[tagId] = tag
+                return {
+                    entities
+                }
             }
         default:
             return state;

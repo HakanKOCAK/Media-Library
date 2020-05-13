@@ -1,4 +1,9 @@
-import { GET_FILES_SUCCESS, GET_FILES_FAIL } from './types';
+import {
+    GET_FILES_SUCCESS,
+    GET_FILES_FAIL,
+    DELETE_TAG,
+    SAVE_TAG
+} from './types';
 import { setFilesLoaded } from './app';
 import { getFiles } from '../apis/getFiles';
 
@@ -19,5 +24,19 @@ export const getAllFiles = () => {
             })
             dispatch(setFilesLoaded(true));
         }
+    }
+}
+
+export const deleteTag = ({ submissionId, tagId }) => {
+    return {
+        type: DELETE_TAG,
+        payload: { submissionId, tagId }
+    }
+}
+
+export const saveTag = ({ submissionId, data }) => {
+    return {
+        type: SAVE_TAG,
+        payload: { submissionId, data }
     }
 }
