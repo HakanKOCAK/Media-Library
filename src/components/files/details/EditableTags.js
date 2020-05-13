@@ -1,23 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faSave, faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
 
 const EditableTags = (props) => {
 
-    const { submittedTags, type } = props;
+    const { tags, type, onTagDelete, onTagAdd, onTagSave } = props;
 
     //To check if a tag is editing 
     const [edit, setEdit] = useState([]);
-
-    //Set tags and their default value
-    const [tags, setTags] = useState([]);
-
-    //Check the start interval of a tag (video, audio)
-    const [start, setStart] = useState([]);
-
-    //Check the end interval of a tag (video, audio)
-    const [end, setEnd] = useState([]);
 
     //To display edit and delete options of tags
     const [visible, setVisible] = useState([]);
@@ -37,28 +28,25 @@ const EditableTags = (props) => {
 
     const onChange = (event, index) => {
 
-        let arr = []
+        const arr = [...tags]
         const { name, value } = event.currentTarget;
 
         if (name.includes('tag')) {
-            arr = [...tags];
-            arr[index] = value;
-            setTags(arr);
+            arr[index].tag = value;
         } else if (name.includes('start')) {
-            arr = [...start];
-            arr[index] = value;
-            setStart(arr);
+            arr[index].start = value;
         } else {
-            arr = [...end];
-            arr[index] = value;
-            setEnd(arr);
+            arr[index].end = value;
         }
+
+        // setTags(arr);
     }
 
     const onDelete = (index) => {
         const arr = [...tags];
         arr.splice(index, 1);
-        setTags(arr);
+        // setTags(arr);
+        onTagDelete(index);
     }
 
     const onSave = () => {
@@ -72,22 +60,15 @@ const EditableTags = (props) => {
     }
 
     const onAdd = () => {
-        const arr = [...tags];
-        arr.push('');
-        setTags(arr);
+        const arr = [...tags, ''];
+        // setTags(arr);
     }
-
-    useEffect(() => {
-        setTags(submittedTags.map(tag => { return tag.tag }))
-        setStart(submittedTags.map(tag => { return tag.start }))
-        setEnd(submittedTags.map(tag => { return tag.end }))
-    }, [props])
 
     return (
         <fieldset className='main'>
             <legend className='label'>Tags</legend>
             <div className='tagsContainer'>
-                {tags.map((t, index) => {
+                {tags.map((item, index) => {
                     return (
                         <div key={index}
                             className={`tag 
@@ -106,27 +87,13 @@ const EditableTags = (props) => {
                             onMouseLeave={() => onLeave(index)}
                         >
                             {
-                                type === 'Other' || type === 'Image'
+                                edit[index]
                                     ?
-                                    submittedTags[index].tag !== tags[index]
-                                        ?
-                                        <div className='iconContainer right'>
-                                            <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave()} />
-                                        </div>
-                                        :
-                                        null
+                                    <div className='iconContainer right'>
+                                        <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave()} />
+                                    </div>
                                     :
-                                    submittedTags[index].tag !== tags[index]
-                                        ||
-                                        submittedTags[index].start !== start[index]
-                                        ||
-                                        submittedTags[index].end !== end[index]
-                                        ?
-                                        <div className='iconContainer right'>
-                                            <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave()} />
-                                        </div>
-                                        :
-                                        null
+                                    null
                             }
                             <input disabled={!edit[index]}
                                 className={`tagInput 
@@ -140,7 +107,7 @@ const EditableTags = (props) => {
                                 }
                                 name={`tag${index}`}
                                 type='text'
-                                value={t}
+                                value={item.tag}
                                 onChange={event => onChange(event, index)}
                             />
                             {
@@ -168,14 +135,14 @@ const EditableTags = (props) => {
                                         <input className='intervalInput'
                                             name={`start${index}`}
                                             type='text'
-                                            value={start[index]}
+                                            value={item.start}
                                             onChange={event => onChange(event, index)}
                                         />
                                                 /
                                                 <input className='intervalInput'
                                             name={`end${index}`}
                                             type='text'
-                                            value={end[index]}
+                                            value={item.end}
                                             onChange={event => onChange(event, index)}
                                         />
                                     </div>
@@ -199,9 +166,7 @@ const EditableTags = (props) => {
 }
 
 EditableTags.propTypes = {
-    submittedStart: PropTypes.array.isRequired,
-    submittedEnd: PropTypes.array.isRequired,
-    submittedTags: PropTypes.array.isRequired,
+    tags: PropTypes.array.isRequired,
     type: PropTypes.string.isRequired
 }
 

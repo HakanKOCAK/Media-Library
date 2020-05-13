@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
@@ -12,6 +13,7 @@ import EditableTags from './details/EditableTags';
 import '../../styles/FileDetails.css';
 
 const FileDetails = (props) => {
+    const dispatch = useDispatch()
     const { id } = props.match.params
 
     const file = props.files.entities[id];
@@ -33,62 +35,18 @@ const FileDetails = (props) => {
 
     const url = file.entity.url
 
-    // const onEnter = (index) => {
-    //     const arr = [];
-    //     arr[index] = true;
-    //     setVisible(arr);
-    // }
 
-    // const onLeave = (index) => {
-    //     const arr = [];
-    //     arr[index] = false;
-    //     setEdit(arr)
-    //     setVisible(arr);
-    // }
+    const onDelete = (index) => {
+        dispatch({ type: 'TAG_DELETED', payload: { index: index, submissionId: id } })
+    }
 
-    // const onChange = (event, index) => {
+    const onSave = () => {
 
-    //     let arr = []
-    //     const { name, value } = event.currentTarget;
+    }
 
-    //     if (name.includes('tag')) {
-    //         arr = [...tags];
-    //         arr[index] = value;
-    //         setTags(arr);
-    //     } else if (name.includes('start')) {
-    //         arr = [...start];
-    //         arr[index] = value;
-    //         setStart(arr);
-    //     } else {
-    //         arr = [...end];
-    //         arr[index] = value;
-    //         setEnd(arr);
-    //     }
-    // }
+    const onAdd = () => {
 
-    // const onDelete = (index) => {
-    //     const arr = [...tags];
-    //     arr.splice(index, 1);
-    //     setTags(arr);
-    //     setOriginalTags(arr);
-    // }
-
-    // const onSave = () => {
-    //     setOriginalTags(tags);
-    // }
-
-    // const onEdit = (index) => {
-    //     const arr = [...edit];
-    //     arr[index] = true;
-    //     setEdit(arr);
-    // }
-
-    // const onAdd = () => {
-    //     const arr = [...tags];
-    //     arr.push('');
-    //     setTags(arr);
-    //     setOriginalTags(arr);
-    // }
+    }
 
     if (!file) {
         return <Spinner />
@@ -114,7 +72,10 @@ const FileDetails = (props) => {
                         <Other url={url} />
             }
             <EditableTags
-                submittedTags={submittedTags}
+                tags={submittedTags}
+                onTagDelete={onDelete}
+                onTagAdd={onAdd}
+                onTagSave={onSave}
                 type={type}
             />
         </Fragment>

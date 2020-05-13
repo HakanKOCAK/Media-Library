@@ -1,6 +1,6 @@
 import { GET_FILES_SUCCESS, GET_FILES_FAIL } from './types';
 import { setFilesLoaded } from './app';
-import { getFiles } from '../apis/getFile';
+import { getFiles } from '../apis/getFiles';
 
 export const getAllFiles = () => {
     return async (dispatch) => {
