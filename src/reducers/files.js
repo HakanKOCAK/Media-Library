@@ -21,6 +21,12 @@ export default function (state = initialState, action) {
                 ...state,
                 error: payload
             }
+
+        case 'TAG_DELETED':
+            console.log(state, payload)
+            return {
+                ...state
+            }
         default:
             return state;
     }

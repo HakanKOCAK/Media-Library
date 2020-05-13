@@ -32,16 +32,15 @@ const normalizeResponse = (question, submissionDetails, key) => {
                 try {
                     const submittedTags = JSON.parse(questionAnswer);
                     const tagsOfSubmission = tags => {
-                        const newTags = tags.reduce((newTags, item) => {
+                        const newTags = tags.reduce((newTags, item, index) => {
                             const keys = Object.keys(item)
-                            newTags.push(
+                            newTags[index] =
                                 keys.reduce((newObject, key) => {
                                     const answer = item[key]
                                     return { ...newObject, tag: answer }
                                 }, {})
-                            )
                             return newTags;
-                        }, [])
+                        }, {})
                         return newTags;
                     }
                     submissionDetails.entity = {
@@ -54,7 +53,7 @@ const normalizeResponse = (question, submissionDetails, key) => {
                     submissionDetails.entity = {
                         ...submissionDetails.entity,
                         qid: key,
-                        tags: []
+                        tags: {}
                     }
                 }
             } else if (submissionDetails.fileType === 'Image' || submissionDetails.fileType === 'Other') {
@@ -70,9 +69,9 @@ const normalizeResponse = (question, submissionDetails, key) => {
                 try {
                     const submittedTags = JSON.parse(questionAnswer);
                     const tagsOfSubmission = tags => {
-                        const newTags = tags.reduce((newTags, item) => {
+                        const newTags = tags.reduce((newTags, item, index) => {
                             const keys = Object.keys(item)
-                            newTags.push(
+                            newTags[index] =
                                 keys.reduce((newObject, key) => {
                                     const answer = item[key]
                                     if (key === 'Tag') {
@@ -91,9 +90,9 @@ const normalizeResponse = (question, submissionDetails, key) => {
                                         }
                                     }
                                 }, {})
-                            )
+
                             return newTags;
-                        }, [])
+                        }, {})
                         return newTags;
                     }
                     submissionDetails.entity = {
@@ -106,7 +105,7 @@ const normalizeResponse = (question, submissionDetails, key) => {
                     submissionDetails.entity = {
                         ...submissionDetails.entity,
                         qid: key,
-                        tags: []
+                        tags: {}
                     }
                 }
             } else if (submissionDetails.fileType === 'Video/Audio') {
