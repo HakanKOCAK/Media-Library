@@ -7,9 +7,13 @@ const EditableTags = (props) => {
 
     const { tags, type, onTagDelete, onTagAdd, onTagSave } = props;
 
+    console.log(tags)
     //To check if a tag is editing 
     const [edit, setEdit] = useState([]);
 
+    //tags and  value
+    const [displayTags, setTags] = useState({ ...tags })
+    console.log('display', displayTags)
     //To display edit and delete options of tags
     const [visible, setVisible] = useState([]);
 
@@ -26,27 +30,27 @@ const EditableTags = (props) => {
         setVisible(arr);
     }
 
-    const onChange = (event, index) => {
+    const onChange = (event, key) => {
 
-        const arr = [...tags]
+        const arr = { ...displayTags }
         const { name, value } = event.currentTarget;
 
         if (name.includes('tag')) {
-            arr[index].tag = value;
+            arr[key].tag = value;
         } else if (name.includes('start')) {
-            arr[index].start = value;
+            arr[key].start = value;
         } else {
-            arr[index].end = value;
+            arr[key].end = value;
         }
 
-        // setTags(arr);
+        setTags(arr);
     }
 
-    const onDelete = (index) => {
-        const arr = [...tags];
-        arr.splice(index, 1);
-        // setTags(arr);
-        onTagDelete(index);
+    const onDelete = (tagId) => {
+        const obj = { ...displayTags }
+        delete obj[tagId]
+        setTags(obj)
+        onTagDelete(tagId);
     }
 
     const onSave = () => {
@@ -60,90 +64,99 @@ const EditableTags = (props) => {
     }
 
     const onAdd = () => {
-        const arr = [...tags, ''];
-        // setTags(arr);
+        if (type === 'Video/Audio') {
+            const obj = { ...displayTags, [Object.keys(tags).length]: { tag: '', start: '00:00', end: '00:00' } };
+            setTags(obj);
+        } else {
+            const obj = { ...displayTags, [Object.keys(tags).length]: { tag: '' } };
+            setTags(obj);
+        }
     }
 
     return (
         <fieldset className='main'>
             <legend className='label'>Tags</legend>
             <div className='tagsContainer'>
-                {tags.map((item, index) => {
+                {Object.entries(displayTags).map(item => {
+                    const key = item[0];
+                    const tag = item[1].tag;
+                    const start = item[1].start;
+                    const end = item[1].end;
                     return (
-                        <div key={index}
+                        <div key={item[0]}
                             className={`tag 
-                                    ${edit[index] && type === 'Video/Audio'
+                                    ${edit[key] && type === 'Video/Audio'
                                     ?
                                     'editTagExtended'
                                     :
-                                    edit[index]
+                                    edit[key]
                                         ?
                                         'editInput'
                                         :
                                         ''
                                 }`
                             }
-                            onMouseEnter={() => onEnter(index)}
-                            onMouseLeave={() => onLeave(index)}
+                            onMouseEnter={() => onEnter(key)}
+                            onMouseLeave={() => onLeave(key)}
                         >
                             {
-                                edit[index]
+                                edit[key]
                                     ?
-                                    <div className='iconContainer right'>
+                                    < div className='iconContainer right'>
                                         <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave()} />
                                     </div>
                                     :
                                     null
                             }
-                            <input disabled={!edit[index]}
+                            <input disabled={!edit[key]}
                                 className={`tagInput 
                                     ${
-                                    edit[index]
+                                    edit[key]
                                         ?
                                         'editInput'
                                         :
                                         ''
                                     }`
                                 }
-                                name={`tag${index}`}
+                                name={`tag${key}`}
                                 type='text'
-                                value={item.tag}
-                                onChange={event => onChange(event, index)}
+                                value={tag}
+                                onChange={event => onChange(event, key)}
                             />
                             {
-                                visible[index]
+                                visible[key]
                                     ?
                                     <div className='iconContainer left'>
                                         {
-                                            !edit[index]
+                                            !edit[key]
                                                 ?
                                                 <FontAwesomeIcon className='icon' icon={faEdit}
-                                                    size='1x' onClick={() => onEdit(index)} />
+                                                    size='1x' onClick={() => onEdit(key)} />
 
                                                 :
                                                 null
                                         }
-                                        <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => onDelete(index)} />
+                                        <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => onDelete(key)} />
                                     </div>
                                     :
                                     null
                             }
                             {
-                                edit[index] && type === 'Video/Audio'
+                                edit[key] && type === 'Video/Audio'
                                     ?
                                     <div className='intervalContainer'>
                                         <input className='intervalInput'
-                                            name={`start${index}`}
+                                            name={`start${key}`}
                                             type='text'
-                                            value={item.start}
-                                            onChange={event => onChange(event, index)}
+                                            value={start}
+                                            onChange={event => onChange(event, key)}
                                         />
                                                 /
                                                 <input className='intervalInput'
-                                            name={`end${index}`}
+                                            name={`end${key}`}
                                             type='text'
-                                            value={item.end}
-                                            onChange={event => onChange(event, index)}
+                                            value={end}
+                                            onChange={event => onChange(event, key)}
                                         />
                                     </div>
                                     :
