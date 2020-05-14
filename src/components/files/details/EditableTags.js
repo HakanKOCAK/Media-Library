@@ -71,7 +71,7 @@ const EditableTags = (props) => {
         } else {
             obj = { tagId: [uuidv4()], tag: { tag: '' } };
         }
-        onTagSave(obj)
+        onTagAdd(obj)
     }
 
     return (

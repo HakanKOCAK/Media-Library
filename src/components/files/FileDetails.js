@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
@@ -42,12 +42,23 @@ const FileDetails = (props) => {
         await deleteTag({ submissionId: id, tagId: tagId })(dispatch)
         const newTags = props.files.entities[id].entity.tags
         const res = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
+
+        if (!res.success) {
+            alert(`${res.error}\nPlease refresh the page.`)
+        }
     }
 
     const onSave = async (data) => {
         dispatch(saveTag({ submissionId: id, data: data }))
         const newTags = props.files.entities[id].entity.tags
         const res = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
+        if (!res.success) {
+            alert(`${res.error}\nPlease refresh the page.`)
+        }
+    }
+
+    const onAdd = (data) => {
+        dispatch(saveTag({ submissionId: id, data: data }))
     }
 
     if (!file) {
@@ -76,6 +87,7 @@ const FileDetails = (props) => {
             <EditableTags
                 tags={tags}
                 onTagDelete={onDelete}
+                onTagAdd={onAdd}
                 onTagSave={onSave}
                 type={type}
             />

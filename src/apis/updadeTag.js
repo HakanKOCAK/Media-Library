@@ -11,7 +11,14 @@ export const updateTag = async ({ submissionId, qid, data }) => {
 
     try {
         const res = await axios.post(`https://api.jotform.com/submission/${submissionId}?apiKey=${apiKey}&submission[${qid}]=${JSON.stringify(newTags)}`)
-        console.log('res', res)
+
+        const data = res.data
+
+        if (data.responseCode === 200) {
+            return { success: true, error: null }
+        }
+
+        return { success: false, error: data.message }
     } catch (error) {
         return { success: false, error: error }
     }
