@@ -11,3 +11,6 @@ export const DELETE_FILE = 'DELETE FILE';
 
 export const DELETE_TAG = 'DELETE TAG';
 export const SAVE_TAG = 'SAVE TAG';
+
+export const SET_ERROR = "SET ERROR";
+export const HIDE_ERROR = "HIDE ERROR";
