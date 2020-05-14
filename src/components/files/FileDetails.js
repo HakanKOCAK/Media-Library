@@ -10,6 +10,7 @@ import Image from './details/Image';
 import Other from './details/Other';
 import EditableTags from './details/EditableTags';
 import { deleteTag, saveTag } from '../../actions/files';
+import { updateTag } from '../../apis/updadeTag';
 
 import '../../styles/FileDetails.css';
 
@@ -33,17 +34,20 @@ const FileDetails = (props) => {
     const type = file.fileType
 
     //Set submitted tags
-    const tags = file.entity.tags
+    let tags = file.entity.tags
 
     const url = file.entity.url
 
-
-    const onDelete = (tagId) => {
-        dispatch(deleteTag({ submissionId: id, tagId: tagId }))
+    const onDelete = async (tagId) => {
+        await deleteTag({ submissionId: id, tagId: tagId })(dispatch)
+        const newTags = props.files.entities[id].entity.tags
+        const res = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
     }
 
-    const onSave = (data) => {
+    const onSave = async (data) => {
         dispatch(saveTag({ submissionId: id, data: data }))
+        const newTags = props.files.entities[id].entity.tags
+        const res = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
     }
 
     if (!file) {

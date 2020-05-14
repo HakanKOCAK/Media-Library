@@ -52,7 +52,7 @@ const FileList = (props) => {
                     {filesArray.map((item) => {
                         return (
                             <tr key={item.submissionId}>
-                                <td onClick={() => handleClick(item.submissionId)}>
+                                <td>
                                     {item.nameSurname}
                                 </td>
                                 <td onClick={() => handleClick(item.submissionId)}>

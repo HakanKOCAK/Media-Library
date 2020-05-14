@@ -31,23 +31,24 @@ export const getAllFiles = () => {
 
 export const deleteFile = (submissiodId) => {
     return async (dispatch) => {
+        dispatch({
+            type: DELETE_FILE,
+            payload: { submissionId: submissiodId }
+        })
+
         const res = await deleteSubmittedFile(submissiodId);
-        console.log(res)
-        if (res.success) {
-            dispatch({
-                type: DELETE_FILE,
-                payload: { submissionId: submissiodId }
-            })
-        } else {
-            alert(res.error)
+        if (!res.success) {
+            alert(`${res.error}\nPlease refresh the page`)
         }
     }
 }
 
 export const deleteTag = ({ submissionId, tagId }) => {
-    return {
-        type: DELETE_TAG,
-        payload: { submissionId, tagId }
+    return async (dispatch) => {
+        dispatch({
+            type: DELETE_TAG,
+            payload: { submissionId, tagId }
+        })
     }
 }
 

@@ -12,8 +12,9 @@ export const deleteSubmittedFile = async (submissionId) => {
         const data = res.data;
         if (data.responseCode === 401) {
             return { success: false, error: data.message }
+        } else if (data.responseCode === 404) {
+            return { success: false, error: data.message }
         }
-
         return { success: true, error: null }
     } catch (error) {
         return { success: false, error: error };
