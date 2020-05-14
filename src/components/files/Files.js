@@ -16,7 +16,7 @@ const Files = (props) => {
 
 Files.propTypes = {
     files: PropTypes.shape({
-        entities: []
+        entities: {}
     })
 }
 

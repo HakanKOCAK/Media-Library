@@ -11,9 +11,6 @@ const EditableTags = (props) => {
     //To check if a tag is editing 
     const [edit, setEdit] = useState([]);
 
-    //tags and  value
-    const [displayTags, setTags] = useState(tags)
-
     //To display edit and delete options of tags
     const [visible, setVisible] = useState([]);
 
@@ -32,9 +29,7 @@ const EditableTags = (props) => {
 
     const onChange = (event, key) => {
 
-        const arr = { ...displayTags }
         const { name, value } = event.currentTarget;
-
         if (name.includes('tag')) {
             tags[key].tag = value;
         } else if (name.includes('start')) {
@@ -42,8 +37,6 @@ const EditableTags = (props) => {
         } else {
             tags[key].end = value;
         }
-
-        setTags(arr);
     }
 
     const onDelete = (tagId) => {
@@ -185,6 +178,14 @@ EditableTags.propTypes = {
     onTagAdd: PropTypes.func.isRequired,
     onTagSave: PropTypes.func.isRequired,
     onTagDelete: PropTypes.func.isRequired
+}
+
+EditableTags.defaultProps = {
+    tags: {},
+    type: '',
+    onTagAdd: () => { },
+    onTagSave: () => { },
+    onTagDelete: () => { }
 }
 
 export default EditableTags

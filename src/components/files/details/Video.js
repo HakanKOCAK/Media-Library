@@ -16,4 +16,8 @@ const Video = (props) => {
 Video.propTypes = {
     url: PropTypes.string.isRequired
 }
+
+Video.defaultProps = {
+    url: ''
+}
 export default Video;

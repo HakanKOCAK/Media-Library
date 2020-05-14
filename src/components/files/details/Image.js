@@ -25,4 +25,8 @@ const Image = (props) => {
 Image.propTypes = {
     url: PropTypes.string.isRequired
 }
+
+Image.defaultProps = {
+    url: ''
+}
 export default Image;

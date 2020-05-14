@@ -14,4 +14,9 @@ const Other = (props) => {
 Other.propTypes = {
     url: PropTypes.string.isRequired
 }
+
+Other.defaultProps = {
+    url: ''
+}
+
 export default Other;
