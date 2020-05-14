@@ -1,7 +1,7 @@
 import { SET_ERROR, HIDE_ERROR } from '../actions/types';
 
 const initState = {
-    message: '',
+    message: null,
     isOpen: false
 };
 
@@ -16,7 +16,7 @@ export default function (state = initState, action) {
             }
         case HIDE_ERROR:
             return {
-                message: '',
+                message: null,
                 isOpen: false
             }
         default:

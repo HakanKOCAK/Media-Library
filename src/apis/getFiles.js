@@ -157,26 +157,29 @@ export const getFiles = async () => {
         }
 
         const res = await axios.get(`https://api.jotform.com/form/${formId}/submissions`, config)
+        if (res.data.responseCode === 200) {
+            const content = res.data.content
+            const answers = await getAnswers(Object.values(content))
 
-        const content = res.data.content
-        const answers = await getAnswers(Object.values(content))
+            const sizes = await getFileSizesAndNames({ ...answers })
 
-        const sizes = await getFileSizesAndNames({ ...answers })
+            const updatedAnswers = (data, sizes) => {
+                sizes.forEach(item => {
+                    data[item['key']].entity = { ...data[item['key']].entity, size: item['size'] }
+                })
 
-        const updatedAnswers = (data, sizes) => {
-            sizes.forEach(item => {
-                data[item['key']].entity = { ...data[item['key']].entity, size: item['size'] }
-            })
+                return data;
+            }
 
-            return data;
+            const answersWithSizes = { ...updatedAnswers({ ...answers }, [...sizes]) }
+
+            return { success: true, data: answersWithSizes }
+        } else {
+            return { success: false, error: res.data.message }
         }
 
-        const answersWithSizes = { ...updatedAnswers({ ...answers }, [...sizes]) }
-
-        return answersWithSizes;
     } catch (error) {
-        console.log(error)
-        return error;
+        return { success: false, error: error }
     }
 }
 

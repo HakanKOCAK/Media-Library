@@ -11,6 +11,7 @@ import Other from './details/Other';
 import EditableTags from './details/EditableTags';
 import { deleteTag, saveTag } from '../../actions/files';
 import { updateTag } from '../../apis/updadeTag';
+import { setError } from '../../actions/error';
 
 import '../../styles/FileDetails.css';
 
@@ -41,19 +42,20 @@ const FileDetails = (props) => {
     const onDelete = async (tagId) => {
         await deleteTag({ submissionId: id, tagId: tagId })(dispatch)
         const newTags = props.files.entities[id].entity.tags
-        const res = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
+        const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
 
-        if (!res.success) {
-            alert(`${res.error}\nPlease refresh the page.`)
+        if (!response.success) {
+            dispatch(setError(response.error))
         }
     }
 
     const onSave = async (data) => {
         dispatch(saveTag({ submissionId: id, data: data }))
         const newTags = props.files.entities[id].entity.tags
-        const res = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
-        if (!res.success) {
-            alert(`${res.error}\nPlease refresh the page.`)
+        const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
+
+        if (!response.success) {
+            dispatch(setError(response.error))
         }
     }
 

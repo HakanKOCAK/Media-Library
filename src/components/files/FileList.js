@@ -26,11 +26,12 @@ const FileList = (props) => {
         )
     }
 
+    const onDelete = (submissionId) => {
+        dispatch(deleteFile(submissionId));
+    }
     const handleClick = (event, submissionId) => {
         if (event.target.className === 'clickable') {
             props.history.push('/files/' + submissionId);
-        } else if (event.target.parentNode.className.baseVal && event.target.parentNode.className.baseVal.includes('icon')) {
-            deleteFile(submissionId)(dispatch);
         }
     }
     return (
@@ -74,7 +75,7 @@ const FileList = (props) => {
                                     -
                                 </td>
                                 <td>
-                                    <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={event => handleClick(event, item.submissionId)} />
+                                    <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={event => onDelete(event, item.submissionId)} />
                                 </td>
                             </tr>
                         )

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Navbar from './components/Navbar';
+import ErrorNotification from './components/ErrorNotification';
 import Landing from './components/Landing';
 import Routes from './components/routing/Routes';
 import { loadUser } from './actions/user';
@@ -18,6 +19,7 @@ const App = () => {
   return (
     <Router>
       <Navbar />
+      <ErrorNotification />
       <Switch >
         <Route exact path="/" component={Landing} />
         <Route component={Routes} />

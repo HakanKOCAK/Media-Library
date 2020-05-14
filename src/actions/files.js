@@ -8,22 +8,28 @@ import {
 import { setFilesLoaded } from './app';
 import { getFiles } from '../apis/getFiles';
 import { deleteSubmittedFile } from '../apis/deleteFile';
+import { setError } from './error';
 
 export const getAllFiles = () => {
     return async (dispatch) => {
         try {
-            const answers = await getFiles();
+            const response = await getFiles();
 
-            dispatch({
-                type: GET_FILES_SUCCESS,
-                payload: answers
-            })
+            if (response.success) {
+                dispatch({
+                    type: GET_FILES_SUCCESS,
+                    payload: response.data
+                })
+            } else {
+                dispatch(setError(response.error))
+            }
             dispatch(setFilesLoaded(true));
         } catch (error) {
             console.log(error)
             dispatch({
                 type: GET_FILES_FAIL
             })
+            dispatch(setError(error))
             dispatch(setFilesLoaded(true));
         }
     }
@@ -36,9 +42,10 @@ export const deleteFile = (submissiodId) => {
             payload: { submissionId: submissiodId }
         })
 
-        const res = await deleteSubmittedFile(submissiodId);
-        if (!res.success) {
-            alert(`${res.error}\nPlease refresh the page`)
+        const response = await deleteSubmittedFile(submissiodId);
+        if (!response.success) {
+            console.log('here')
+            dispatch(setError(response.error))
         }
     }
 }

@@ -10,7 +10,7 @@ export const updateTag = async ({ submissionId, qid, data }) => {
     }, [])
 
     try {
-        const res = await axios.post(`https://api.jotform.com/submission/${submissionId}?apiKey=${apiKey}&submission[${qid}]=${JSON.stringify(newTags)}`)
+        const res = await axios.post(`https://api.jotform.com/submission/?apiKey=${apiKey}&submission[${qid}]=${JSON.stringify(newTags)}`)
 
         const data = res.data
 

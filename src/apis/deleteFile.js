@@ -13,7 +13,7 @@ export const deleteSubmittedFile = async (submissionId) => {
         if (data.responseCode === 200) {
             return { success: true, error: null }
         }
-        return { success: true, error: data.message }
+        return { success: false, error: data.message }
     } catch (error) {
         return { success: false, error: error };
     }
