@@ -180,7 +180,8 @@ EditableTags.propTypes = {
     type: PropTypes.string.isRequired,
     onTagAdd: PropTypes.func.isRequired,
     onTagSave: PropTypes.func.isRequired,
-    onTagDelete: PropTypes.func.isRequired
+    onTagDelete: PropTypes.func.isRequired,
+    onTagChange: PropTypes.func.isRequired
 }
 
 EditableTags.defaultProps = {
@@ -188,7 +189,8 @@ EditableTags.defaultProps = {
     type: '',
     onTagAdd: () => { },
     onTagSave: () => { },
-    onTagDelete: () => { }
+    onTagDelete: () => { },
+    onTagChange: () => { }
 }
 
 export default EditableTags
