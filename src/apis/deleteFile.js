@@ -10,12 +10,10 @@ export const deleteSubmittedFile = async (submissionId) => {
         }
         const res = await axios.delete(`https://api.jotform.com/submission/${submissionId}`, config)
         const data = res.data;
-        if (data.responseCode === 401) {
-            return { success: false, error: data.message }
-        } else if (data.responseCode === 404) {
-            return { success: false, error: data.message }
+        if (data.responseCode === 200) {
+            return { success: true, error: null }
         }
-        return { success: true, error: null }
+        return { success: true, error: data.message }
     } catch (error) {
         return { success: false, error: error };
     }
