@@ -27,3 +27,8 @@
 .table thead{
     background-color: #f4f4f4;
 }
+
+.newLink {
+    display: block;
+    text-align: center;
+}
