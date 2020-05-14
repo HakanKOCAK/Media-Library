@@ -1,9 +1,13 @@
 import {
     GET_FILES_SUCCESS,
     GET_FILES_FAIL,
-    DELETE_TAG,
+    DELETE_TAG_REQUEST,
+    DELETE_TAG_SUCCESS,
+    DELETE_TAG_ERROR,
     SAVE_TAG,
-    DELETE_FILE
+    DELETE_FILE_REQUEST,
+    DELETE_FILE_SUCCESS,
+    DELETE_FILE_ERROR,
 } from '../actions/types';
 
 const initialState = {
@@ -22,9 +26,9 @@ export default function (state = initialState, action) {
         case GET_FILES_FAIL:
             return {
                 ...state,
-                error: payload
+                entities: []
             }
-        case DELETE_FILE:
+        case DELETE_FILE_REQUEST:
             {
                 const { submissionId } = payload
                 let entities = { ...state.entities }
@@ -39,7 +43,14 @@ export default function (state = initialState, action) {
                     entities
                 }
             }
-        case DELETE_TAG:
+        case DELETE_FILE_SUCCESS:
+        case DELETE_FILE_ERROR:
+        case DELETE_TAG_SUCCESS:
+        case DELETE_TAG_ERROR:
+            return {
+                ...state
+            }
+        case DELETE_TAG_REQUEST:
             {
                 const { submissionId, tagId } = payload
                 let entities = { ...state.entities }

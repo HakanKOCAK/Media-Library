@@ -12,6 +12,7 @@ import EditableTags from './details/EditableTags';
 import { deleteTag, saveTag } from '../../actions/files';
 import { updateTag } from '../../apis/updadeTag';
 import { setError } from '../../actions/error';
+import { DELETE_TAG_SUCCESS, DELETE_TAG_ERROR } from '../../actions/types';
 
 import '../../styles/FileDetails.css';
 
@@ -45,7 +46,14 @@ const FileDetails = (props) => {
         const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
 
         if (!response.success) {
+            dispatch({
+                type: DELETE_TAG_ERROR
+            })
             dispatch(setError(response.error))
+        } else {
+            dispatch({
+                type: DELETE_TAG_SUCCESS
+            })
         }
     }
 

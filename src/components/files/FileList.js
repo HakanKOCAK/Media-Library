@@ -17,15 +17,6 @@ const FileList = (props) => {
     if (!files) {
         return null;
     }
-
-    if (filesArray.length === 0) {
-        return (
-            <div style={{ textAlign: 'center' }}>
-                There are no files.
-            </div>
-        )
-    }
-
     const onDelete = (submissionId) => {
         dispatch(deleteFile(submissionId));
     }
@@ -75,7 +66,7 @@ const FileList = (props) => {
                                     -
                                 </td>
                                 <td>
-                                    <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={event => onDelete(event, item.submissionId)} />
+                                    <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => onDelete(item.submissionId)} />
                                 </td>
                             </tr>
                         )

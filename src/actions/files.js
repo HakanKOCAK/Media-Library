@@ -1,9 +1,11 @@
 import {
     GET_FILES_SUCCESS,
     GET_FILES_FAIL,
-    DELETE_TAG,
+    DELETE_TAG_REQUEST,
     SAVE_TAG,
-    DELETE_FILE
+    DELETE_FILE_REQUEST,
+    DELETE_FILE_SUCCESS,
+    DELETE_FILE_ERROR,
 } from './types';
 import { setFilesLoaded } from './app';
 import { getFiles } from '../apis/getFiles';
@@ -21,6 +23,9 @@ export const getAllFiles = () => {
                     payload: response.data
                 })
             } else {
+                dispatch({
+                    type: GET_FILES_FAIL
+                })
                 dispatch(setError(response.error))
             }
             dispatch(setFilesLoaded(true));
@@ -35,17 +40,24 @@ export const getAllFiles = () => {
     }
 }
 
-export const deleteFile = (submissiodId) => {
+export const deleteFile = (submissionId) => {
     return async (dispatch) => {
         dispatch({
-            type: DELETE_FILE,
-            payload: { submissionId: submissiodId }
+            type: DELETE_FILE_REQUEST,
+            payload: { submissionId: submissionId }
         })
 
-        const response = await deleteSubmittedFile(submissiodId);
+        console.log(submissionId)
+        const response = await deleteSubmittedFile(submissionId);
         if (!response.success) {
-            console.log('here')
+            dispatch({
+                type: DELETE_FILE_ERROR
+            })
             dispatch(setError(response.error))
+        } else {
+            dispatch({
+                type: DELETE_FILE_SUCCESS
+            })
         }
     }
 }
@@ -53,7 +65,7 @@ export const deleteFile = (submissiodId) => {
 export const deleteTag = ({ submissionId, tagId }) => {
     return async (dispatch) => {
         dispatch({
-            type: DELETE_TAG,
+            type: DELETE_TAG_REQUEST,
             payload: { submissionId, tagId }
         })
     }
