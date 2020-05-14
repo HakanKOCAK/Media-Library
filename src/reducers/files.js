@@ -28,7 +28,13 @@ export default function (state = initialState, action) {
             {
                 const { submissionId, tagId } = payload
                 let entities = { ...state.entities }
-                delete entities[submissionId].entity.tags[tagId]
+                const obj = {}
+                Object.entries(entities[submissionId].entity.tags).forEach(([key, value]) => {
+                    if (key !== tagId) {
+                        obj[key] = value
+                    }
+                })
+                entities[submissionId].entity.tags = obj
                 return {
                     entities
                 }
