@@ -20,7 +20,7 @@ const FileList = (props) => {
 
     if (filesArray.length === 0) {
         return (
-            <div>
+            <div style={{ textAlign: 'center' }}>
                 There are no files.
             </div>
         )
