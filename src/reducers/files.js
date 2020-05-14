@@ -2,7 +2,8 @@ import {
     GET_FILES_SUCCESS,
     GET_FILES_FAIL,
     DELETE_TAG,
-    SAVE_TAG
+    SAVE_TAG,
+    DELETE_FILE
 } from '../actions/types';
 
 const initialState = {
@@ -23,7 +24,21 @@ export default function (state = initialState, action) {
                 ...state,
                 error: payload
             }
-
+        case DELETE_FILE:
+            {
+                const { submissionId } = payload
+                let entities = { ...state.entities }
+                const obj = {}
+                Object.entries(entities).forEach(([key, value]) => {
+                    if (key !== submissionId) {
+                        obj[key] = value
+                    }
+                })
+                entities = obj
+                return {
+                    entities
+                }
+            }
         case DELETE_TAG:
             {
                 const { submissionId, tagId } = payload

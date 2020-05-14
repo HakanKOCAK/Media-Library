@@ -1,9 +1,16 @@
 import React, { Fragment } from 'react';
+import { useDispatch } from 'react-redux';
+import { formId } from '../../config/config';
 import { withRouter } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
+import { deleteFile } from '../../actions/files';
+
 import '../../styles/Files.css'
 
 const FileList = (props) => {
+    const dispatch = useDispatch();
     const { files } = props
     const filesArray = Object.values(files)
 
@@ -19,9 +26,12 @@ const FileList = (props) => {
         )
     }
 
-    const handleClick = (event, item) => {
-        event.preventDefault()
-        props.history.push('/files/' + item.submissionId);
+    const onDelete = (submissionId) => {
+        deleteFile(submissionId)(dispatch);
+    }
+
+    const handleClick = (submissionId) => {
+        props.history.push('/files/' + submissionId);
     }
     return (
         <Fragment>
@@ -35,33 +45,37 @@ const FileList = (props) => {
                         <th>File Type</th>
                         <th>File Size</th>
                         <th>Duration</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {filesArray.map((item) => {
                         return (
-                            <tr key={item.submissionId} onClick={event => handleClick(event, item)}>
-                                <td>
+                            <tr key={item.submissionId}>
+                                <td onClick={() => handleClick(item.submissionId)}>
                                     {item.nameSurname}
                                 </td>
-                                <td>
+                                <td onClick={() => handleClick(item.submissionId)}>
                                     {item.email}
                                 </td>
-                                <td>
+                                <td onClick={() => handleClick(item.submissionId)}>
                                     {item.uploadDate}
                                 </td>
-                                <td>
+                                <td onClick={() => handleClick(item.submissionId)}>
                                     {item.entity.fileName}
                                 </td>
-                                <td>
+                                <td onClick={() => handleClick(item.submissionId)}>
                                     {item.fileType}
                                 </td>
-                                <td>
+                                <td onClick={() => handleClick(item.submissionId)}>
                                     {item.entity.size}
                                 </td>
-                                <td>
+                                <td onClick={() => handleClick(item.submissionId)}>
                                     -
-                            </td>
+                                </td>
+                                <td>
+                                    <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => onDelete(item.submissionId)} />
+                                </td>
                             </tr>
                         )
                     })}
@@ -70,7 +84,7 @@ const FileList = (props) => {
             <a
                 rel="noopener noreferrer"
                 target="_blank"
-                href="https://form.jotform.com/201324174735046"
+                href={`https://form.jotform.com/${formId}`}
                 className="newLink"
             >
                 New File

@@ -2,10 +2,12 @@ import {
     GET_FILES_SUCCESS,
     GET_FILES_FAIL,
     DELETE_TAG,
-    SAVE_TAG
+    SAVE_TAG,
+    DELETE_FILE
 } from './types';
 import { setFilesLoaded } from './app';
 import { getFiles } from '../apis/getFiles';
+import { deleteSubmittedFile } from '../apis/deleteFile';
 
 export const getAllFiles = () => {
     return async (dispatch) => {
@@ -23,6 +25,21 @@ export const getAllFiles = () => {
                 type: GET_FILES_FAIL
             })
             dispatch(setFilesLoaded(true));
+        }
+    }
+}
+
+export const deleteFile = (submissiodId) => {
+    return async (dispatch) => {
+        const res = await deleteSubmittedFile(submissiodId);
+        console.log(res)
+        if (res.success) {
+            dispatch({
+                type: DELETE_FILE,
+                payload: { submissionId: submissiodId }
+            })
+        } else {
+            alert(res.error)
         }
     }
 }
