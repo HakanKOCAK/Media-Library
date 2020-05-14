@@ -13,7 +13,7 @@ const App = () => {
 
   useEffect(() => {
     loadUser()(dispatch);
-  }, [])
+  })
 
   return (
     <Router>

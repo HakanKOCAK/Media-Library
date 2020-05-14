@@ -6,7 +6,7 @@ const Other = (props) => {
 
     return (
         <div className='mediaContainer'>
-            <a href={url} target="_blank">Download File</a>
+            <a href={url} rel="noopener noreferrer" target="_blank">Download File</a>
         </div>
     )
 }

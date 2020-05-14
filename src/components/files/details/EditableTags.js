@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faSave, faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import { v4 as uuidv4 } from 'uuid';
@@ -180,8 +180,11 @@ const EditableTags = (props) => {
 }
 
 EditableTags.propTypes = {
-    tags: PropTypes.array.isRequired,
-    type: PropTypes.string.isRequired
+    tags: PropTypes.object.isRequired,
+    type: PropTypes.string.isRequired,
+    onTagAdd: PropTypes.func.isRequired,
+    onTagSave: PropTypes.func.isRequired,
+    onTagDelete: PropTypes.func.isRequired
 }
 
 export default EditableTags

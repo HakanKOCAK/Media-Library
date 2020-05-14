@@ -5,7 +5,6 @@ import { errorMessages } from '../Utils/errors';
 const Error = props => {
     const { flags } = props;
 
-    console.log(flags)
     return (
         <div className="error-div">
             {
@@ -14,6 +13,7 @@ const Error = props => {
                     if (val) {
                         return <p className="my-1">{errorMessages[key]}</p>
                     }
+                    return null;
                 })
             }
         </div>

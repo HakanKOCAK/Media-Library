@@ -9,9 +9,6 @@ const PrivateRoute = ({
     files,
     app,
     user,
-    // app: { userLoaded, filesLoaded },
-    // files: { entities },
-    // user: { isAuthenticated },
     ...rest
 }) => {
     const storeProps = { files, app, user }

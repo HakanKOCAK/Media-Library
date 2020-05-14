@@ -15,7 +15,7 @@ const Image = (props) => {
     return (
         <div className='imageContainer'>
             <Spinner styled={false} />
-            <img className='image' src={url}
+            <img alt='submittedImage' className='image' src={url}
                 style={loaded ? { opacity: '1' } : { opacity: '0' }}
                 onLoad={() => handleImageLoaded()} />
         </div>
