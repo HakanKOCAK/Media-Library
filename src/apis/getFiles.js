@@ -174,10 +174,8 @@ export const getFiles = async () => {
             const answersWithSizes = { ...updatedAnswers({ ...answers }, [...sizes]) }
 
             return { success: true, data: answersWithSizes }
-        } else {
-            return { success: false, error: res.data.message }
         }
-
+        return { success: false, error: res.data.message }
     } catch (error) {
         return { success: false, error: error }
     }

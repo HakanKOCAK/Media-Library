@@ -5,6 +5,8 @@ import { faTimesCircle, faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import '../styles/ErrorNotification.css';
+
 export const ErrorNotification = (props) => {
     const dispatch = useDispatch();
 
@@ -18,17 +20,20 @@ export const ErrorNotification = (props) => {
     }
 
     return (
-        <>
+        <div className='errorContainer'>
             {
                 isOpen && message && (
                     <div className="errorNotification">
-                        <FontAwesomeIcon icon={faTimesCircle} onClick={handleClose} size="1x" />
                         <span>{message}</span>
-                        <FontAwesomeIcon icon={faSyncAlt} onClick={onReload} size="1x" />
+                        <span>Please reload the page.</span>
+                        <div>
+                            <FontAwesomeIcon className='errorIcon' icon={faSyncAlt} onClick={onReload} size="1x" />
+                            <FontAwesomeIcon className='errorIcon' icon={faTimesCircle} onClick={handleClose} size="1x" />
+                        </div>
                     </div>
                 )
             }
-        </>
+        </div>
     )
 }
 
