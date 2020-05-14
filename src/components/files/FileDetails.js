@@ -9,10 +9,10 @@ import Video from './details/Video';
 import Image from './details/Image';
 import Other from './details/Other';
 import EditableTags from './details/EditableTags';
-import { deleteTag, saveTag } from '../../actions/files';
+import { deleteTag, addTag } from '../../actions/files';
 import { updateTag } from '../../apis/updadeTag';
 import { setError } from '../../actions/error';
-import { DELETE_TAG_SUCCESS, DELETE_TAG_ERROR } from '../../actions/types';
+import { SAVE_TAG_REQUEST, SAVE_TAG_ERROR, SAVE_TAG_SUCCESS, DELETE_TAG_SUCCESS, DELETE_TAG_ERROR } from '../../actions/types';
 
 import '../../styles/FileDetails.css';
 
@@ -57,18 +57,27 @@ const FileDetails = (props) => {
         }
     }
 
-    const onSave = async (data) => {
-        dispatch(saveTag({ submissionId: id, data: data }))
+    const onSave = async () => {
+        dispatch({
+            type: SAVE_TAG_REQUEST
+        })
         const newTags = props.files.entities[id].entity.tags
         const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
 
         if (!response.success) {
+            dispatch({
+                type: SAVE_TAG_ERROR
+            })
             dispatch(setError(response.error))
+        } else {
+            dispatch({
+                type: SAVE_TAG_SUCCESS
+            })
         }
     }
 
     const onAdd = (data) => {
-        dispatch(saveTag({ submissionId: id, data: data }))
+        dispatch(addTag({ submissionId: id, data: data }))
     }
 
     if (!file) {

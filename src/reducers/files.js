@@ -4,10 +4,13 @@ import {
     DELETE_TAG_REQUEST,
     DELETE_TAG_SUCCESS,
     DELETE_TAG_ERROR,
-    SAVE_TAG,
+    SAVE_TAG_REQUEST,
+    ADD_TAG,
     DELETE_FILE_REQUEST,
     DELETE_FILE_SUCCESS,
     DELETE_FILE_ERROR,
+    SAVE_TAG_ERROR,
+    SAVE_TAG_SUCCESS,
 } from '../actions/types';
 
 const initialState = {
@@ -43,6 +46,9 @@ export default function (state = initialState, action) {
                     entities
                 }
             }
+        case SAVE_TAG_REQUEST:
+        case SAVE_TAG_ERROR:
+        case SAVE_TAG_SUCCESS:
         case DELETE_FILE_SUCCESS:
         case DELETE_FILE_ERROR:
         case DELETE_TAG_SUCCESS:
@@ -65,7 +71,7 @@ export default function (state = initialState, action) {
                     entities
                 }
             }
-        case SAVE_TAG:
+        case ADD_TAG:
             {
                 const { submissionId, data } = payload
                 const { tagId, tag } = data

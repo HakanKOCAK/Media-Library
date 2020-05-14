@@ -2,7 +2,8 @@ import {
     GET_FILES_SUCCESS,
     GET_FILES_FAIL,
     DELETE_TAG_REQUEST,
-    SAVE_TAG,
+    SAVE_TAG_REQUEST,
+    ADD_TAG,
     DELETE_FILE_REQUEST,
     DELETE_FILE_SUCCESS,
     DELETE_FILE_ERROR,
@@ -71,9 +72,9 @@ export const deleteTag = ({ submissionId, tagId }) => {
     }
 }
 
-export const saveTag = ({ submissionId, data }) => {
+export const addTag = ({ submissionId, data }) => {
     return {
-        type: SAVE_TAG,
+        type: ADD_TAG,
         payload: { submissionId, data }
     }
 }
