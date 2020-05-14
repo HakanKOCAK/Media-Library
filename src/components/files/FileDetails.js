@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
@@ -36,7 +36,7 @@ const FileDetails = (props) => {
     const type = file.fileType
 
     //Set submitted tags
-    let tags = file.entity.tags
+    const [tags, setTags] = useState(file.entity.tags)
 
     const url = file.entity.url
 
@@ -80,6 +80,23 @@ const FileDetails = (props) => {
         dispatch(addTag({ submissionId: id, data: data }))
     }
 
+    const onChange = (type, key, value) => {
+        const obj = { ...tags }
+        if (type === 'tag') {
+            obj[key].tag = value
+        } else if (type === 'start') {
+            obj[key].start = value
+        } else {
+            obj[key].end = value
+        }
+
+        setTags(obj)
+    }
+
+
+    useEffect(() => {
+        setTags(files.entities[id].entity.tags);
+    }, [files])
     if (!file) {
         return <Spinner />
     }
@@ -108,6 +125,7 @@ const FileDetails = (props) => {
                 onTagDelete={onDelete}
                 onTagAdd={onAdd}
                 onTagSave={onSave}
+                onTagChange={onChange}
                 type={type}
             />
         </Fragment>

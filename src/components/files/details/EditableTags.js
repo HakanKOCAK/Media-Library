@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 const EditableTags = (props) => {
 
-    const { tags, type, onTagDelete, onTagAdd, onTagSave } = props;
+    const { tags, type, onTagDelete, onTagAdd, onTagSave, onTagChange } = props;
 
     //To check if a tag is editing 
     const [edit, setEdit] = useState([]);
@@ -31,11 +31,14 @@ const EditableTags = (props) => {
 
         const { name, value } = event.currentTarget;
         if (name.includes('tag')) {
-            tags[key].tag = value;
+
+            onTagChange('tag', key, value)
         } else if (name.includes('start')) {
-            tags[key].start = value;
+
+            onTagChange('start', key, value)
         } else {
-            tags[key].end = value;
+
+            onTagChange('end', key, value)
         }
     }
 
