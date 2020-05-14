@@ -24,7 +24,7 @@ const Login = () => {
         } else {
             setFlag({ ...flags, EMAIL_FORMAT: false })
         }
-    }, [email, flags])
+    }, [email])
 
     useEffect(() => {
         if (password.length < 6 && password.length) {
@@ -32,7 +32,7 @@ const Login = () => {
         } else {
             setFlag({ ...flags, PASSWORD_LENGTH: false });
         }
-    }, [password, flags])
+    }, [password])
 
     const onChange = event => {
         const { name, value } = event.currentTarget;

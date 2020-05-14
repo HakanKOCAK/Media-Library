@@ -26,7 +26,7 @@ const Register = () => {
         } else {
             setFlag({ ...flags, EMAIL_FORMAT: false, USER_EXIST: false })
         }
-    }, [email, flags])
+    }, [email])
 
     useEffect(() => {
         if (password.length < 6) {
@@ -34,7 +34,7 @@ const Register = () => {
         } else {
             setFlag({ ...flags, PASSWORD_LENGTH: false });
         }
-    }, [password, flags])
+    }, [password])
 
     useEffect(() => {
         if (password2 !== password) {
@@ -42,7 +42,7 @@ const Register = () => {
         } else {
             setFlag({ ...flags, PASSWORDS_DO_NOT_MATCH: false });
         }
-    }, [password, password2, flags])
+    }, [password2])
 
     const onChange = event => {
         const { name, value } = event.currentTarget;
