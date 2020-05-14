@@ -26,12 +26,12 @@ const FileList = (props) => {
         )
     }
 
-    const onDelete = (submissionId) => {
-        deleteFile(submissionId)(dispatch);
-    }
-
-    const handleClick = (submissionId) => {
-        props.history.push('/files/' + submissionId);
+    const handleClick = (event, submissionId) => {
+        if (event.target.className === 'clickable') {
+            props.history.push('/files/' + submissionId);
+        } else if (event.target.parentNode.className.baseVal && event.target.parentNode.className.baseVal.includes('icon')) {
+            deleteFile(submissionId)(dispatch);
+        }
     }
     return (
         <Fragment>
@@ -51,30 +51,30 @@ const FileList = (props) => {
                 <tbody>
                     {filesArray.map((item) => {
                         return (
-                            <tr key={item.submissionId}>
-                                <td>
+                            <tr key={item.submissionId} onClick={event => handleClick(event, item.submissionId)}>
+                                <td className="clickable">
                                     {item.nameSurname}
                                 </td>
-                                <td onClick={() => handleClick(item.submissionId)}>
+                                <td className="clickable">
                                     {item.email}
                                 </td>
-                                <td onClick={() => handleClick(item.submissionId)}>
+                                <td className="clickable">
                                     {item.uploadDate}
                                 </td>
-                                <td onClick={() => handleClick(item.submissionId)}>
+                                <td className="clickable">
                                     {item.entity.fileName}
                                 </td>
-                                <td onClick={() => handleClick(item.submissionId)}>
+                                <td className="clickable">
                                     {item.fileType}
                                 </td>
-                                <td onClick={() => handleClick(item.submissionId)}>
+                                <td className="clickable">
                                     {item.entity.size}
                                 </td>
-                                <td onClick={() => handleClick(item.submissionId)}>
+                                <td className="clickable">
                                     -
                                 </td>
                                 <td>
-                                    <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => onDelete(item.submissionId)} />
+                                    <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={event => handleClick(event, item.submissionId)} />
                                 </td>
                             </tr>
                         )
