@@ -32,3 +32,15 @@
     display: block;
     text-align: center;
 }
+
+.toolbar{
+    cursor: default;
+    display: flex;
+    justify-content: space-evenly;
+}
+.icon{
+    border:none;
+    cursor: pointer;
+    display: flex;
+    background-color: transparent;
+}

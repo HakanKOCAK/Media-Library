@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { formId } from '../../config/config';
 import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
 import { deleteFile } from '../../actions/files';
 
@@ -14,14 +14,29 @@ const FileList = (props) => {
     const { files } = props
     const filesArray = Object.values(files)
 
-    if (!files) {
-        return null;
-    }
-    const onDelete = (submissionId) => {
-        dispatch(deleteFile(submissionId));
-    }
+    const nodeClassList = []
+    useEffect(() => {
+        let node = document.getElementsByClassName('toolbar')[0]
+
+        while (node.hasChildNodes()) {
+            const childrens = Array.from(node.children);
+            childrens.forEach(child => {
+                node = child
+                const classList = Array.from(node.classList)
+                classList.forEach(className => {
+                    nodeClassList.push(className);
+                })
+            })
+        }
+    }, [files])
+
     const handleClick = (event, submissionId) => {
-        if (event.target.className === 'clickable') {
+        const classes = Array.from(event.target.parentNode.classList)
+        if (nodeClassList.some(v => classes.indexOf(v) !== -1)) {
+            if (classes.includes('delete')) {
+                dispatch(deleteFile(submissionId));
+            }
+        } else if (!Array.from(event.target.classList).includes('toolbar')) {
             props.history.push('/files/' + submissionId);
         }
     }
@@ -44,29 +59,41 @@ const FileList = (props) => {
                     {filesArray.map((item) => {
                         return (
                             <tr key={item.submissionId} onClick={event => handleClick(event, item.submissionId)}>
-                                <td className="clickable">
+                                <td>
                                     {item.nameSurname}
                                 </td>
-                                <td className="clickable">
+                                <td>
                                     {item.email}
                                 </td>
-                                <td className="clickable">
+                                <td>
                                     {item.uploadDate}
                                 </td>
-                                <td className="clickable">
+                                <td>
                                     {item.entity.fileName}
                                 </td>
-                                <td className="clickable">
+                                <td>
                                     {item.fileType}
                                 </td>
-                                <td className="clickable">
+                                <td>
                                     {item.entity.size}
                                 </td>
-                                <td className="clickable">
+                                <td>
                                     -
                                 </td>
-                                <td>
-                                    <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => onDelete(item.submissionId)} />
+                                <td className='toolbar'>
+                                    <button className='icon'>
+                                        <a
+                                            style={{ marginTop: '1.3px', textDecoration: 'none', color: 'black' }}
+                                            rel="noopener noreferrer"
+                                            target="_blank"
+                                            href={`https://jotform.com/edit/${item.submissionId}`}
+                                        >
+                                            <FontAwesomeIcon className='edit' icon={faEdit} size="1x" />
+                                        </a>
+                                    </button>
+                                    <button className='icon' >
+                                        <FontAwesomeIcon className='delete' icon={faTrashAlt} size="1x" />
+                                    </button>
                                 </td>
                             </tr>
                         )
