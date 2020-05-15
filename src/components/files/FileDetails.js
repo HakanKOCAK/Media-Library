@@ -36,7 +36,7 @@ const FileDetails = (props) => {
     const type = file.fileType
 
     //Set submitted tags
-    const [tags, setTags] = useState(file.entity.tags)
+    let tags = file.entity.tags
 
     const url = file.entity.url
 
@@ -88,7 +88,7 @@ const FileDetails = (props) => {
     }
 
     useEffect(() => {
-        setTags(files.entities[id].entity.tags);
+        tags = files.entities[id].entity.tags;
     }, [files])
     if (!file) {
         return <Spinner />

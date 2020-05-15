@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 const EditableTags = (props) => {
 
-    const { tags, type, onTagDelete, onTagAdd, onTagSave, onTagChange } = props;
+    const { tags, type, onTagDelete, onTagAdd, onTagSave } = props;
 
     //To check if a tag is editing 
     const [edit, setEdit] = useState([]);
@@ -35,18 +35,16 @@ const EditableTags = (props) => {
     }
 
     const onChange = (event, key) => {
-
+        const obj = { ...tags }
         const { name, value } = event.currentTarget;
         if (name.includes('tag')) {
-
-            onTagChange('tag', key, value)
+            obj[key].tag = value
         } else if (name.includes('start')) {
-
-            onTagChange('start', key, value)
+            obj[key].start = value
         } else {
-
-            onTagChange('end', key, value)
+            obj[key].end = value
         }
+        setTags(obj)
     }
 
     const onDelete = (tagId, isNew) => {
@@ -80,7 +78,7 @@ const EditableTags = (props) => {
         <fieldset className='main'>
             <legend className='label'>Tags</legend>
             <div className='tagsContainer'>
-                {Object.entries(tags).map(item => {
+                {Object.entries(displayTags).map(item => {
                     const key = item[0];
                     const tag = item[1].tag;
                     const start = item[1].start;
@@ -196,8 +194,7 @@ EditableTags.defaultProps = {
     type: '',
     onTagAdd: () => { },
     onTagSave: () => { },
-    onTagDelete: () => { },
-    onTagChange: () => { }
+    onTagDelete: () => { }
 }
 
 export default EditableTags
