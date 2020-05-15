@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faSave, faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import { v4 as uuidv4 } from 'uuid';
@@ -6,17 +6,10 @@ import PropTypes from 'prop-types';
 
 const EditableTags = (props) => {
 
-    const { tags, type, onTagDelete, onTagAdd, onTagSave } = props;
+    const { tags, type, onTagDelete, onTagAdd, onTagSave, onTagChange } = props;
 
     //To check if a tag is editing 
     const [edit, setEdit] = useState([]);
-
-    //set tags to state
-    const [displayTags, setTags] = useState(tags)
-
-    useEffect(() => {
-        setTags(tags)
-    }, [tags])
 
     //To display edit and delete options of tags
     const [visible, setVisible] = useState([]);
@@ -35,16 +28,18 @@ const EditableTags = (props) => {
     }
 
     const onChange = (event, key) => {
-        const obj = { ...tags }
+
         const { name, value } = event.currentTarget;
         if (name.includes('tag')) {
-            obj[key].tag = value
+
+            onTagChange('tag', key, value)
         } else if (name.includes('start')) {
-            obj[key].start = value
+
+            onTagChange('start', key, value)
         } else {
-            obj[key].end = value
+
+            onTagChange('end', key, value)
         }
-        setTags(obj)
     }
 
     const onDelete = (tagId, isNew) => {
@@ -78,7 +73,7 @@ const EditableTags = (props) => {
         <fieldset className='main'>
             <legend className='label'>Tags</legend>
             <div className='tagsContainer'>
-                {Object.entries(displayTags).map(item => {
+                {Object.entries(tags).map(item => {
                     const key = item[0];
                     const tag = item[1].tag;
                     const start = item[1].start;
@@ -102,7 +97,7 @@ const EditableTags = (props) => {
                             onMouseLeave={() => onLeave(key)}
                         >
                             {
-                                edit[key]
+                                isNew
                                     ?
                                     < div className='iconContainer right'>
                                         <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave(key)} />
@@ -185,14 +180,17 @@ EditableTags.propTypes = {
     type: PropTypes.string.isRequired,
     onTagAdd: PropTypes.func.isRequired,
     onTagSave: PropTypes.func.isRequired,
-    onTagDelete: PropTypes.func.isRequired
+    onTagDelete: PropTypes.func.isRequired,
+    onTagChange: PropTypes.func.isRequired
 }
 
 EditableTags.defaultProps = {
     tags: {},
     type: '',
     onTagAdd: () => { },
-    onTagSave: () => { }
+    onTagSave: () => { },
+    onTagDelete: () => { },
+    onTagChange: () => { }
 }
 
 export default EditableTags

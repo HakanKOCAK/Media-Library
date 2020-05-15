@@ -36,7 +36,8 @@ const FileDetails = (props) => {
     const type = file.fileType
 
     //Set submitted tags
-    let tags = file.entity.tags
+    const [tags, setTags] = useState(file.entity.tags)
+
 
     const url = file.entity.url
 
@@ -82,12 +83,25 @@ const FileDetails = (props) => {
         }
     }
 
+    const onChange = (type, key, value) => {
+        const obj = { ...tags }
+        if (type === 'tag') {
+            obj[key].tag = value
+        } else if (type === 'start') {
+            obj[key].start = value
+        } else {
+            obj[key].end = value
+        }
+
+        setTags(obj)
+    }
+
     const onAdd = (data) => {
         dispatch(addTag({ submissionId: id, data: data }))
     }
 
     useEffect(() => {
-        tags = files.entities[id].entity.tags;
+        setTags(files.entities[id].entity.tags);
     }, [files])
     if (!file) {
         return <Spinner />
@@ -116,6 +130,7 @@ const FileDetails = (props) => {
                 tags={tags}
                 onTagDelete={onDelete}
                 onTagAdd={onAdd}
+                onTagChange={onChange}
                 onTagSave={onSave}
                 type={type}
             />
