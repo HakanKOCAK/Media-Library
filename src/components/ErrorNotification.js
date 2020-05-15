@@ -1,20 +1,15 @@
 import React from 'react';
-import { HIDE_ERROR } from '../actions/types';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import '../styles/ErrorNotification.css';
 
 export const ErrorNotification = (props) => {
-    const dispatch = useDispatch();
 
     const { error } = props
     const { message, isOpen } = error
     const onReload = () => {
         window.location.reload();
-    }
-    const handleClose = () => {
-        dispatch({ type: HIDE_ERROR })
     }
 
     return (
@@ -26,7 +21,6 @@ export const ErrorNotification = (props) => {
                         <span>Please reload the page.</span>
                         <div className='button-div'>
                             <button className='btn btn-primary' onClick={onReload}>Reload</button>
-                            <button className='btn btn-primary' onClick={handleClose}>Close</button>
                         </div>
                     </div>
                 )
