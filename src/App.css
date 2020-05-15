@@ -94,6 +94,11 @@ body {
   align-content: center;
 }
 
+.blur{
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+}
+
 .form .form-group {
   margin: 1.2rem 0;
 }

@@ -5,12 +5,18 @@ import Login from '../Login';
 import NoMatch from '../NoMatch';
 import Files from '../files/Files'
 import FileDetails from '../files/FileDetails'
+import { connect } from 'react-redux';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
+import PropTypes from 'prop-types';
 
-const Routes = () => {
+const Routes = (props) => {
+
+    const { error } = props
+    const { isOpen } = error
+    console.log(isOpen)
     return (
-        <section className="container">
+        <section className={`container ${isOpen ? 'blur' : ''}`}>
             <Switch>
                 <PublicRoute exact path="/register" component={Register} />
                 <PublicRoute exact path="/login" component={Login} />
@@ -23,4 +29,18 @@ const Routes = () => {
     );
 };
 
-export default Routes;
+Routes.propTypes = {
+    error: PropTypes.shape({
+        isOpen: PropTypes.bool.isRequired
+    })
+}
+
+Routes.defaultProps = {
+    error: { isOpen: false }
+}
+const mapStateToProps = state => {
+    return {
+        error: state.error
+    }
+}
+export default connect(mapStateToProps)(Routes);

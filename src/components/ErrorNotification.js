@@ -1,7 +1,5 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { HIDE_ERROR } from '../actions/types';
-import { faTimesCircle, faSyncAlt } from '@fortawesome/free-solid-svg-icons'
 import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -24,16 +22,16 @@ export const ErrorNotification = (props) => {
             {
                 isOpen && message && (
                     <div className="errorNotification">
-                        <span>{message}</span>
+                        <span className='error-msg'>{message}</span>
                         <span>Please reload the page.</span>
-                        <div>
-                            <FontAwesomeIcon className='errorIcon' icon={faSyncAlt} onClick={onReload} size="1x" />
-                            <FontAwesomeIcon className='errorIcon' icon={faTimesCircle} onClick={handleClose} size="1x" />
+                        <div className='button-div'>
+                            <button className='btn btn-primary' onClick={onReload}>Reload</button>
+                            <button className='btn btn-primary' onClick={handleClose}>Close</button>
                         </div>
                     </div>
                 )
             }
-        </div>
+        </div >
     )
 }
 
