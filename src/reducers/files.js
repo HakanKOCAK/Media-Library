@@ -56,7 +56,7 @@ export default function (state = initialState, action) {
                     console.log(obj)
                     Object.entries(entities[submissionId].entity.tags[tagId]).forEach(([key, value]) => {
                         console.log(key, value)
-                        if (key !== 'new') {
+                        if (key !== 'new' && key !== 'edited') {
                             obj[key] = value
                         }
                     })

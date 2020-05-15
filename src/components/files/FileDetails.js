@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
@@ -37,7 +37,6 @@ const FileDetails = (props) => {
 
     //Set submitted tags
     const [tags, setTags] = useState(file.entity.tags)
-
 
     const url = file.entity.url
 
@@ -85,6 +84,7 @@ const FileDetails = (props) => {
 
     const onChange = (type, key, value) => {
         const obj = { ...tags }
+        obj[key].edited = true
         if (type === 'tag') {
             obj[key].tag = value
         } else if (type === 'start') {
@@ -92,7 +92,6 @@ const FileDetails = (props) => {
         } else {
             obj[key].end = value
         }
-
         setTags(obj)
     }
 

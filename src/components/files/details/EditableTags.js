@@ -31,13 +31,10 @@ const EditableTags = (props) => {
 
         const { name, value } = event.currentTarget;
         if (name.includes('tag')) {
-
             onTagChange('tag', key, value)
         } else if (name.includes('start')) {
-
             onTagChange('start', key, value)
         } else {
-
             onTagChange('end', key, value)
         }
     }
@@ -78,6 +75,7 @@ const EditableTags = (props) => {
                     const tag = item[1].tag;
                     const start = item[1].start;
                     const isNew = item[1].new;
+                    const isEdited = item[1].edited;
                     const end = item[1].end;
                     return (
                         <div key={item[0]}
@@ -97,7 +95,7 @@ const EditableTags = (props) => {
                             onMouseLeave={() => onLeave(key)}
                         >
                             {
-                                isNew
+                                isNew || isEdited
                                     ?
                                     < div className='iconContainer right'>
                                         <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave(key)} />
