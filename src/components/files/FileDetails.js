@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
@@ -42,13 +42,8 @@ const FileDetails = (props) => {
 
     const onDelete = async (tagId, isNew) => {
         dispatch(deleteTag({ submissionId: id, tagId: tagId }))
-        dispatch({
-            type: DELETE_TAG_SUCCESS
-        })
-        const newTags = props.files.entities[id].entity.tags
-
         if (!isNew) {
-            console.log('here')
+            const newTags = props.files.entities[id].entity.tags
             const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
             if (!response.success) {
                 dispatch({
@@ -60,6 +55,10 @@ const FileDetails = (props) => {
                     type: DELETE_TAG_SUCCESS
                 })
             }
+        } else {
+            dispatch({
+                type: DELETE_TAG_SUCCESS
+            })
         }
     }
 

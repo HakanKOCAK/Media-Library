@@ -185,16 +185,14 @@ EditableTags.propTypes = {
     type: PropTypes.string.isRequired,
     onTagAdd: PropTypes.func.isRequired,
     onTagSave: PropTypes.func.isRequired,
-    onTagDelete: PropTypes.func.isRequired,
-    onTagChange: PropTypes.func.isRequired
+    onTagDelete: PropTypes.func.isRequired
 }
 
 EditableTags.defaultProps = {
     tags: {},
     type: '',
     onTagAdd: () => { },
-    onTagSave: () => { },
-    onTagDelete: () => { }
+    onTagSave: () => { }
 }
 
 export default EditableTags
