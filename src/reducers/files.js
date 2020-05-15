@@ -51,11 +51,10 @@ export default function (state = initialState, action) {
                 const { submissionId, tagId } = payload
                 let entities = { ...state.entities }
                 const isNew = entities[submissionId].entity.tags[tagId].new
-                if (isNew) {
+                const isEdited = entities[submissionId].entity.tags[tagId].edited
+                if (isNew || isEdited) {
                     const obj = {}
-                    console.log(obj)
                     Object.entries(entities[submissionId].entity.tags[tagId]).forEach(([key, value]) => {
-                        console.log(key, value)
                         if (key !== 'new' && key !== 'edited') {
                             obj[key] = value
                         }
