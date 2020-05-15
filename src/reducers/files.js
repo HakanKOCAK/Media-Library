@@ -5,7 +5,6 @@ import {
     DELETE_TAG_SUCCESS,
     DELETE_TAG_ERROR,
     SAVE_TAG_REQUEST,
-    ADD_TAG,
     DELETE_FILE_REQUEST,
     DELETE_FILE_SUCCESS,
     DELETE_FILE_ERROR,
@@ -88,17 +87,6 @@ export default function (state = initialState, action) {
                     }
                 })
                 entities[submissionId].entity.tags = obj
-                return {
-                    entities
-                }
-            }
-        case ADD_TAG:
-            {
-                const { submissionId, data } = payload
-                const { tagId, tag } = data
-                let entities = { ...state.entities }
-                entities[submissionId].entity.tags[tagId] = tag
-                entities[submissionId].entity.tags[tagId].new = true
                 return {
                     entities
                 }
