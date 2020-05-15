@@ -40,26 +40,33 @@ const FileDetails = (props) => {
 
     const url = file.entity.url
 
-    const onDelete = async (tagId) => {
-        await deleteTag({ submissionId: id, tagId: tagId })(dispatch)
+    const onDelete = async (tagId, isNew) => {
+        dispatch(deleteTag({ submissionId: id, tagId: tagId }))
+        dispatch({
+            type: DELETE_TAG_SUCCESS
+        })
         const newTags = props.files.entities[id].entity.tags
-        const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
 
-        if (!response.success) {
-            dispatch({
-                type: DELETE_TAG_ERROR
-            })
-            dispatch(setError(response.error))
-        } else {
-            dispatch({
-                type: DELETE_TAG_SUCCESS
-            })
+        if (!isNew) {
+            console.log('here')
+            const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
+            if (!response.success) {
+                dispatch({
+                    type: DELETE_TAG_ERROR
+                })
+                dispatch(setError(response.error))
+            } else {
+                dispatch({
+                    type: DELETE_TAG_SUCCESS
+                })
+            }
         }
     }
 
-    const onSave = async () => {
+    const onSave = async (key) => {
         dispatch({
-            type: SAVE_TAG_REQUEST
+            type: SAVE_TAG_REQUEST,
+            payload: { submissionId: id, tagId: key }
         })
         const newTags = props.files.entities[id].entity.tags
         const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
@@ -79,20 +86,6 @@ const FileDetails = (props) => {
     const onAdd = (data) => {
         dispatch(addTag({ submissionId: id, data: data }))
     }
-
-    const onChange = (type, key, value) => {
-        const obj = { ...tags }
-        if (type === 'tag') {
-            obj[key].tag = value
-        } else if (type === 'start') {
-            obj[key].start = value
-        } else {
-            obj[key].end = value
-        }
-
-        setTags(obj)
-    }
-
 
     useEffect(() => {
         setTags(files.entities[id].entity.tags);
@@ -125,7 +118,6 @@ const FileDetails = (props) => {
                 onTagDelete={onDelete}
                 onTagAdd={onAdd}
                 onTagSave={onSave}
-                onTagChange={onChange}
                 type={type}
             />
         </Fragment>

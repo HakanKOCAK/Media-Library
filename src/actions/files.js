@@ -64,11 +64,9 @@ export const deleteFile = (submissionId) => {
 }
 
 export const deleteTag = ({ submissionId, tagId }) => {
-    return async (dispatch) => {
-        dispatch({
-            type: DELETE_TAG_REQUEST,
-            payload: { submissionId, tagId }
-        })
+    return {
+        type: DELETE_TAG_REQUEST,
+        payload: { submissionId, tagId }
     }
 }
 

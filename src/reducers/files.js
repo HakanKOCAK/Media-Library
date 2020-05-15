@@ -47,6 +47,28 @@ export default function (state = initialState, action) {
                 }
             }
         case SAVE_TAG_REQUEST:
+            {
+                const { submissionId, tagId } = payload
+                let entities = { ...state.entities }
+                const isNew = entities[submissionId].entity.tags[tagId].new
+                if (isNew) {
+                    const obj = {}
+                    console.log(obj)
+                    Object.entries(entities[submissionId].entity.tags[tagId]).forEach(([key, value]) => {
+                        console.log(key, value)
+                        if (key !== 'new') {
+                            obj[key] = value
+                        }
+                    })
+                    entities[submissionId].entity.tags[tagId] = obj
+                    return {
+                        entities
+                    }
+                }
+                return {
+                    entities
+                }
+            }
         case SAVE_TAG_ERROR:
         case SAVE_TAG_SUCCESS:
         case DELETE_FILE_SUCCESS:
@@ -77,6 +99,7 @@ export default function (state = initialState, action) {
                 const { tagId, tag } = data
                 let entities = { ...state.entities }
                 entities[submissionId].entity.tags[tagId] = tag
+                entities[submissionId].entity.tags[tagId].new = true
                 return {
                     entities
                 }

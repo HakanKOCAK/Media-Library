@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faSave, faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import { v4 as uuidv4 } from 'uuid';
@@ -10,6 +10,13 @@ const EditableTags = (props) => {
 
     //To check if a tag is editing 
     const [edit, setEdit] = useState([]);
+
+    //set tags to state
+    const [displayTags, setTags] = useState(tags)
+
+    useEffect(() => {
+        setTags(tags)
+    }, [tags])
 
     //To display edit and delete options of tags
     const [visible, setVisible] = useState([]);
@@ -42,13 +49,12 @@ const EditableTags = (props) => {
         }
     }
 
-    const onDelete = (tagId) => {
-        onTagDelete(tagId);
+    const onDelete = (tagId, isNew) => {
+        onTagDelete(tagId, isNew);
     }
 
     const onSave = (key) => {
-        const data = { tagId: key, tag: tags[key] }
-        onTagSave(data)
+        onTagSave(key)
         const arr = []
         arr[key] = false
         setEdit(arr)
@@ -78,6 +84,7 @@ const EditableTags = (props) => {
                     const key = item[0];
                     const tag = item[1].tag;
                     const start = item[1].start;
+                    const isNew = item[1].new;
                     const end = item[1].end;
                     return (
                         <div key={item[0]}
@@ -133,7 +140,7 @@ const EditableTags = (props) => {
                                                 :
                                                 null
                                         }
-                                        <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => onDelete(key)} />
+                                        <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => onDelete(key, isNew)} />
                                     </div>
                                     :
                                     null
