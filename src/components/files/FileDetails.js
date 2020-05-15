@@ -9,7 +9,7 @@ import Video from './details/Video';
 import Image from './details/Image';
 import Other from './details/Other';
 import EditableTags from './details/EditableTags';
-import { deleteTag, addTag } from '../../actions/files';
+import { deleteTag } from '../../actions/files';
 import { updateTag } from '../../apis/updadeTag';
 import { setError } from '../../actions/error';
 import { SAVE_TAG_REQUEST, SAVE_TAG_ERROR, SAVE_TAG_SUCCESS, DELETE_TAG_SUCCESS, DELETE_TAG_ERROR } from '../../actions/types';
@@ -41,8 +41,10 @@ const FileDetails = (props) => {
     const url = file.entity.url
 
     const onDelete = async (tagId, isNew) => {
-        dispatch(deleteTag({ submissionId: id, tagId: tagId }))
+
+        console.log('tagId:', tagId)
         if (!isNew) {
+            dispatch(deleteTag({ submissionId: id, tagId: tagId }))
             const newTags = props.files.entities[id].entity.tags
             const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
             if (!response.success) {
@@ -56,9 +58,13 @@ const FileDetails = (props) => {
                 })
             }
         } else {
-            dispatch({
-                type: DELETE_TAG_SUCCESS
+            const newTags = {}
+            Object.entries(tags).forEach(([key, value]) => {
+                if (key !== tagId) {
+                    newTags[key] = value
+                }
             })
+            setTags(newTags)
         }
     }
 
@@ -83,20 +89,22 @@ const FileDetails = (props) => {
     }
 
     const onChange = (type, key, value) => {
-        const obj = { ...tags }
-        obj[key].edited = true
+        const newTags = { ...tags }
+        newTags[key].edited = true
         if (type === 'tag') {
-            obj[key].tag = value
+            newTags[key].tag = value
         } else if (type === 'start') {
-            obj[key].start = value
+            newTags[key].start = value
         } else {
-            obj[key].end = value
+            newTags[key].end = value
         }
-        setTags(obj)
+        setTags(newTags)
     }
 
     const onAdd = (data) => {
-        dispatch(addTag({ submissionId: id, data: data }))
+        const newTags = { ...tags }
+        newTags[data.tagId] = data.tag
+        setTags(newTags)
     }
 
     useEffect(() => {
