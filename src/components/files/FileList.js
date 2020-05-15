@@ -32,7 +32,7 @@ const FileList = (props) => {
 
     const handleClick = (event, submissionId) => {
         const classes = Array.from(event.target.parentNode.classList)
-        if (nodeClassList.some(v => classes.indexOf(v) !== -1)) {
+        if (nodeClassList.some(className => classes.indexOf(className) !== -1)) {
             if (classes.includes('delete')) {
                 dispatch(deleteFile(submissionId));
             }
