@@ -42,7 +42,6 @@ const FileDetails = (props) => {
 
     const onDelete = async (tagId, isNew) => {
 
-        console.log('tagId:', tagId)
         if (!isNew) {
             dispatch(deleteTag({ submissionId: id, tagId: tagId }))
             const newTags = props.files.entities[id].entity.tags
@@ -71,7 +70,7 @@ const FileDetails = (props) => {
     const onSave = async (key) => {
         dispatch({
             type: SAVE_TAG_REQUEST,
-            payload: { submissionId: id, tagId: key }
+            payload: { submissionId: id, tagId: key, tag: tags[key] }
         })
         const newTags = props.files.entities[id].entity.tags
         const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })

@@ -46,7 +46,6 @@ export const deleteFile = (submissionId) => {
             payload: { submissionId: submissionId }
         })
 
-        console.log(submissionId)
         const response = await deleteSubmittedFile(submissionId);
         if (!response.success) {
             dispatch({
@@ -65,12 +64,5 @@ export const deleteTag = ({ submissionId, tagId }) => {
     return {
         type: DELETE_TAG_REQUEST,
         payload: { submissionId, tagId }
-    }
-}
-
-export const addTag = ({ submissionId, data }) => {
-    return {
-        type: ADD_TAG,
-        payload: { submissionId, data }
     }
 }

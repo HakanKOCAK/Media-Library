@@ -47,22 +47,27 @@ export default function (state = initialState, action) {
             }
         case SAVE_TAG_REQUEST:
             {
-                const { submissionId, tagId } = payload
-                let entities = { ...state.entities }
-                const isNew = entities[submissionId].entity.tags[tagId].new
-                const isEdited = entities[submissionId].entity.tags[tagId].edited
-                if (isNew || isEdited) {
-                    const obj = {}
-                    Object.entries(entities[submissionId].entity.tags[tagId]).forEach(([key, value]) => {
+                const { submissionId, tagId, tag } = payload
+                let entities = { ...state.entities };
+                if (tag.new) {
+                    const newTagInfo = {}
+                    Object.entries(tag).forEach(([key, value]) => {
                         if (key !== 'new' && key !== 'edited') {
-                            obj[key] = value
+                            newTagInfo[key] = value
                         }
                     })
-                    entities[submissionId].entity.tags[tagId] = obj
+                    entities[submissionId].entity.tags[tagId] = newTagInfo;
                     return {
                         entities
                     }
                 }
+                const newTagInfo = {}
+                Object.entries(entities[submissionId].entity.tags[tagId]).forEach(([key, value]) => {
+                    if (key !== 'edited') {
+                        newTagInfo[key] = value
+                    }
+                })
+                entities[submissionId].entity.tags[tagId] = newTagInfo
                 return {
                     entities
                 }
