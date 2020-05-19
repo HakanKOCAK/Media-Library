@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { formId } from '../../config/config';
 import { withRouter } from 'react-router-dom';
@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
 import { deleteFile } from '../../actions/files';
+import ReactPlayer from 'react-player'
+import Spinner from '../spinner/Spinner';
 
 import '../../styles/Files.css'
 
@@ -14,6 +16,14 @@ const FileList = (props) => {
     const { files } = props
     const filesArray = Object.values(files)
 
+    const [durations, setDurations] = useState({})
+
+    console.log('durations', durations)
+    const onReady = (state, submissionId) => {
+        const newDurations = { ...durations };
+        newDurations[submissionId] = state.getDuration();
+        setDurations(newDurations)
+    }
     const onEdit = (event, submissionId) => {
         event.stopPropagation();
         window.open(`https://jotform.com/edit/${submissionId}`, '_blank');
@@ -45,8 +55,9 @@ const FileList = (props) => {
                 </thead>
                 <tbody>
                     {filesArray.map((item) => {
+                        const submissionId = item.submissionId
                         return (
-                            <tr key={item.submissionId} onClick={event => handleClick(event, item.submissionId)}>
+                            <tr key={submissionId} onClick={event => handleClick(event, submissionId)}>
                                 <td>
                                     {item.nameSurname}
                                 </td>
@@ -65,17 +76,37 @@ const FileList = (props) => {
                                 <td>
                                     {item.entity.size}
                                 </td>
-                                <td>
-                                    -
+                                <td style={{ fontSize: '11px', height: '82px' }}>
+                                    {
+                                        item.fileType === 'Video/Audio'
+                                            ?
+                                            durations[submissionId]
+                                                ?
+                                                durations[submissionId]
+                                                :
+                                                <Spinner styled={false} duration={true} />
+                                            :
+                                            'Not available'
+                                    }
+
                                 </td>
                                 <td className='toolbar'>
-                                    <button className='icon' onClick={event => onEdit(event, item.submissionId)}>
+                                    <button className='icon' onClick={event => onEdit(event, submissionId)}>
                                         <FontAwesomeIcon icon={faEdit} size="1x" />
                                     </button>
-                                    <button className='icon' onClick={event => onDelete(event, item.submissionId)}>
+                                    <button className='icon' onClick={event => onDelete(event, submissionId)}>
                                         <FontAwesomeIcon icon={faTrashAlt} size="1x" />
                                     </button>
                                 </td>
+                                {
+                                    item.fileType === 'Video/Audio'
+                                        ?
+                                        <td style={{ display: 'none' }} >
+                                            <ReactPlayer url={item.entity.url} onReady={state => onReady(state, submissionId)} />
+                                        </td>
+                                        :
+                                        null
+                                }
                             </tr>
                         )
                     })}

@@ -10,22 +10,33 @@ const styles = {
     'display': 'flex'
 }
 const Spinner = (props) => {
-    const { styled } = props
+    const { styled, duration } = props
     return (
         <Fragment>
             <div style={!styled ? {} : { styles }}>
-                <img
-                    src={spinner}
-                    style={{ width: '200px', margin: 'auto', display: 'block' }}
-                    alt='Loading...'
-                />
+                {
+                    !duration
+                        ?
+                        <img
+                            src={spinner}
+                            style={{ width: '200px', margin: 'auto', display: 'block' }}
+                            alt='Loading...'
+                        />
+                        :
+                        <img
+                            src={spinner}
+                            style={{ width: '65px', height: '65px' }}
+                            alt='Loading...'
+                        />
+                }
             </div>
         </Fragment>
     )
 };
 
 Spinner.propTypes = {
-    styled: PropTypes.bool
+    styled: PropTypes.bool,
+    duration: PropTypes.bool
 }
 
 export default Spinner;
