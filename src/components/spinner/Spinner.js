@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import spinner from './spinner.gif';
 import PropTypes from 'prop-types';
 
 const styles = {
-    'height': '100vh',
+    'height': '80vh',
     'justifyContent': 'center',
     'alignItems': 'center',
     'flexDirection': 'column',
@@ -12,25 +12,23 @@ const styles = {
 const Spinner = (props) => {
     const { styled, duration } = props
     return (
-        <Fragment>
-            <div style={!styled ? {} : { styles }}>
-                {
-                    !duration
-                        ?
-                        <img
-                            src={spinner}
-                            style={{ width: '200px', margin: 'auto', display: 'block' }}
-                            alt='Loading...'
-                        />
-                        :
-                        <img
-                            src={spinner}
-                            style={{ width: '65px', height: '65px' }}
-                            alt='Loading...'
-                        />
-                }
-            </div>
-        </Fragment>
+        <div style={styled === undefined ? styles : {}}>
+            {
+                !duration
+                    ?
+                    <img
+                        src={spinner}
+                        style={{ width: '45px', margin: 'auto', display: 'block' }}
+                        alt='Loading...'
+                    />
+                    :
+                    <img
+                        src={spinner}
+                        style={{ width: '22px' }}
+                        alt='Loading...'
+                    />
+            }
+        </div>
     )
 };
 
