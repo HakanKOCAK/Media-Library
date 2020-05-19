@@ -34,13 +34,13 @@
 }
 
 .toolbar{
-    cursor: default;
     display: flex;
-    justify-content: space-evenly;
+    height: 82px;
+    justify-content: space-between;
+    cursor: default;
 }
 .icon{
     border:none;
     cursor: pointer;
-    display: flex;
     background-color: transparent;
 }

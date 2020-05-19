@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import { formId } from '../../config/config';
 import { withRouter } from 'react-router-dom';
@@ -14,31 +14,19 @@ const FileList = (props) => {
     const { files } = props
     const filesArray = Object.values(files)
 
-    const nodeClassList = []
-    useEffect(() => {
-        let node = document.getElementsByClassName('toolbar')[0]
+    const onEdit = (event, submissionId) => {
+        event.stopPropagation();
+        window.open(`https://jotform.com/edit/${submissionId}`, '_blank');
+    }
 
-        while (node.hasChildNodes()) {
-            const childrens = Array.from(node.children);
-            childrens.forEach(child => {
-                node = child
-                const classList = Array.from(node.classList)
-                classList.forEach(className => {
-                    nodeClassList.push(className);
-                })
-            })
-        }
-    }, [files])
+    const onDelete = (event, submissionId) => {
+        event.stopPropagation();
+        dispatch(deleteFile(submissionId));
+    }
 
     const handleClick = (event, submissionId) => {
-        const classes = Array.from(event.target.parentNode.classList)
-        if (nodeClassList.some(className => classes.indexOf(className) !== -1)) {
-            if (classes.includes('delete')) {
-                dispatch(deleteFile(submissionId));
-            }
-        } else if (!Array.from(event.target.classList).includes('toolbar')) {
+        if (!Array.from(event.target.classList).includes('toolbar'))
             props.history.push('/files/' + submissionId);
-        }
     }
     return (
         <Fragment>
@@ -81,18 +69,11 @@ const FileList = (props) => {
                                     -
                                 </td>
                                 <td className='toolbar'>
-                                    <button className='icon'>
-                                        <a
-                                            style={{ marginTop: '1.3px', textDecoration: 'none', color: 'black' }}
-                                            rel="noopener noreferrer"
-                                            target="_blank"
-                                            href={`https://jotform.com/edit/${item.submissionId}`}
-                                        >
-                                            <FontAwesomeIcon className='edit' icon={faEdit} size="1x" />
-                                        </a>
+                                    <button className='icon' onClick={event => onEdit(event, item.submissionId)}>
+                                        <FontAwesomeIcon icon={faEdit} size="1x" />
                                     </button>
-                                    <button className='icon' >
-                                        <FontAwesomeIcon className='delete' icon={faTrashAlt} size="1x" />
+                                    <button className='icon' onClick={event => onDelete(event, item.submissionId)}>
+                                        <FontAwesomeIcon icon={faTrashAlt} size="1x" />
                                     </button>
                                 </td>
                             </tr>
