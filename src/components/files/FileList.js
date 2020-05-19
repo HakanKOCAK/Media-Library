@@ -76,7 +76,7 @@ const FileList = (props) => {
                                 <td>
                                     {item.entity.size}
                                 </td>
-                                <td style={{ fontSize: '11px', height: '82px' }}>
+                                <td style={{ fontSize: '11px' }}>
                                     {
                                         item.fileType === 'Video/Audio'
                                             ?

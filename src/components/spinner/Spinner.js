@@ -12,7 +12,7 @@ const styles = {
 const Spinner = (props) => {
     const { styled, duration } = props
     return (
-        <div style={styled === undefined ? styles : {}}>
+        <div style={styled ? styles : {}}>
             {
                 !duration
                     ?
@@ -35,6 +35,11 @@ const Spinner = (props) => {
 Spinner.propTypes = {
     styled: PropTypes.bool,
     duration: PropTypes.bool
+}
+
+Spinner.defaultProps = {
+    styled: true,
+    duration: false
 }
 
 export default Spinner;
