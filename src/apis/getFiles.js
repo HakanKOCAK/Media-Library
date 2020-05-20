@@ -86,8 +86,8 @@ const normalizeResponse = (question, submissionDetails, key) => {
                                         const endMinSec = end.split('-');
                                         return {
                                             ...newObject,
-                                            start: `${startMinSec[0]}:${startMinSec[1]}`,
-                                            end: `${endMinSec[0]}:${endMinSec[1]}`
+                                            start: `${startMinSec[0]}:${startMinSec[1]}:${startMinSec[2]}`,
+                                            end: `${endMinSec[0]}:${endMinSec[1]}:${endMinSec[1]}`
                                         }
                                     }
                                 }, {})
