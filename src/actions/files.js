@@ -5,6 +5,7 @@ import {
     DELETE_FILE_REQUEST,
     DELETE_FILE_SUCCESS,
     DELETE_FILE_ERROR,
+    ADD_DURATION
 } from './types';
 import { setFilesLoaded } from './app';
 import { getFiles } from '../apis/getFiles';
@@ -64,5 +65,12 @@ export const deleteTag = ({ submissionId, tagId }) => {
     return {
         type: DELETE_TAG_REQUEST,
         payload: { submissionId, tagId }
+    }
+}
+
+export const addDuration = ({ submissionId, duration }) => {
+    return {
+        type: ADD_DURATION,
+        payload: { submissionId, duration }
     }
 }

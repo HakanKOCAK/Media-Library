@@ -19,7 +19,7 @@ export const SAVE_TAG_REQUEST = 'SAVE TAG REQUEST';
 export const SAVE_TAG_SUCCESS = 'SAVE TAG SUCCESS';
 export const SAVE_TAG_ERROR = 'SAVE TAG ERROR';
 
-export const ADD_TAG = 'ADD TAG';
+export const ADD_DURATION = 'ADD DURATION';
 
 export const SET_ERROR = "SET ERROR";
 export const HIDE_ERROR = "HIDE ERROR";

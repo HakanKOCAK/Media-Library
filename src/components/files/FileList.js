@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import { formId } from '../../config/config';
 import { withRouter } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { deleteFile } from '../../actions/files';
 import ReactPlayer from 'react-player'
 import Spinner from '../spinner/Spinner';
 import prettyMilliseconds from 'pretty-ms';
+import { addDuration } from '../../actions/files';
 
 import '../../styles/Files.css'
 
@@ -17,13 +18,9 @@ const FileList = (props) => {
     const { files } = props
     const filesArray = Object.values(files)
 
-    const [durations, setDurations] = useState({})
-
-    console.log('durations', durations)
     const onReady = (state, submissionId) => {
-        const newDurations = { ...durations };
-        newDurations[submissionId] = prettyMilliseconds(state.getDuration() * 1000);
-        setDurations(newDurations)
+        const duration = prettyMilliseconds(state.getDuration() * 1000);
+        dispatch(addDuration({ submissionId, duration }))
     }
     const onEdit = (event, submissionId) => {
         event.stopPropagation();
@@ -77,17 +74,17 @@ const FileList = (props) => {
                                 <td>
                                     {item.entity.size}
                                 </td>
-                                <td style={{ fontSize: '11px' }}>
+                                <td>
                                     {
                                         item.fileType === 'Video/Audio'
                                             ?
-                                            durations[submissionId]
+                                            item.entity.duration
                                                 ?
-                                                durations[submissionId]
+                                                item.entity.duration
                                                 :
                                                 <Spinner styled={false} duration={true} />
                                             :
-                                            'Not available'
+                                            'N/A'
                                     }
 
                                 </td>

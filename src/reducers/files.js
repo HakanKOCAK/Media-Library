@@ -10,6 +10,7 @@ import {
     DELETE_FILE_ERROR,
     SAVE_TAG_ERROR,
     SAVE_TAG_SUCCESS,
+    ADD_DURATION
 } from '../actions/types';
 
 const initialState = {
@@ -92,6 +93,15 @@ export default function (state = initialState, action) {
                     }
                 })
                 entities[submissionId].entity.tags = obj
+                return {
+                    entities
+                }
+            }
+        case ADD_DURATION:
+            {
+                const { submissionId, duration } = payload
+                const entities = { ...state.entities }
+                entities[submissionId].entity.duration = duration
                 return {
                     entities
                 }
