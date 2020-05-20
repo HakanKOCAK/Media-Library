@@ -1,27 +1,59 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import { HIDE_ERROR } from '../actions/types';
 
 import '../styles/ErrorNotification.css';
 
 export const ErrorNotification = (props) => {
+    const dispatch = useDispatch()
 
     const { error } = props
-    const { message, isOpen } = error
+    const { message, isOpen, errorTypes } = error
     const onReload = () => {
         window.location.reload();
     }
 
+    const onClose = () => {
+        dispatch({
+            type: HIDE_ERROR
+        })
+    }
     return (
         <div className='errorContainer'>
             {
                 isOpen && message && (
                     <div className="errorNotification">
                         <span className='error-msg'>{message}</span>
-                        <span>Please reload the page.</span>
-                        <div className='button-div'>
-                            <button className='btn btn-primary' onClick={onReload}>Reload</button>
-                        </div>
+                        {
+                            errorTypes.includes('tag') ? <span>Tag cannot be empty</span> : null
+                        }
+                        {
+                            errorTypes.includes('interval') ?
+                                (
+                                    <>
+                                        <span>Interval Format is:</span>
+                                        <span>00:00:00 / 00:00:05</span>
+                                    </>
+                                )
+                                :
+                                null
+                        }
+                        {
+                            errorTypes.length === 0
+                                ?
+                                <>
+                                    <span>Tag cannot be empty</span>
+                                    <div className='button-div'>
+                                        <button className='btn btn-primary' onClick={onReload}>Reload</button>
+                                    </div>
+                                </>
+                                :
+                                <div className='button-div'>
+                                    <button className='btn btn-primary' onClick={onClose}>Close</button>
+                                </div>
+
+                        }
                     </div>
                 )
             }
@@ -32,14 +64,16 @@ export const ErrorNotification = (props) => {
 ErrorNotification.propTypes = {
     error: PropTypes.shape({
         message: PropTypes.string,
-        isOpen: PropTypes.bool
+        isOpen: PropTypes.bool,
+        errorTypes: PropTypes.array
     })
 }
 
 ErrorNotification.defaultProps = {
     error: PropTypes.shape({
         message: '',
-        isOpen: false
+        isOpen: false,
+        errorTypes: []
     })
 }
 

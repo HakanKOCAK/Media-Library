@@ -1,6 +1,12 @@
 import { SET_ERROR, HIDE_ERROR } from './types';
 
-export function setError(error) {
+export function setError(error, types) {
+    if (types) {
+        return {
+            type: SET_ERROR,
+            payload: { error, types }
+        }
+    }
     return {
         type: SET_ERROR,
         payload: error

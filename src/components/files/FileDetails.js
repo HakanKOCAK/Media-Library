@@ -79,7 +79,12 @@ const FileDetails = (props) => {
             dispatch({
                 type: SAVE_TAG_ERROR
             })
-            dispatch(setError(response.error))
+            if (response.types.length !== 0) {
+                dispatch(setError(response.error, response.types))
+            } else {
+                dispatch(setError(response.error))
+            }
+
         } else {
             dispatch({
                 type: SAVE_TAG_SUCCESS
@@ -97,6 +102,7 @@ const FileDetails = (props) => {
         } else {
             newTags[key].end = value
         }
+
         setTags(newTags)
     }
 
@@ -109,6 +115,7 @@ const FileDetails = (props) => {
     useEffect(() => {
         setTags(files.entities[id].entity.tags);
     }, [files])
+
     if (!file) {
         return <Spinner />
     }

@@ -59,7 +59,7 @@ const EditableTags = (props) => {
     const onAdd = () => {
         let obj = {}
         if (type === 'Video/Audio') {
-            obj = { tagId: uuidv4(), tag: { tag: '', start: '00:00', end: '00:00', new: true } };
+            obj = { tagId: uuidv4(), tag: { tag: '', start: '00:00:00', end: '00:00:00', new: true } };
         } else {
             obj = { tagId: uuidv4(), tag: { tag: '', new: true } };
         }

@@ -14,7 +14,6 @@ const Routes = (props) => {
 
     const { error } = props
     const { isOpen } = error
-    console.log(isOpen)
     return (
         <section className={`container ${isOpen ? 'blur' : ''}`}>
             <Switch>
