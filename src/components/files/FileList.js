@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import { deleteFile } from '../../actions/files';
 import ReactPlayer from 'react-player'
 import Spinner from '../spinner/Spinner';
+import prettyMilliseconds from 'pretty-ms';
 
 import '../../styles/Files.css'
 
@@ -21,7 +22,7 @@ const FileList = (props) => {
     console.log('durations', durations)
     const onReady = (state, submissionId) => {
         const newDurations = { ...durations };
-        newDurations[submissionId] = state.getDuration();
+        newDurations[submissionId] = prettyMilliseconds(state.getDuration() * 1000);
         setDurations(newDurations)
     }
     const onEdit = (event, submissionId) => {
