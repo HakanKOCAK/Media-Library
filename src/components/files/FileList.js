@@ -2,13 +2,9 @@ import React, { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 import { formId } from '../../config/config';
 import { withRouter } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
 import { deleteFile } from '../../actions/files';
-import ReactPlayer from 'react-player'
-import Spinner from '../spinner/Spinner';
-import prettyMilliseconds from 'pretty-ms';
+import ListItem from './ListItem';
 import { addDuration } from '../../actions/files';
 
 import '../../styles/Files.css'
@@ -18,22 +14,19 @@ const FileList = (props) => {
     const { files } = props
     const filesArray = Object.values(files)
 
-    const onReady = (state, submissionId) => {
-        const duration = prettyMilliseconds(state.getDuration() * 1000);
+    const onReady = (submissionId, duration) => {
         dispatch(addDuration({ submissionId, duration }))
     }
-    const onEdit = (event, submissionId) => {
-        event.stopPropagation();
+    const onEdit = (submissionId) => {
         window.open(`https://jotform.com/edit/${submissionId}`, '_blank');
     }
 
-    const onDelete = (event, submissionId) => {
-        event.stopPropagation();
+    const onDelete = (submissionId) => {
         dispatch(deleteFile(submissionId));
     }
 
-    const handleClick = (event, submissionId) => {
-        if (!Array.from(event.target.classList).includes('toolbar'))
+    const handleClick = (classList, submissionId) => {
+        if (!classList.includes('toolbar'))
             props.history.push('/files/' + submissionId);
     }
     return (
@@ -53,59 +46,14 @@ const FileList = (props) => {
                 </thead>
                 <tbody>
                     {filesArray.map((item) => {
-                        const submissionId = item.submissionId
                         return (
-                            <tr key={submissionId} onClick={event => handleClick(event, submissionId)}>
-                                <td>
-                                    {item.nameSurname}
-                                </td>
-                                <td>
-                                    {item.email}
-                                </td>
-                                <td>
-                                    {item.uploadDate}
-                                </td>
-                                <td>
-                                    {item.entity.fileName}
-                                </td>
-                                <td>
-                                    {item.fileType}
-                                </td>
-                                <td>
-                                    {item.entity.size}
-                                </td>
-                                <td>
-                                    {
-                                        item.fileType === 'Video/Audio'
-                                            ?
-                                            item.entity.duration
-                                                ?
-                                                item.entity.duration
-                                                :
-                                                <Spinner styled={false} duration={true} />
-                                            :
-                                            'N/A'
-                                    }
-
-                                </td>
-                                <td className='toolbar'>
-                                    <button className='icon' onClick={event => onEdit(event, submissionId)}>
-                                        <FontAwesomeIcon icon={faEdit} size="1x" />
-                                    </button>
-                                    <button className='icon' onClick={event => onDelete(event, submissionId)}>
-                                        <FontAwesomeIcon icon={faTrashAlt} size="1x" />
-                                    </button>
-                                </td>
-                                {
-                                    item.fileType === 'Video/Audio'
-                                        ?
-                                        <td style={{ display: 'none' }} >
-                                            <ReactPlayer url={item.entity.url} onReady={state => onReady(state, submissionId)} />
-                                        </td>
-                                        :
-                                        null
-                                }
-                            </tr>
+                            <ListItem
+                                key={item.submissionId}
+                                handleClick={handleClick}
+                                onEdit={onEdit}
+                                onDelete={onDelete}
+                                onReady={onReady}
+                                file={item} />
                         )
                     })}
                 </tbody>
