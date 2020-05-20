@@ -3,9 +3,20 @@ import { apiKey } from '../config/config';
 
 export const updateTag = async ({ submissionId, qid, data }) => {
 
+    console.log(data)
     const newTags = Object.values(data).reduce((newTags, item) => {
         const tag = item.tag
-        newTags.push({ "Tag": tag })
+        let interval
+        if (item.start && item.end) {
+            const start = item.start.replace(/:/g, '-');
+            const end = item.end.replace(/:/g, '-');
+            interval = `${start}/${end}`
+        }
+        if (interval) {
+            newTags.push({ "Tag": tag, "Interval": interval })
+        } else {
+            newTags.push({ "Tag": tag })
+        }
         return newTags
     }, [])
 
