@@ -71,7 +71,7 @@ const FileList = (props) => {
 }
 
 FileList.propTypes = {
-    files: PropTypes.object.isRequired,
+    files: PropTypes.shape({}).isRequired,
     history: PropTypes.shape({
         push: PropTypes.func.isRequired
     }),

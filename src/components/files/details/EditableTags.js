@@ -174,7 +174,7 @@ const EditableTags = (props) => {
 }
 
 EditableTags.propTypes = {
-    tags: PropTypes.object.isRequired,
+    tags: PropTypes.shape({}).isRequired,
     type: PropTypes.string.isRequired,
     onTagAdd: PropTypes.func.isRequired,
     onTagSave: PropTypes.func.isRequired,

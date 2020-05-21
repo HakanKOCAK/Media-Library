@@ -153,7 +153,7 @@ const FileDetails = (props) => {
 
 FileDetails.propTypes = {
     files: PropTypes.shape({
-        entities: PropTypes.object.isRequired
+        entities: PropTypes.shape({}).isRequired
     }),
     match: PropTypes.shape({
         params: PropTypes.shape({
@@ -164,7 +164,8 @@ FileDetails.propTypes = {
 
 
 FileDetails.defaultProps = {
-    files: {}
+    files: {},
+    id: ''
 }
 
 export default FileDetails;

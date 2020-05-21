@@ -16,12 +16,14 @@ const Files = (props) => {
 
 Files.propTypes = {
     files: PropTypes.shape({
-        entities: {}
-    })
+        entities: PropTypes.shape({}).isRequired
+    }).isRequired
 }
 
 Files.defaultProps = {
-    files: {}
+    files: {
+        entities: {}
+    }
 }
 
 export default Files;

@@ -86,7 +86,19 @@ const ListItem = (props) => {
 }
 
 ListItem.propTypes = {
-    file: PropTypes.object.isRequired,
+    file: PropTypes.shape({
+        submissionId: PropTypes.string.isRequired,
+        nameSurname: PropTypes.string.isRequired,
+        uploadDate: PropTypes.string.isRequired,
+        email: PropTypes.string.isRequired,
+        entity: PropTypes.shape({
+            fileName: PropTypes.string.isRequired,
+            url: PropTypes.string.isRequired,
+            size: PropTypes.string.isRequired,
+            duration: PropTypes.string
+        }).isRequired,
+        fileType: PropTypes.string.isRequired
+    }).isRequired,
     handleClick: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
     onEdit: PropTypes.func.isRequired,
@@ -94,7 +106,19 @@ ListItem.propTypes = {
 }
 
 ListItem.defaultProps = {
-    file: {},
+    file: {
+        submissionId: '',
+        nameSurname: '',
+        uploadDate: '',
+        email: '',
+        entity: {
+            fileName: '',
+            url: '',
+            size: '',
+            duration: ''
+        },
+        fileType: ''
+    },
     handleClick: () => { },
     onDelete: () => { },
     onEdit: () => { },

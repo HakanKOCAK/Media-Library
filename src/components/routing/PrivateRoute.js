@@ -41,10 +41,21 @@ const PrivateRoute = ({
 };
 
 PrivateRoute.propTypes = {
-    user: PropTypes.object.isRequired,
-    app: PropTypes.object.isRequired,
-    files: PropTypes.object.isRequired,
-    component: PropTypes.object.isRequired
+    user: PropTypes.shape({
+        isAuthenticated: PropTypes.bool.isRequired,
+        email: PropTypes.string.isRequired
+    }),
+    app: PropTypes.shape({
+        userLoaded: PropTypes.bool.isRequired,
+        filesLoaded: PropTypes.bool.isRequired
+    }),
+    files: PropTypes.shape({
+        entities: PropTypes.shape({})
+    }),
+    component: PropTypes.oneOfType([
+        PropTypes.elementType,
+        PropTypes.node
+    ])
 };
 
 const mapStateToProps = state => {

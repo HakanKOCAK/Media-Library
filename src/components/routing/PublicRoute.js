@@ -33,9 +33,17 @@ const PublicRoute = ({
     );
 
 PublicRoute.propTypes = {
-    user: PropTypes.object.isRequired,
-    app: PropTypes.object.isRequired,
-    component: PropTypes.object.isRequired
+    user: PropTypes.shape({
+        isAuthenticated: PropTypes.bool.isRequired
+    }),
+    app: PropTypes.shape({
+        userLoaded: PropTypes.bool.isRequired,
+        filesLoaded: PropTypes.bool.isRequired
+    }),
+    component: PropTypes.oneOfType([
+        PropTypes.elementType,
+        PropTypes.node
+    ])
 };
 
 const mapStateToProps = state => ({
