@@ -1,4 +1,5 @@
 import {
+    GET_FILES_REQUEST,
     GET_FILES_SUCCESS,
     GET_FILES_FAIL,
     DELETE_TAG_REQUEST,
@@ -15,6 +16,9 @@ import { setError } from './error';
 export const getAllFiles = () => {
     return async (dispatch) => {
         try {
+            dispatch({
+                type: GET_FILES_REQUEST
+            })
             const response = await getFiles();
 
             if (response.success) {

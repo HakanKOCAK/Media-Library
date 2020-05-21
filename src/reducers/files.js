@@ -1,4 +1,5 @@
 import {
+    GET_FILES_REQUEST,
     GET_FILES_SUCCESS,
     GET_FILES_FAIL,
     DELETE_TAG_REQUEST,
@@ -73,6 +74,7 @@ export default function (state = initialState, action) {
                     entities
                 }
             }
+        case GET_FILES_REQUEST:
         case SAVE_TAG_ERROR:
         case SAVE_TAG_SUCCESS:
         case DELETE_FILE_SUCCESS:

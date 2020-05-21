@@ -1,5 +1,6 @@
 export const GET_FILES_SUCCESS = 'GET FILES SUCCESS';
 export const GET_FILES_FAIL = 'GET FILES FAIL';
+export const GET_FILES_REQUEST = 'GET FILES REQUEST';
 
 export const SET_USER_DATA = 'SET USER DATA';
 export const REMOVE_USER_DATA = 'REMOVED USER DATA';
