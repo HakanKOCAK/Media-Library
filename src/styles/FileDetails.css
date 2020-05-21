@@ -79,13 +79,18 @@
 
 .tagInput{
     background: transparent;
-    border:none;
+    border: 0.5px var(--light-color) solid;
     text-align: center;
+}
+
+.tagInput:focus{
+    outline-width: 0.5px;
 }
 
 .editInput{
     background: var(--dark-color);
     color: white;
+    border: 0.5px var(--dark-color) solid;
     cursor: text;
 }
 
@@ -110,9 +115,18 @@
     width: 50px;
     height: 25px;
     color: white;
-    border:none;
+    border:0.5px var(--dark-color) solid;
     text-align: center;
 }
+
+.intervalInput:focus{
+    outline-width: 0.5px;
+}
+
+.redBorder{
+     border: 1px #c4302b solid;
+}
+
 
 .iconContainer{
     display: flex;
@@ -130,5 +144,5 @@
 .icon{
     margin-right: 2px;
     margin-left: 2px;
-    cursor: pointer;
+    cursor: pointer
 }

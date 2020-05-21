@@ -14,6 +14,27 @@ const EditableTags = (props) => {
     //To display edit and delete options of tags
     const [visible, setVisible] = useState([]);
 
+
+    const isTagCorrect = (tagId) => {
+        console.log('isTag', tags[tagId].tag !== '')
+        return tags[tagId].tag !== ''
+    }
+
+    const isStartCorrect = (tagId) => {
+        return /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(tags[tagId].start)
+    }
+
+    const isEndCorrect = (tagId) => {
+        return /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(tags[tagId].end)
+    }
+    const isFormatsCorrect = (tagId) => {
+        if (tags[tagId].start && tags[tagId].end) {
+            return isTagCorrect(tagId) && isStartCorrect(tagId) && isEndCorrect(tagId)
+        }
+
+        return tags[tagId].tag !== '';
+    }
+
     const onEnter = (index) => {
         const arr = [];
         arr[index] = true;
@@ -89,13 +110,14 @@ const EditableTags = (props) => {
                                         'editInput'
                                         :
                                         ''
-                                }`
+                                }
+                                ${!isFormatsCorrect(tagId) ? 'redBorder' : ''}`
                             }
                             onMouseEnter={() => onEnter(tagId)}
                             onMouseLeave={() => onLeave(tagId)}
                         >
                             {
-                                (isNew || isEdited) && tag !== ''
+                                (isNew || isEdited) && isFormatsCorrect(tagId)
                                     ?
                                     < div className='iconContainer right'>
                                         <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave(tagId)} />
@@ -111,7 +133,8 @@ const EditableTags = (props) => {
                                         'editInput'
                                         :
                                         ''
-                                    }`
+                                    }
+                                    ${!isTagCorrect(tagId) ? 'redBorder' : ''}`
                                 }
                                 name={`tag${tagId}`}
                                 type='text'
@@ -140,14 +163,14 @@ const EditableTags = (props) => {
                                 edit[tagId] && type === 'Video/Audio'
                                     ?
                                     <div className='intervalContainer'>
-                                        <input className='intervalInput'
+                                        <input className={`intervalInput ${!isStartCorrect(tagId) ? 'redBorder' : ''}`}
                                             name={`start${tagId}`}
                                             type='text'
                                             value={start}
                                             onChange={event => onChange(event, tagId)}
                                         />
                                                 /
-                                                <input className='intervalInput'
+                                        <input className={`intervalInput ${!isEndCorrect(tagId) ? 'redBorder' : ''}`}
                                             name={`end${tagId}`}
                                             type='text'
                                             value={end}
