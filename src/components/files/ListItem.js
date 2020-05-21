@@ -61,6 +61,13 @@ const ListItem = (props) => {
                         :
                         'N/A'
                 }
+                {
+                    file.fileType === 'Video/Audio'
+                        ?
+                        <ReactPlayer style={{ display: 'none' }} url={file.entity.url} onReady={state => onReady(state.getDuration())} />
+                        :
+                        null
+                }
 
             </td>
             <td className='toolbar'>
@@ -71,15 +78,6 @@ const ListItem = (props) => {
                     <FontAwesomeIcon icon={faTrashAlt} size="1x" />
                 </button>
             </td>
-            {
-                file.fileType === 'Video/Audio'
-                    ?
-                    <td style={{ display: 'none' }} >
-                        <ReactPlayer url={file.entity.url} onReady={state => onReady(state.getDuration())} />
-                    </td>
-                    :
-                    null
-            }
         </tr>
     )
 }
