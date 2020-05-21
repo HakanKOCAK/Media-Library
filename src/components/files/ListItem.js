@@ -25,9 +25,8 @@ const ListItem = (props) => {
         props.onEdit(submissionId);
     }
 
-    const onReady = (state) => {
-        const duration = prettyMilliseconds(state.getDuration() * 1000);
-        props.onReady(submissionId, duration)
+    const onReady = (duration) => {
+        props.onReady(submissionId, prettyMilliseconds(duration * 1000))
     }
 
     return (
@@ -76,7 +75,7 @@ const ListItem = (props) => {
                 file.fileType === 'Video/Audio'
                     ?
                     <td style={{ display: 'none' }} >
-                        <ReactPlayer url={file.entity.url} onReady={state => onReady(state)} />
+                        <ReactPlayer url={file.entity.url} onReady={state => onReady(state.getDuration())} />
                     </td>
                     :
                     null
