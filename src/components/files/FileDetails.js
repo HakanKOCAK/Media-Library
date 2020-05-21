@@ -67,10 +67,10 @@ const FileDetails = (props) => {
         }
     }
 
-    const onSave = async (key) => {
+    const onSave = async (tagId) => {
         dispatch({
             type: SAVE_TAG_REQUEST,
-            payload: { submissionId: id, tagId: key, tag: tags[key] }
+            payload: { submissionId: id, tagId: tagId, tag: tags[tagId] }
         })
         const newTags = props.files.entities[id].entity.tags
         const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags })
@@ -92,16 +92,17 @@ const FileDetails = (props) => {
         }
     }
 
-    const onChange = (type, key, value) => {
+    const onChange = (type, tagId, value) => {
         const newTags = { ...tags }
-        newTags[key].edited = true
+        newTags[tagId].edited = true
         if (type === 'tag') {
-            newTags[key].tag = value
+            newTags[tagId].tag = value
         } else if (type === 'start') {
-            newTags[key].start = value
+            newTags[tagId].start = value
         } else {
-            newTags[key].end = value
+            newTags[tagId].end = value
         }
+
 
         setTags(newTags)
     }

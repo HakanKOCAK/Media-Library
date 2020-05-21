@@ -27,15 +27,15 @@ const EditableTags = (props) => {
         setVisible(arr);
     }
 
-    const onChange = (event, key) => {
+    const onChange = (event, tagId) => {
 
         const { name, value } = event.currentTarget;
         if (name.includes('tag')) {
-            onTagChange('tag', key, value)
+            onTagChange('tag', tagId, value)
         } else if (name.includes('start')) {
-            onTagChange('start', key, value)
+            onTagChange('start', tagId, value)
         } else {
-            onTagChange('end', key, value)
+            onTagChange('end', tagId, value)
         }
     }
 
@@ -43,16 +43,16 @@ const EditableTags = (props) => {
         onTagDelete(tagId, isNew);
     }
 
-    const onSave = (key) => {
-        onTagSave(key)
+    const onSave = (tagId) => {
+        onTagSave(tagId)
         const arr = []
-        arr[key] = false
+        arr[tagId] = false
         setEdit(arr)
     }
 
-    const onEdit = (index) => {
+    const onEdit = (tagId) => {
         const arr = [...edit];
-        arr[index] = true;
+        arr[tagId] = true;
         setEdit(arr);
     }
 
@@ -71,7 +71,7 @@ const EditableTags = (props) => {
             <legend className='label'>Tags</legend>
             <div className='tagsContainer'>
                 {Object.entries(tags).map(item => {
-                    const key = item[0];
+                    const tagId = item[0];
                     const tag = item[1].tag;
                     const start = item[1].start;
                     const isNew = item[1].new;
@@ -80,78 +80,78 @@ const EditableTags = (props) => {
                     return (
                         <div key={item[0]}
                             className={`tag 
-                                    ${edit[key] && type === 'Video/Audio'
+                                    ${edit[tagId] && type === 'Video/Audio'
                                     ?
                                     'editTagExtended'
                                     :
-                                    edit[key]
+                                    edit[tagId]
                                         ?
                                         'editInput'
                                         :
                                         ''
                                 }`
                             }
-                            onMouseEnter={() => onEnter(key)}
-                            onMouseLeave={() => onLeave(key)}
+                            onMouseEnter={() => onEnter(tagId)}
+                            onMouseLeave={() => onLeave(tagId)}
                         >
                             {
-                                isNew || isEdited
+                                (isNew || isEdited) && tag !== ''
                                     ?
                                     < div className='iconContainer right'>
-                                        <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave(key)} />
+                                        <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave(tagId)} />
                                     </div>
                                     :
                                     null
                             }
-                            <input disabled={!edit[key]}
+                            <input disabled={!edit[tagId]}
                                 className={`tagInput 
                                     ${
-                                    edit[key]
+                                    edit[tagId]
                                         ?
                                         'editInput'
                                         :
                                         ''
                                     }`
                                 }
-                                name={`tag${key}`}
+                                name={`tag${tagId}`}
                                 type='text'
                                 value={tag}
-                                onChange={event => onChange(event, key)}
+                                onChange={event => onChange(event, tagId)}
                             />
                             {
-                                visible[key]
+                                visible[tagId]
                                     ?
                                     <div className='iconContainer left'>
                                         {
-                                            !edit[key]
+                                            !edit[tagId]
                                                 ?
                                                 <FontAwesomeIcon className='icon' icon={faEdit}
-                                                    size='1x' onClick={() => onEdit(key)} />
+                                                    size='1x' onClick={() => onEdit(tagId)} />
 
                                                 :
                                                 null
                                         }
-                                        <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => { if (window.confirm('Delete the tag?')) { onDelete(key, isNew) } }} />
+                                        <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => { if (window.confirm('Delete the tag?')) { onDelete(tagId, isNew) } }} />
                                     </div>
                                     :
                                     null
                             }
                             {
-                                edit[key] && type === 'Video/Audio'
+                                edit[tagId] && type === 'Video/Audio'
                                     ?
                                     <div className='intervalContainer'>
                                         <input className='intervalInput'
-                                            name={`start${key}`}
+                                            name={`start${tagId}`}
                                             type='text'
                                             value={start}
-                                            onChange={event => onChange(event, key)}
+                                            onChange={event => onChange(event, tagId)}
                                         />
                                                 /
                                                 <input className='intervalInput'
-                                            name={`end${key}`}
+                                            name={`end${tagId}`}
                                             type='text'
                                             value={end}
-                                            onChange={event => onChange(event, key)}
+                                            onChange={event => onChange(event, tagId)}
                                         />
                                     </div>
                                     :
