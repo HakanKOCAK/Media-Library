@@ -131,7 +131,7 @@ const EditableTags = (props) => {
                                                 :
                                                 null
                                         }
-                                        <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => onDelete(key, isNew)} />
+                                        <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => { if (window.confirm('Delete the tag?')) { onDelete(key, isNew) } }} />
                                     </div>
                                     :
                                     null

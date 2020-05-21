@@ -36,11 +36,13 @@
 .toolbar{
     display: flex;
     height: 82px;
+    align-items: center;
     justify-content: space-between;
     cursor: default;
 }
 .icon{
     border:none;
     cursor: pointer;
+    max-height: 25px;
     background-color: transparent;
 }

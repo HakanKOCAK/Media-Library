@@ -15,8 +15,7 @@ const ListItem = (props) => {
         props.handleClick(Array.from(event.target.classList), submissionId);
     }
 
-    const onDelete = (event) => {
-        event.stopPropagation();
+    const onDelete = () => {
         props.onDelete(submissionId);
     }
 
@@ -74,7 +73,7 @@ const ListItem = (props) => {
                 <button className='icon' onClick={event => onEdit(event)}>
                     <FontAwesomeIcon icon={faEdit} size="1x" />
                 </button>
-                <button className='icon' onClick={event => onDelete(event)}>
+                <button className='icon' onClick={event => { event.stopPropagation(); if (window.confirm('Delete the File?')) { onDelete() } }}>
                     <FontAwesomeIcon icon={faTrashAlt} size="1x" />
                 </button>
             </td>
