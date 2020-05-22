@@ -30,7 +30,7 @@ export default function (state = initialState, action) {
         case GET_FILES_FAIL:
             return {
                 ...state,
-                entities: []
+                entities: {}
             }
         case DELETE_FILE_REQUEST:
             {
