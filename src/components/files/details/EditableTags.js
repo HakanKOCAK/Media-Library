@@ -20,13 +20,22 @@ const EditableTags = (props) => {
         return tags[tagId].tag !== ''
     }
 
-    const isStartCorrect = (tagId) => {
+    const isStartCorrect = (tagId) => { // "Correct" means something else. We're pursuing validity here.
+        // Also you're not checking if tagId is a valid index..
         return /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(tags[tagId].start)
     }
 
     const isEndCorrect = (tagId) => {
         return /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(tags[tagId].end)
     }
+    // Literally repeating yourself.. Consider following:
+    //
+    // const isTimestampsValid = tagId => {
+    //     const { start = '', end = '' } = tags[tagId];
+    //     const regExp = /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/;
+    //     return [start, end].map(each => regExp.test(each));
+    // }
+
     const isFormatsCorrect = (tagId) => {
         if (tags[tagId].start && tags[tagId].end) {
             return isTagCorrect(tagId) && isStartCorrect(tagId) && isEndCorrect(tagId)
@@ -91,15 +100,18 @@ const EditableTags = (props) => {
         <fieldset className='main'>
             <legend className='label'>Tags</legend>
             <div className='tagsContainer'>
-                {Object.entries(tags).map(item => {
+                {Object.entries(tags).map(item => { // Whenever you have this much operation on render, consider extracting child components and keep parent components simpler.
                     const tagId = item[0];
                     const tag = item[1].tag;
                     const start = item[1].start;
                     const isNew = item[1].new;
                     const isEdited = item[1].edited;
                     const end = item[1].end;
+                    // Here is a good point to use destructuring.
                     return (
-                        <div key={item[0]}
+                        <div key={item[0]} // item[0] was assigned to a variable. Why not using it?
+
+                          // Not a great way to set classes. Also bad readability.. Gather a classList array beforehand.
                             className={`tag 
                                     ${edit[tagId] && type === 'Video/Audio'
                                     ?
@@ -109,7 +121,7 @@ const EditableTags = (props) => {
                                         ?
                                         'editInput'
                                         :
-                                        ''
+                                        '' // This line has 40 chars indent. does it worth it?
                                 }
                                 ${!isFormatsCorrect(tagId) ? 'redBorder' : ''}`
                             }
@@ -155,6 +167,7 @@ const EditableTags = (props) => {
                                                 null
                                         }
                                         <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => { if (window.confirm('Delete the tag?')) { onDelete(tagId, isNew) } }} />
+                                        {/* confirm check should go inside goDelete, Also you already developed an alert box(with blurry background etc.). Why not using it? */}
                                     </div>
                                     :
                                     null

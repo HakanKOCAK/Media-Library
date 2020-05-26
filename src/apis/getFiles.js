@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { apiKey, formId } from '../config/config';
+import { apiKey, formId } from '../config/config'; // Please prepare a default config file.
 import { v4 as uuidv4 } from 'uuid';
 import pretty from 'prettysize';
 const normalizeResponse = (question, submissionDetails, key) => {
@@ -15,7 +15,7 @@ const normalizeResponse = (question, submissionDetails, key) => {
         case 'videoAudio':
             if (questionAnswer.length) {
                 submissionDetails.entity = {
-                    ...submissionDetails.entites,
+                    ...submissionDetails.entites, // typo?
                     url: questionAnswer[0]
                 }
             }
@@ -30,9 +30,9 @@ const normalizeResponse = (question, submissionDetails, key) => {
             return submissionDetails;
         case 'tagsImageOther':
             if (questionAnswer) {
-                try {
+                try { // What are we trying here? Avoid wrapping all your code into try/catch. Only the necessary part.
                     const submittedTags = JSON.parse(questionAnswer);
-                    const tagsOfSubmission = tags => {
+                    const tagsOfSubmission = tags => { // functions should include a verb on their name.
                         const newTags = tags.reduce((newTags, item) => {
                             const keys = Object.keys(item)
                             newTags[uuidv4()] =
@@ -58,6 +58,7 @@ const normalizeResponse = (question, submissionDetails, key) => {
                     }
                 }
             } else if (submissionDetails.fileType === 'Image' || submissionDetails.fileType === 'Other') {
+                // You can use ['Image', 'Other'].includes(submissionDetails.fileType) in order to avoid unnecessary repetitious typing on building condition.
                 submissionDetails.entity = {
                     ...submissionDetails.entity,
                     qid: key,
@@ -67,9 +68,10 @@ const normalizeResponse = (question, submissionDetails, key) => {
             return submissionDetails
         case 'tagsVideoAudio':
             if (questionAnswer) {
-                try {
+                try { // Same here
                     const submittedTags = JSON.parse(questionAnswer);
-                    const tagsOfSubmission = tags => {
+                    const tagsOfSubmission = tags => { // You shouldn't define different functions for similar things.
+                        // Define a function and handle difference within. You can move this to a util file.
                         const newTags = tags.reduce((newTags, item) => {
                             const keys = Object.keys(item)
                             newTags[uuidv4()] =
@@ -128,7 +130,7 @@ const normalizeResponse = (question, submissionDetails, key) => {
             }
             return submissionDetails
         default:
-            if (questionName !== 'mediaLibrary' && questionName !== 'submit') {
+            if (questionName !== 'mediaLibrary' && questionName !== 'submit') { // Why didn't you use different cases for those?
                 return submissionDetails = {
                     ...submissionDetails,
                     [questionName]: questionAnswer
@@ -139,7 +141,7 @@ const normalizeResponse = (question, submissionDetails, key) => {
 }
 
 const getAnswers = async data => {
-    return data.reduce((answers, item) => {
+    return data.reduce((answers, item) => { // item is too vague. Name it more specifically.
         const submission = item.answers
         const createdAt = item.created_at.split(' ')[0].split('-')
         const date = `${createdAt[2]}/${createdAt[1]}/${createdAt[0]}`
@@ -192,10 +194,12 @@ export const getFiles = async () => {
 }
 
 const getFileName = (url) => {
-    return url.split('/')[url.split('/').length - 1]
+    return url.split('/')[url.split('/').length - 1] // why splitting url multiple times??
 }
 const getFileSizesAndNames = async (files) => {
-    const data = Promise.all(
+    const data = Promise.all( // Why waiting for all files? What if one of them huge and takes time? Approach this as you've implemented video/audio durations in file list. Nothing should wait for
+      // another thing unnecessarily.
+      // Also this doesn't cover if an url causes an error somehow..
         Object.keys(files).map(async (key) => {
             const file = files[key]
             const url = file.entity.url

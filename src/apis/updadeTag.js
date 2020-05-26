@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { apiKey } from '../config/config';
 
+// You have a typo on file name.
 export const updateTag = async ({ submissionId, qid, data }) => {
 
     const newTags = Object.values(data).reduce((newTags, item) => {
@@ -24,7 +25,8 @@ export const updateTag = async ({ submissionId, qid, data }) => {
         let flag = false;
         const types = [];
         newTags.forEach(item => {
-            if (!/^((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)\/((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)$/g.test(item.Interval)) {
+            if (!/^((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)\/((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)$/g.test(item.Interval)) { // It seems you've used this regexp somewhere else. Extract a function and use
+                // it from there
                 flag = true;
                 types.push('interval');
             }

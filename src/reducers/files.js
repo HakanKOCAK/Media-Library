@@ -24,12 +24,13 @@ export default function (state = initialState, action) {
     switch (type) {
         case GET_FILES_SUCCESS:
             return {
-                ...state,
+                ...state, // state only has entities. so you don't need the rest of them since you're providing that value.
                 entities: payload,
             }
         case GET_FILES_FAIL:
             return {
-                ...state,
+                ...state, // same here. It's a good practice though(it may have some other attributes in future), you can keep it but your code needs consistency. If you plan to keep this, add for
+                // other cases in this switch block
                 entities: {}
             }
         case DELETE_FILE_REQUEST:
@@ -83,7 +84,7 @@ export default function (state = initialState, action) {
         case DELETE_TAG_ERROR:
             return {
                 ...state
-            }
+            } // If you're not changing anything on state, you don't need to listen these actions.
         case DELETE_TAG_REQUEST:
             {
                 const { submissionId, tagId } = payload

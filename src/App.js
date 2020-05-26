@@ -9,6 +9,7 @@ import { loadUser } from './actions/user';
 
 import './App.css';
 
+// In your eslint configuration please extend eslint-config-airbnb-base
 const App = () => {
   const dispatch = useDispatch();
 
