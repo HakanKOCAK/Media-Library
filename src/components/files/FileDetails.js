@@ -40,6 +40,13 @@ const FileDetails = (props) => {
 
     const url = file.entity.url
 
+    //seek the player to given seconds
+    const [seekTo, setSeekTo] = useState();
+
+    const onTagClick = (time) => {
+        setSeekTo(time);
+    }
+
     const onDelete = async (tagId, isNew) => {
 
         if (!isNew) {
@@ -136,7 +143,7 @@ const FileDetails = (props) => {
                     :
                     type === 'Video/Audio'
                         ?
-                        <Video url={url} />
+                        <Video url={url} seekTo={seekTo} />
                         :
                         <Other url={url} />
             }
@@ -146,6 +153,7 @@ const FileDetails = (props) => {
                 onTagAdd={onAdd}
                 onTagChange={onChange}
                 onTagSave={onSave}
+                onTagClick={onTagClick}
                 type={type}
             />
         </Fragment>

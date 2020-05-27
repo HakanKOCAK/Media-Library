@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 const EditableTags = (props) => {
 
-    const { tags, type, onTagDelete, onTagAdd, onTagSave, onTagChange } = props;
+    const { tags, type, onTagDelete, onTagAdd, onTagSave, onTagChange, onTagClick } = props;
 
     //To check if a tag is editing 
     const [edit, setEdit] = useState([]);
@@ -16,7 +16,6 @@ const EditableTags = (props) => {
 
 
     const isTagCorrect = (tagId) => {
-        console.log('isTag', tags[tagId].tag !== '')
         return tags[tagId].tag !== ''
     }
 
@@ -35,6 +34,10 @@ const EditableTags = (props) => {
         return tags[tagId].tag !== '';
     }
 
+    const onSeekTo = (time) => {
+        onTagClick(time);
+    }
+
     const onEnter = (index) => {
         const arr = [];
         arr[index] = true;
@@ -49,8 +52,7 @@ const EditableTags = (props) => {
     }
 
     const onChange = (event, tagId) => {
-
-        const { name, value } = event.currentTarget;
+        const { name, value } = event.target;
         if (name.includes('tag')) {
             onTagChange('tag', tagId, value)
         } else if (name.includes('start')) {
@@ -64,14 +66,16 @@ const EditableTags = (props) => {
         onTagDelete(tagId, isNew);
     }
 
-    const onSave = (tagId) => {
+    const onSave = (event, tagId) => {
+        event.stopPropagation();
         onTagSave(tagId)
         const arr = []
         arr[tagId] = false
         setEdit(arr)
     }
 
-    const onEdit = (tagId) => {
+    const onEdit = (event, tagId) => {
+        event.stopPropagation();
         const arr = [...edit];
         arr[tagId] = true;
         setEdit(arr);
@@ -115,12 +119,13 @@ const EditableTags = (props) => {
                             }
                             onMouseEnter={() => onEnter(tagId)}
                             onMouseLeave={() => onLeave(tagId)}
+                            onClick={() => type === 'Video/Audio' ? onSeekTo(start) : () => { return }}
                         >
                             {
                                 (isNew || isEdited) && isFormatsCorrect(tagId)
                                     ?
                                     < div className='iconContainer right'>
-                                        <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={() => onSave(tagId)} />
+                                        <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={event => onSave(event, tagId)} />
                                     </div>
                                     :
                                     null
@@ -139,6 +144,7 @@ const EditableTags = (props) => {
                                 name={`tag${tagId}`}
                                 type='text'
                                 value={tag}
+                                onClick={event => { event.stopPropagation() }}
                                 onChange={event => onChange(event, tagId)}
                             />
                             {
@@ -149,12 +155,12 @@ const EditableTags = (props) => {
                                             !edit[tagId]
                                                 ?
                                                 <FontAwesomeIcon className='icon' icon={faEdit}
-                                                    size='1x' onClick={() => onEdit(tagId)} />
+                                                    size='1x' onClick={event => onEdit(event, tagId)} />
 
                                                 :
                                                 null
                                         }
-                                        <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={() => { if (window.confirm('Delete the tag?')) { onDelete(tagId, isNew) } }} />
+                                        <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={event => { event.stopPropagation(); if (window.confirm('Delete the tag?')) { onDelete(tagId, isNew) } }} />
                                     </div>
                                     :
                                     null
@@ -167,6 +173,7 @@ const EditableTags = (props) => {
                                             name={`start${tagId}`}
                                             type='text'
                                             value={start}
+                                            onClick={event => { event.stopPropagation() }}
                                             onChange={event => onChange(event, tagId)}
                                         />
                                                 /
@@ -174,6 +181,7 @@ const EditableTags = (props) => {
                                             name={`end${tagId}`}
                                             type='text'
                                             value={end}
+                                            onClick={event => { event.stopPropagation() }}
                                             onChange={event => onChange(event, tagId)}
                                         />
                                     </div>
@@ -202,7 +210,8 @@ EditableTags.propTypes = {
     onTagAdd: PropTypes.func.isRequired,
     onTagSave: PropTypes.func.isRequired,
     onTagDelete: PropTypes.func.isRequired,
-    onTagChange: PropTypes.func.isRequired
+    onTagChange: PropTypes.func.isRequired,
+    onTagClick: PropTypes.func.isRequired
 }
 
 EditableTags.defaultProps = {
@@ -211,7 +220,8 @@ EditableTags.defaultProps = {
     onTagAdd: () => { },
     onTagSave: () => { },
     onTagDelete: () => { },
-    onTagChange: () => { }
+    onTagChange: () => { },
+    onTagClick: () => { }
 }
 
 export default EditableTags
