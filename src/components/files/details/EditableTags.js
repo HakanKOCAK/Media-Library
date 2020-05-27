@@ -31,7 +31,7 @@ const EditableTags = (props) => {
     }
 
     const isEndCorrect = (tagId) => {
-        return /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(tags[tagId].start)
+        return /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(tags[tagId].end)
     }
     const isFormatsCorrect = (tagId) => {
         if (tags[tagId].start && tags[tagId].end) {
