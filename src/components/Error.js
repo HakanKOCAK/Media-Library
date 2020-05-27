@@ -8,10 +8,10 @@ const Error = props => {
     return (
         <div className="error-div">
             {
-                Object.keys(flags).map(key => {
+                Object.keys(flags).map((key, index) => {
                     const val = flags[key];
                     if (val) {
-                        return <p className="my-1">{errorMessages[key]}</p>
+                        return <p key={index} className="my-1">{errorMessages[key]}</p>
                     }
                     return null;
                 })

@@ -121,6 +121,9 @@ const EditableTags = (props) => {
 
     return (
         <>
+            <div style={{ margin: '0px auto', maxWidth: '950px' }}>
+                <Error flags={flags} />
+            </div>
             <fieldset className='main'>
                 <legend className='label'>Tags</legend>
                 <div className='tagsContainer'>
@@ -246,9 +249,6 @@ const EditableTags = (props) => {
                     </div>
                 </div>
             </fieldset>
-            <div style={{ margin: '0px auto', maxWidth: '950px' }}>
-                <Error flags={flags} />
-            </div>
         </>
     )
 }
