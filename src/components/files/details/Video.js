@@ -13,20 +13,19 @@ const Video = (props) => {
         setReady(true)
     }
 
-    const setTo = (interval) => {
-        if (isReady) {
-            const hoursMinutesSeconds = interval.split(':');
-            const hours = parseInt(hoursMinutesSeconds[0]);
-            const minutes = parseInt(hoursMinutesSeconds[1]);
-            const seconds = parseInt(hoursMinutesSeconds[2]);
-            const toSecond = hours * 3600 + minutes * 60 + seconds
-            playerRef.current.seekTo(toSecond, 'seconds')
-        }
-    }
-
     useEffect(() => {
+        function setTo(interval) {
+            if (isReady) {
+                const hoursMinutesSeconds = interval.split(':');
+                const hours = parseInt(hoursMinutesSeconds[0]);
+                const minutes = parseInt(hoursMinutesSeconds[1]);
+                const seconds = parseInt(hoursMinutesSeconds[2]);
+                const toSecond = hours * 3600 + minutes * 60 + seconds
+                playerRef.current.seekTo(toSecond, 'seconds')
+            }
+        }
         setTo(seekTo)
-    }, [seekTo, setTo])
+    }, [seekTo])
 
     return (
         <div className='mediaContainer'>
