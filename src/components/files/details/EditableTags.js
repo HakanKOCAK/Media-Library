@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faSave, faEdit, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt, faSave, faEdit, faPlusCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 
@@ -45,10 +45,16 @@ const EditableTags = (props) => {
     }
 
     const onLeave = (index) => {
-        const arr = [];
+        const arr = [...edit];
         arr[index] = false;
-        setEdit(arr)
         setVisible(arr);
+    }
+
+    const onCancel = (event, index) => {
+        event.stopPropagation();
+        const arr = [...edit];
+        arr[index] = false;
+        setEdit(arr);
     }
 
     const onChange = (event, tagId) => {
@@ -105,6 +111,7 @@ const EditableTags = (props) => {
                     return (
                         <div key={item[0]}
                             className={`tag 
+                                    ${type === 'Video/Audio' ? 'pointer' : ''}
                                     ${edit[tagId] && type === 'Video/Audio'
                                     ?
                                     'editTagExtended'
@@ -124,7 +131,7 @@ const EditableTags = (props) => {
                             {
                                 (isNew || isEdited) && isFormatsCorrect(tagId)
                                     ?
-                                    < div className='iconContainer right'>
+                                    <div className='iconContainer right'>
                                         <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={event => onSave(event, tagId)} />
                                     </div>
                                     :
@@ -132,13 +139,8 @@ const EditableTags = (props) => {
                             }
                             <input disabled={!edit[tagId]}
                                 className={`tagInput 
-                                    ${
-                                    edit[tagId]
-                                        ?
-                                        'editInput'
-                                        :
-                                        ''
-                                    }
+                                    ${type === 'Video/Audio' ? 'pointer' : ''}
+                                    ${edit[tagId] ? 'editInput' : ''}
                                     ${!isTagCorrect(tagId) ? 'redBorder' : ''}`
                                 }
                                 name={`tag${tagId}`}
@@ -148,22 +150,41 @@ const EditableTags = (props) => {
                                 onChange={event => onChange(event, tagId)}
                             />
                             {
-                                visible[tagId]
-                                    ?
-                                    <div className='iconContainer left'>
-                                        {
-                                            !edit[tagId]
-                                                ?
-                                                <FontAwesomeIcon className='icon' icon={faEdit}
-                                                    size='1x' onClick={event => onEdit(event, tagId)} />
-
-                                                :
-                                                null
-                                        }
-                                        <FontAwesomeIcon className='icon' icon={faTrashAlt} size="1x" onClick={event => { event.stopPropagation(); if (window.confirm('Delete the tag?')) { onDelete(tagId, isNew) } }} />
-                                    </div>
-                                    :
-                                    null
+                                <div className={`iconContainer ${visible[tagId] ? 'left' : ''}`}>
+                                    {
+                                        !edit[tagId]
+                                            ?
+                                            <FontAwesomeIcon
+                                                style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
+                                                className='icon'
+                                                icon={faEdit}
+                                                size='1x'
+                                                onClick={event => onEdit(event, tagId)}
+                                            />
+                                            :
+                                            null
+                                    }
+                                    {
+                                        edit[tagId]
+                                            ?
+                                            <FontAwesomeIcon
+                                                style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
+                                                className='icon'
+                                                icon={faTimesCircle}
+                                                size="1x"
+                                                onClick={event => { onCancel(event, tagId) }}
+                                            />
+                                            :
+                                            null
+                                    }
+                                    <FontAwesomeIcon
+                                        style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
+                                        className='icon'
+                                        icon={faTrashAlt}
+                                        size="1x"
+                                        onClick={event => { event.stopPropagation(); if (window.confirm('Delete the tag?')) { onDelete(tagId, isNew) } }}
+                                    />
+                                </div>
                             }
                             {
                                 edit[tagId] && type === 'Video/Audio'

@@ -65,7 +65,7 @@
     height: 30px;
     flex-wrap:wrap;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     border-radius: 20px;
     border: 0.5px black solid;
     background: var(--light-color);
@@ -130,7 +130,7 @@
 
 .iconContainer{
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
 }
 
 .left{
@@ -145,4 +145,8 @@
     margin-right: 2px;
     margin-left: 2px;
     cursor: pointer
+}
+
+.pointer{
+    cursor: pointer;
 }
