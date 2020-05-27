@@ -4,5 +4,7 @@ export const errorMessages = {
     EMAIL_FORMAT: 'Wrong email format.',
     NO_ACCOUNT: 'User Not Found. Please check your credentials.',
     USER_DISABLED: 'Sorry, it seems like the account has been disabled by an administrator.',
-    USER_EXIST: 'User already exist.'
+    USER_EXIST: 'User already exist.',
+    EMPTY_TAG: 'Tag cannot be empty.',
+    INTERVAL_FORMAT: 'Interval format should be like 00:00:00'
 }

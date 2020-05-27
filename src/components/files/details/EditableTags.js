@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faSave, faEdit, faPlusCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import Error from '../../Error';
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 
@@ -14,6 +15,12 @@ const EditableTags = (props) => {
     //To display edit and delete options of tags
     const [visible, setVisible] = useState([]);
 
+    const config = {
+        EMPTY_TAG: false,
+        INTERVAL_FORMAT: false
+    }
+
+    const [flags, setFlag] = useState(config);
 
     const isTagCorrect = (tagId) => {
         return tags[tagId].tag !== ''
@@ -24,7 +31,7 @@ const EditableTags = (props) => {
     }
 
     const isEndCorrect = (tagId) => {
-        return /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(tags[tagId].end)
+        return /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(tags[tagId].start)
     }
     const isFormatsCorrect = (tagId) => {
         if (tags[tagId].start && tags[tagId].end) {
@@ -61,10 +68,25 @@ const EditableTags = (props) => {
         const { name, value } = event.target;
         if (name.includes('tag')) {
             onTagChange('tag', tagId, value)
+            if (value === '') {
+                setFlag({ ...flags, EMPTY_TAG: true })
+            } else {
+                setFlag({ ...flags, EMPTY_TAG: false })
+            }
         } else if (name.includes('start')) {
             onTagChange('start', tagId, value)
+            if (!/^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(value)) {
+                setFlag({ ...flags, INTERVAL_FORMAT: true })
+            } else {
+                setFlag({ ...flags, INTERVAL_FORMAT: false })
+            }
         } else {
             onTagChange('end', tagId, value)
+            if (!/^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(value)) {
+                setFlag({ ...flags, INTERVAL_FORMAT: true })
+            } else {
+                setFlag({ ...flags, INTERVAL_FORMAT: false })
+            }
         }
     }
 
@@ -98,131 +120,136 @@ const EditableTags = (props) => {
     }
 
     return (
-        <fieldset className='main'>
-            <legend className='label'>Tags</legend>
-            <div className='tagsContainer'>
-                {Object.entries(tags).map(item => {
-                    const tagId = item[0];
-                    const tag = item[1].tag;
-                    const start = item[1].start;
-                    const isNew = item[1].new;
-                    const isEdited = item[1].edited;
-                    const end = item[1].end;
-                    return (
-                        <div key={item[0]}
-                            className={`tag 
+        <>
+            <fieldset className='main'>
+                <legend className='label'>Tags</legend>
+                <div className='tagsContainer'>
+                    {Object.entries(tags).map(item => {
+                        const tagId = item[0];
+                        const tag = item[1].tag;
+                        const start = item[1].start;
+                        const isNew = item[1].new;
+                        const isEdited = item[1].edited;
+                        const end = item[1].end;
+                        return (
+                            <div key={item[0]}
+                                className={`tag 
                                     ${type === 'Video/Audio' ? 'pointer' : ''}
                                     ${edit[tagId] && type === 'Video/Audio'
-                                    ?
-                                    'editTagExtended'
-                                    :
-                                    edit[tagId]
                                         ?
-                                        'editInput'
+                                        'editTagExtended'
                                         :
-                                        ''
-                                }
+                                        edit[tagId]
+                                            ?
+                                            'editInput'
+                                            :
+                                            ''
+                                    }
                                 ${!isFormatsCorrect(tagId) ? 'redBorder' : ''}`
-                            }
-                            onMouseEnter={() => onEnter(tagId)}
-                            onMouseLeave={() => onLeave(tagId)}
-                            onClick={() => type === 'Video/Audio' ? onSeekTo(start) : () => { return }}
-                        >
-                            <div className='iconContainer right'>
+                                }
+                                onMouseEnter={() => onEnter(tagId)}
+                                onMouseLeave={() => onLeave(tagId)}
+                                onClick={() => type === 'Video/Audio' ? onSeekTo(start) : () => { return }}
+                            >
+                                <div className='iconContainer right'>
+                                    {
+                                        (isNew || isEdited) && isFormatsCorrect(tagId)
+                                            ?
+                                            <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={event => onSave(event, tagId)} />
+                                            :
+                                            null
+                                    }
+                                </div>
+
+                                <input disabled={!edit[tagId]}
+                                    className={`tagInput 
+                                    ${type === 'Video/Audio' ? 'pointer' : ''}
+                                    ${edit[tagId] ? 'editInput' : ''}
+                                    ${!isTagCorrect(tagId) ? 'redBorder' : ''}`
+                                    }
+                                    name={`tag${tagId}`}
+                                    type='text'
+                                    value={tag}
+                                    onClick={event => { event.stopPropagation() }}
+                                    onChange={event => onChange(event, tagId)}
+                                />
                                 {
-                                    (isNew || isEdited) && isFormatsCorrect(tagId)
+                                    <div className={`iconContainer ${visible[tagId] ? 'left' : ''}`}>
+                                        {
+                                            !edit[tagId]
+                                                ?
+                                                <FontAwesomeIcon
+                                                    style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
+                                                    className='icon'
+                                                    icon={faEdit}
+                                                    size='1x'
+                                                    onClick={event => onEdit(event, tagId)}
+                                                />
+                                                :
+                                                null
+                                        }
+                                        {
+                                            edit[tagId]
+                                                ?
+                                                <FontAwesomeIcon
+                                                    style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
+                                                    className='icon'
+                                                    icon={faTimesCircle}
+                                                    size="1x"
+                                                    onClick={event => { onCancel(event, tagId) }}
+                                                />
+                                                :
+                                                null
+                                        }
+                                        <FontAwesomeIcon
+                                            style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
+                                            className='icon'
+                                            icon={faTrashAlt}
+                                            size="1x"
+                                            onClick={event => { event.stopPropagation(); if (window.confirm('Delete the tag?')) { onDelete(tagId, isNew) } }}
+                                        />
+                                    </div>
+                                }
+                                {
+                                    edit[tagId] && type === 'Video/Audio'
                                         ?
-                                        <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={event => onSave(event, tagId)} />
+                                        <div className='intervalContainer'>
+                                            <input className={`intervalInput ${!isStartCorrect(tagId) ? 'redBorder' : ''}`}
+                                                name={`start${tagId}`}
+                                                type='text'
+                                                value={start}
+                                                onClick={event => { event.stopPropagation() }}
+                                                onChange={event => onChange(event, tagId)}
+                                            />
+                                                /
+                                        <input className={`intervalInput ${!isEndCorrect(tagId) ? 'redBorder' : ''}`}
+                                                name={`end${tagId}`}
+                                                type='text'
+                                                value={end}
+                                                onClick={event => { event.stopPropagation() }}
+                                                onChange={event => onChange(event, tagId)}
+                                            />
+                                        </div>
                                         :
                                         null
                                 }
                             </div>
-
-                            <input disabled={!edit[tagId]}
-                                className={`tagInput 
-                                    ${type === 'Video/Audio' ? 'pointer' : ''}
-                                    ${edit[tagId] ? 'editInput' : ''}
-                                    ${!isTagCorrect(tagId) ? 'redBorder' : ''}`
-                                }
-                                name={`tag${tagId}`}
-                                type='text'
-                                value={tag}
-                                onClick={event => { event.stopPropagation() }}
-                                onChange={event => onChange(event, tagId)}
-                            />
-                            {
-                                <div className={`iconContainer ${visible[tagId] ? 'left' : ''}`}>
-                                    {
-                                        !edit[tagId]
-                                            ?
-                                            <FontAwesomeIcon
-                                                style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
-                                                className='icon'
-                                                icon={faEdit}
-                                                size='1x'
-                                                onClick={event => onEdit(event, tagId)}
-                                            />
-                                            :
-                                            null
-                                    }
-                                    {
-                                        edit[tagId]
-                                            ?
-                                            <FontAwesomeIcon
-                                                style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
-                                                className='icon'
-                                                icon={faTimesCircle}
-                                                size="1x"
-                                                onClick={event => { onCancel(event, tagId) }}
-                                            />
-                                            :
-                                            null
-                                    }
-                                    <FontAwesomeIcon
-                                        style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
-                                        className='icon'
-                                        icon={faTrashAlt}
-                                        size="1x"
-                                        onClick={event => { event.stopPropagation(); if (window.confirm('Delete the tag?')) { onDelete(tagId, isNew) } }}
-                                    />
-                                </div>
-                            }
-                            {
-                                edit[tagId] && type === 'Video/Audio'
-                                    ?
-                                    <div className='intervalContainer'>
-                                        <input className={`intervalInput ${!isStartCorrect(tagId) ? 'redBorder' : ''}`}
-                                            name={`start${tagId}`}
-                                            type='text'
-                                            value={start}
-                                            onClick={event => { event.stopPropagation() }}
-                                            onChange={event => onChange(event, tagId)}
-                                        />
-                                                /
-                                        <input className={`intervalInput ${!isEndCorrect(tagId) ? 'redBorder' : ''}`}
-                                            name={`end${tagId}`}
-                                            type='text'
-                                            value={end}
-                                            onClick={event => { event.stopPropagation() }}
-                                            onChange={event => onChange(event, tagId)}
-                                        />
-                                    </div>
-                                    :
-                                    null
-                            }
-                        </div>
-                    )
-                })}
-                <div style={{ width: '210px', display: 'flex', justifyContent: 'center' }}>
-                    <FontAwesomeIcon
-                        style={{ marginTop: '5px' }}
-                        icon={faPlusCircle}
-                        size="lg"
-                        onClick={() => onAdd()}
-                    />
+                        )
+                    })}
+                    <div style={{ width: '210px', display: 'flex', justifyContent: 'center' }}>
+                        <FontAwesomeIcon
+                            style={{ marginTop: '5px' }}
+                            icon={faPlusCircle}
+                            size="lg"
+                            onClick={() => onAdd()}
+                        />
+                    </div>
                 </div>
+            </fieldset>
+            <div style={{ margin: '0px auto', maxWidth: '950px' }}>
+                <Error flags={flags} />
             </div>
-        </fieldset >
+        </>
     )
 }
 
