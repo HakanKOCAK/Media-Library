@@ -128,15 +128,16 @@ const EditableTags = (props) => {
                             onMouseLeave={() => onLeave(tagId)}
                             onClick={() => type === 'Video/Audio' ? onSeekTo(start) : () => { return }}
                         >
-                            {
-                                (isNew || isEdited) && isFormatsCorrect(tagId)
-                                    ?
-                                    <div className='iconContainer right'>
+                            <div className='iconContainer right'>
+                                {
+                                    (isNew || isEdited) && isFormatsCorrect(tagId)
+                                        ?
                                         <FontAwesomeIcon className='icon' icon={faSave} size="1x" onClick={event => onSave(event, tagId)} />
-                                    </div>
-                                    :
-                                    null
-                            }
+                                        :
+                                        null
+                                }
+                            </div>
+
                             <input disabled={!edit[tagId]}
                                 className={`tagInput 
                                     ${type === 'Video/Audio' ? 'pointer' : ''}

@@ -63,6 +63,7 @@
     width: 210px;
     padding: 5px;
     height: 30px;
+    margin-bottom: 5px;
     flex-wrap:wrap;
     align-items: center;
     justify-content: space-evenly;
@@ -78,6 +79,7 @@
 }
 
 .tagInput{
+    flex-grow: 2;
     background: transparent;
     border: 0.5px var(--light-color) solid;
     text-align: center;
@@ -130,6 +132,8 @@
 
 .iconContainer{
     display: flex;
+    min-width: 30px;
+    flex-grow: 1;
     justify-content: space-evenly;
 }
 
