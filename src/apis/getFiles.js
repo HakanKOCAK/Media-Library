@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
 import { apiKey, formId } from '../config/config';
+import getTags from '../Utils/getTags';
 
 const normalizeResponse = (question, submissionDetails, key) => {
   let newSubmissionDetails = { ...submissionDetails };
@@ -52,23 +52,10 @@ const normalizeResponse = (question, submissionDetails, key) => {
           return newSubmissionDetails;
         }
 
-        const getTagsOfSubmission = (tags) => {
-          const newTags = tags.reduce((reducedTags, item) => {
-            const returnedObject = { ...reducedTags };
-            const keys = Object.keys(item);
-            returnedObject[uuidv4()] = keys.reduce((newObject, itemKey) => {
-              const answer = item[itemKey];
-              return { ...newObject, tag: answer };
-            }, {});
-            return returnedObject;
-          }, {});
-          return newTags;
-        };
-
         newSubmissionDetails.entity = {
           ...newSubmissionDetails.entity,
           qid: key,
-          tags: getTagsOfSubmission([...submittedTags]),
+          tags: getTags('imageOther', [...submittedTags]),
         };
       } else if (newSubmissionDetails.fileType.includes(['Image', 'Other'])) {
         newSubmissionDetails.entity = {
@@ -92,45 +79,10 @@ const normalizeResponse = (question, submissionDetails, key) => {
           return newSubmissionDetails;
         }
 
-        const getTagsOfSubmission = (tags) => {
-          const newTags = tags.reduce((reducedTags, item) => {
-            const returnedObject = { ...reducedTags };
-            const keys = Object.keys(item);
-            returnedObject[uuidv4()] = keys.reduce((newObject, itemKey) => {
-              const answer = item[itemKey];
-              if (itemKey === 'Tag') {
-                return { ...newObject, tag: answer };
-              }
-              if (answer && /^((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)\/((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)$/g.test(answer)
-              ) {
-                const trimmed = answer.trim();
-                const intervals = trimmed.split('/');
-                const start = intervals[0].trim();
-                const end = intervals[1].trim();
-                const startMinSec = start.split('-');
-                const endMinSec = end.split('-');
-                return {
-                  ...newObject,
-                  start: `${startMinSec[0]}:${startMinSec[1]}:${startMinSec[2]}`,
-                  end: `${endMinSec[0]}:${endMinSec[1]}:${endMinSec[2]}`,
-                };
-              }
-              return {
-                ...newObject,
-                start: '00:00:00',
-                end: '00:00:00',
-              };
-            }, {});
-
-            return returnedObject;
-          }, {});
-          return newTags;
-        };
-
         newSubmissionDetails.entity = {
           ...newSubmissionDetails.entity,
           qid: key,
-          tags: getTagsOfSubmission([...submittedTags]),
+          tags: getTags('videoAudio', [...submittedTags]),
         };
       } else if (newSubmissionDetails.fileType === 'Video/Audio') {
         newSubmissionDetails.entity = {
