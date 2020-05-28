@@ -1,16 +1,9 @@
 import {
-  GET_FILES_REQUEST,
   GET_FILES_SUCCESS,
   GET_FILES_FAIL,
   DELETE_TAG_REQUEST,
-  DELETE_TAG_SUCCESS,
-  DELETE_TAG_ERROR,
   SAVE_TAG_REQUEST,
   DELETE_FILE_REQUEST,
-  DELETE_FILE_SUCCESS,
-  DELETE_FILE_ERROR,
-  SAVE_TAG_ERROR,
-  SAVE_TAG_SUCCESS,
   ADD_DURATION,
 } from '../actions/types';
 
@@ -24,12 +17,10 @@ export default function (state = initialState, action) {
   switch (type) {
     case GET_FILES_SUCCESS:
       return {
-        ...state,
         entities: payload,
       };
     case GET_FILES_FAIL:
       return {
-        ...state,
         entities: {},
       };
     case DELETE_FILE_REQUEST: {
@@ -75,16 +66,6 @@ export default function (state = initialState, action) {
         entities,
       };
     }
-    case GET_FILES_REQUEST:
-    case SAVE_TAG_ERROR:
-    case SAVE_TAG_SUCCESS:
-    case DELETE_FILE_SUCCESS:
-    case DELETE_FILE_ERROR:
-    case DELETE_TAG_SUCCESS:
-    case DELETE_TAG_ERROR:
-      return {
-        ...state,
-      };
     case DELETE_TAG_REQUEST: {
       const { submissionId, tagId } = payload;
       const entities = { ...state.entities };

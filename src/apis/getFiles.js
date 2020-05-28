@@ -17,7 +17,7 @@ const normalizeResponse = (question, submissionDetails, key) => {
     case 'videoAudio':
       if (questionAnswer.length) {
         newSubmissionDetails.entity = {
-          ...newSubmissionDetails.entites,
+          ...newSubmissionDetails.entities,
           url: questionAnswer[0],
         };
       }
@@ -25,7 +25,7 @@ const normalizeResponse = (question, submissionDetails, key) => {
     case 'url':
       if (questionAnswer) {
         newSubmissionDetails.entity = {
-          ...newSubmissionDetails.entites,
+          ...newSubmissionDetails.entity,
           url: questionAnswer,
           videoByUrl: true,
         };
@@ -41,132 +41,143 @@ const normalizeResponse = (question, submissionDetails, key) => {
       return newSubmissionDetails;
     case 'tagsImageOther':
       if (questionAnswer) {
+        let submittedTags = '';
         try {
-          const submittedTags = JSON.parse(questionAnswer);
-          const tagsOfSubmission = (tags) => {
-            const newTags = tags.reduce((reducedTags, item) => {
-              const returnedObject = { ...reducedTags };
-              const keys = Object.keys(item);
-              returnedObject[uuidv4()] = keys.reduce((newObject, itemKey) => {
-                const answer = item[itemKey];
-                return { ...newObject, tag: answer };
-              }, {});
-              return returnedObject;
-            }, {});
-            return newTags;
-          };
-
-          newSubmissionDetails.entity = {
-            ...newSubmissionDetails.entity,
-            qid: key,
-            tags: tagsOfSubmission([...submittedTags]),
-          };
+          submittedTags = JSON.parse(questionAnswer);
         } catch (error) {
           newSubmissionDetails.entity = {
             ...newSubmissionDetails.entity,
             qid: key,
             tags: {},
           };
+          return newSubmissionDetails;
         }
-      } else if (newSubmissionDetails.fileType === 'Image' || newSubmissionDetails.fileType === 'Other') {
+
+        const getTagsOfSubmission = (tags) => {
+          const newTags = tags.reduce((reducedTags, item) => {
+            const returnedObject = { ...reducedTags };
+            const keys = Object.keys(item);
+            returnedObject[uuidv4()] = keys.reduce((newObject, itemKey) => {
+              const answer = item[itemKey];
+              return { ...newObject, tag: answer };
+            }, {});
+            return returnedObject;
+          }, {});
+          return newTags;
+        };
+
         newSubmissionDetails.entity = {
           ...newSubmissionDetails.entity,
           qid: key,
-          tags: [],
+          tags: getTagsOfSubmission([...submittedTags]),
+        };
+      } else if (newSubmissionDetails.fileType.includes(['Image', 'Other'])) {
+        newSubmissionDetails.entity = {
+          ...newSubmissionDetails.entity,
+          qid: key,
+          tags: {},
         };
       }
       return newSubmissionDetails;
     case 'tagsVideoAudio':
       if (questionAnswer) {
+        let submittedTags = '';
         try {
-          const submittedTags = JSON.parse(questionAnswer);
-          const tagsOfSubmission = (tags) => {
-            const newTags = tags.reduce((reducedTags, item) => {
-              const returnedObject = { ...reducedTags };
-              const keys = Object.keys(item);
-              returnedObject[uuidv4()] = keys.reduce((newObject, itemKey) => {
-                const answer = item[itemKey];
-                if (itemKey === 'Tag') {
-                  return { ...newObject, tag: answer };
-                }
-                if (answer && /^((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)\/((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)$/g.test(answer)
-                ) {
-                  const trimmed = answer.trim();
-                  const intervals = trimmed.split('/');
-                  const start = intervals[0].trim();
-                  const end = intervals[1].trim();
-                  const startMinSec = start.split('-');
-                  const endMinSec = end.split('-');
-                  return {
-                    ...newObject,
-                    start: `${startMinSec[0]}:${startMinSec[1]}:${startMinSec[2]}`,
-                    end: `${endMinSec[0]}:${endMinSec[1]}:${endMinSec[2]}`,
-                  };
-                }
-                return {
-                  ...newObject,
-                  start: '00:00:00',
-                  end: '00:00:00',
-                };
-              }, {});
-
-              return returnedObject;
-            }, {});
-            return newTags;
-          };
-
-          newSubmissionDetails.entity = {
-            ...newSubmissionDetails.entity,
-            qid: key,
-            tags: tagsOfSubmission([...submittedTags]),
-          };
+          submittedTags = JSON.parse(questionAnswer);
         } catch (error) {
           newSubmissionDetails.entity = {
             ...newSubmissionDetails.entity,
             qid: key,
             tags: {},
           };
+          return newSubmissionDetails;
         }
+
+        const getTagsOfSubmission = (tags) => {
+          const newTags = tags.reduce((reducedTags, item) => {
+            const returnedObject = { ...reducedTags };
+            const keys = Object.keys(item);
+            returnedObject[uuidv4()] = keys.reduce((newObject, itemKey) => {
+              const answer = item[itemKey];
+              if (itemKey === 'Tag') {
+                return { ...newObject, tag: answer };
+              }
+              if (answer && /^((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)\/((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)$/g.test(answer)
+              ) {
+                const trimmed = answer.trim();
+                const intervals = trimmed.split('/');
+                const start = intervals[0].trim();
+                const end = intervals[1].trim();
+                const startMinSec = start.split('-');
+                const endMinSec = end.split('-');
+                return {
+                  ...newObject,
+                  start: `${startMinSec[0]}:${startMinSec[1]}:${startMinSec[2]}`,
+                  end: `${endMinSec[0]}:${endMinSec[1]}:${endMinSec[2]}`,
+                };
+              }
+              return {
+                ...newObject,
+                start: '00:00:00',
+                end: '00:00:00',
+              };
+            }, {});
+
+            return returnedObject;
+          }, {});
+          return newTags;
+        };
+
+        newSubmissionDetails.entity = {
+          ...newSubmissionDetails.entity,
+          qid: key,
+          tags: getTagsOfSubmission([...submittedTags]),
+        };
       } else if (newSubmissionDetails.fileType === 'Video/Audio') {
         newSubmissionDetails.entity = {
           ...newSubmissionDetails.entity,
           qid: key,
-          tags: [],
+          tags: {},
         };
       }
       return newSubmissionDetails;
+    case 'mediaLibrary':
+    case 'submit':
+    case 'localOrUrl':
+      return newSubmissionDetails;
     default:
-      if (questionName !== 'mediaLibrary' && questionName !== 'submit' && questionName !== 'localOrUrl') {
-        newSubmissionDetails = {
-          ...newSubmissionDetails,
-          [questionName]: questionAnswer,
-        };
-      }
+      newSubmissionDetails = {
+        ...newSubmissionDetails,
+        [questionName]: questionAnswer,
+      };
       return newSubmissionDetails;
   }
 };
 
-const getAnswers = async (data) => data.reduce((answers, item) => {
+const getAnswers = async (data) => data.reduce((answers, submissionDetails) => {
   const newAnswers = { ...answers };
-  const submission = item.answers;
-  const createdAt = item.created_at.split(' ')[0].split('-');
+  const submission = submissionDetails.answers;
+  const createdAt = submissionDetails.created_at.split(' ')[0].split('-');
   const date = `${createdAt[2]}/${createdAt[1]}/${createdAt[0]}`;
 
-  const submissionDetails = Object.entries(submission).reduce((newSubmissionDetails, value) => {
+  const reduceSubmissionDetails = Object.entries(submission).reduce((newSubmissionDetails, value) => {
     const key = value[0];
     const question = value[1];
     const newData = normalizeResponse(question, { ...newSubmissionDetails }, key);
     return {
-      submissionId: item.id,
+      submissionId: submissionDetails.id,
       uploadDate: date,
       ...newData,
     };
   }, {});
-  newAnswers[item.id] = submissionDetails;
+  newAnswers[submissionDetails.id] = reduceSubmissionDetails;
   return newAnswers;
 }, {});
 
-const getFileName = (url) => url.split('/')[url.split('/').length - 1];
+const getFileName = (url) => {
+  const splittedUrl = url.split('/');
+  return splittedUrl[splittedUrl.length - 1];
+};
 const getFileSizesAndNames = async (files) => {
   const data = Promise.all(
     Object.keys(files).map(async (key) => {
@@ -174,8 +185,7 @@ const getFileSizesAndNames = async (files) => {
       const { url } = file.entity;
       const name = getFileName(url);
       file.entity.fileName = name;
-      const { videoByUrl } = file.entity;
-      if (!videoByUrl) {
+      try {
         const resp = await axios({
           method: 'get',
           url,
@@ -185,9 +195,9 @@ const getFileSizesAndNames = async (files) => {
         const { size } = resp.data;
 
         return { key, size: pretty(size, false, false, 2) };
+      } catch (error) {
+        return { key, size: 'N/A' };
       }
-
-      return { key, size: 'N/A' };
     }),
   );
 

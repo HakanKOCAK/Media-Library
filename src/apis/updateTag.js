@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { apiKey } from '../config/config';
 
+function checkFormat(interval) {
+  return /^((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)\/((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)$/g.test(interval);
+}
+
 export default async function updateTag({ submissionId, qid, data }) {
   const newTags = Object.values(data).reduce((reducedTags, item) => {
     const { tag } = item;
@@ -22,9 +26,11 @@ export default async function updateTag({ submissionId, qid, data }) {
     let flag = false;
     const types = [];
     newTags.forEach((item) => {
-      if (!/^((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)\/((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)$/g.test(item.Interval)) {
-        flag = true;
-        types.push('interval');
+      if (item.Interval) {
+        if (!checkFormat(item.Interval)) {
+          flag = true;
+          types.push('interval');
+        }
       }
 
       if (!item.Tag) {

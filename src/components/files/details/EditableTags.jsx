@@ -35,15 +35,15 @@ const EditableTags = (props) => {
 
   const [flags, setFlag] = useState(config);
 
-  const isTagCorrect = (tagId) => tags[tagId].tag !== '';
+  const isTagValid = (tagId) => tags[tagId].tag !== '';
 
-  const isStartCorrect = (tagId) => /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(tags[tagId].start);
+  const isStartIntervalValid = (tagId) => /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(tags[tagId].start);
 
-  const isEndCorrect = (tagId) => /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(tags[tagId].end);
+  const isEndIntervalValid = (tagId) => /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(tags[tagId].end);
 
-  const isFormatsCorrect = (tagId) => {
+  const isFormatsValid = (tagId) => {
     if (tags[tagId].start && tags[tagId].end) {
-      return isTagCorrect(tagId) && isStartCorrect(tagId) && isEndCorrect(tagId);
+      return isTagValid(tagId) && isStartIntervalValid(tagId) && isEndIntervalValid(tagId);
     }
 
     return tags[tagId].tag !== '';
@@ -141,6 +141,49 @@ const EditableTags = (props) => {
     onTagAdd(obj);
   };
 
+  const getTagClasses = (tagId) => {
+    let classes = 'tag';
+    if (type === 'Video/Audio') {
+      classes += ' pointer';
+      if (edit[tagId]) {
+        classes += ' editTagExtended';
+      }
+    } else if (edit[tagId]) {
+      classes += ' editInput';
+    }
+
+    if (!isFormatsValid(tagId)) {
+      classes += ' redBorder';
+    }
+
+    return classes;
+  };
+
+  const getInputBoxClasses = (tagId) => {
+    let classes = 'tagInput';
+    if (type === 'Video/Audio') {
+      classes += ' pointer';
+    }
+    if (edit[tagId]) {
+      classes += ' editInput';
+    }
+    if (!isTagValid(tagId)) {
+      classes += ' redBorder';
+    }
+
+    return classes;
+  };
+
+  const isNewTagExist = () => {
+    const isNewExists = Object.values(tags).map((tag) => {
+      if (tag.new) {
+        return true;
+      }
+      return false;
+    });
+
+    return isNewExists.includes(true);
+  };
   return (
     <>
       <div style={{ margin: '0px auto', maxWidth: '950px' }}>
@@ -161,29 +204,15 @@ const EditableTags = (props) => {
 
             return (
               <div
-                key={item[0]}
-                className={
-                  `tag 
-                  ${type === 'Video/Audio' ? 'pointer' : ''}
-                  ${edit[tagId] && type === 'Video/Audio'
-                    ?
-                    'editTagExtended'
-                    :
-                    edit[tagId]
-                      ?
-                      'editInput'
-                      :
-                      ''
-                  }
-                  ${!isFormatsCorrect(tagId) ? 'redBorder' : ''}`
-                }
+                key={tagId}
+                className={getTagClasses(tagId)}
                 onMouseEnter={() => onEnter(tagId)}
                 onMouseLeave={() => onLeave(tagId)}
                 onClick={() => type === 'Video/Audio' ? onSeekTo(start) : () => { return; }}
               >
                 <div className="iconContainer right">
                   {
-                    (isNew || isEdited) && isFormatsCorrect(tagId)
+                    (isNew || isEdited) && isFormatsValid(tagId)
                       ? <FontAwesomeIcon className="icon" icon={faSave} size="1x" onClick={(event) => onSave(event, tagId)} />
                       : null
                   }
@@ -191,11 +220,7 @@ const EditableTags = (props) => {
 
                 <input
                   disabled={!edit[tagId]}
-                  className={`tagInput 
-                                    ${type === 'Video/Audio' ? 'pointer' : ''}
-                                    ${edit[tagId] ? 'editInput' : ''}
-                                    ${!isTagCorrect(tagId) ? 'redBorder' : ''}`
-                  }
+                  className={getInputBoxClasses(tagId)}
                   name={`tag${tagId}`}
                   type="text"
                   value={tag}
@@ -242,7 +267,7 @@ const EditableTags = (props) => {
                     ? (
                       <div className="intervalContainer">
                         <input
-                          className={`intervalInput ${!isStartCorrect(tagId) ? 'redBorder' : ''}`}
+                          className={`intervalInput ${!isStartIntervalValid(tagId) ? 'redBorder' : ''}`}
                           name={`start${tagId}`}
                           type="text"
                           value={start}
@@ -251,7 +276,7 @@ const EditableTags = (props) => {
                         />
                         /
                         <input
-                          className={`intervalInput ${!isEndCorrect(tagId) ? 'redBorder' : ''}`}
+                          className={`intervalInput ${!isEndIntervalValid(tagId) ? 'redBorder' : ''}`}
                           name={`end${tagId}`}
                           type="text"
                           value={end}
@@ -263,16 +288,21 @@ const EditableTags = (props) => {
                     : null
                 }
               </div>
-            )
+            );
           })}
-          <div style={{ width: '210px', display: 'flex', justifyContent: 'center' }}>
-            <FontAwesomeIcon
-              style={{ marginTop: '5px' }}
-              icon={faPlusCircle}
-              size="lg"
-              onClick={() => onAdd()}
-            />
-          </div>
+          {
+            !isNewTagExist() ? (
+              <div style={{ width: '210px', display: 'flex', justifyContent: 'center' }}>
+                <FontAwesomeIcon
+                  style={{ marginTop: '5px' }}
+                  icon={faPlusCircle}
+                  size="lg"
+                  onClick={() => onAdd()}
+                />
+              </div>
+            )
+              : null
+          }
         </div>
       </fieldset>
     </>
