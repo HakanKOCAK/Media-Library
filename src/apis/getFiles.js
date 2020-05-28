@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import pretty from 'prettysize';
 import { apiKey, formId } from '../config/config';
 
 const normalizeResponse = (question, submissionDetails, key) => {
@@ -159,7 +158,6 @@ const getAnswers = async (data) => data.reduce((answers, submissionDetails) => {
   const submission = submissionDetails.answers;
   const createdAt = submissionDetails.created_at.split(' ')[0].split('-');
   const date = `${createdAt[2]}/${createdAt[1]}/${createdAt[0]}`;
-
   const reduceSubmissionDetails = Object.entries(submission).reduce((newSubmissionDetails, value) => {
     const key = value[0];
     const question = value[1];
