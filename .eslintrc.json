@@ -4,8 +4,8 @@
         "es6": true
     },
     "extends": [
-        "eslint:recommended",
-        "plugin:react/recommended"
+        "airbnb",
+        "airbnb/hooks"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -21,6 +21,5 @@
     "plugins": [
         "react"
     ],
-    "rules": {
-    }
+    "rules": {}
 }
