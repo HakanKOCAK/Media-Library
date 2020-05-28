@@ -58,6 +58,9 @@ export default function (state = initialState, action) {
                             newTagInfo[key] = value
                         }
                     })
+                    if (!entities[submissionId].entity.tags) {
+                        entities[submissionId].entity.tags = {};
+                    }
                     entities[submissionId].entity.tags[tagId] = newTagInfo;
                     return {
                         entities
