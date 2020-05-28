@@ -12,7 +12,7 @@ const Error = (props) => {
         Object.keys(flags).map((key) => {
           const val = flags[key];
           if (val) {
-            return <p key={uuidv4()} className="my-1">{errorMessages[key]}</p>;
+            return <p key={uuidv4()} className="my-02">{errorMessages[key]}</p>;
           }
           return null;
         })

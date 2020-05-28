@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTrashAlt,
@@ -33,7 +33,27 @@ const EditableTags = (props) => {
     INTERVAL_FORMAT: false,
   };
 
-  const [flags, setFlag] = useState(config);
+  const configNew = {
+    EMPTY_TAG: true,
+    INTERVAL_FORMAT: false,
+  };
+
+  const [flags, setFlag] = useState(Object.entries(tags).reduce((newFlags, [tagId, value]) => {
+    const reducedFlags = { ...newFlags };
+    reducedFlags[tagId] = config;
+    return reducedFlags;
+  }, {}));
+
+  useEffect(() => {
+    setFlag(Object.entries(tags).reduce((newFlags, [tagId, value]) => {
+      const reducedFlags = { ...newFlags };
+      reducedFlags[tagId] = { ...flags[tagId] };
+      if (value.new) {
+        reducedFlags[tagId] = configNew;
+      }
+      return reducedFlags;
+    }, {}));
+  }, [tags]);
 
   const isTagValid = (tagId) => tags[tagId].tag !== '';
 
@@ -77,23 +97,23 @@ const EditableTags = (props) => {
     if (name.includes('tag')) {
       onTagChange('tag', tagId, value);
       if (value === '') {
-        setFlag({ ...flags, EMPTY_TAG: true });
+        setFlag({ ...flags, [tagId]: { ...flags[tagId], EMPTY_TAG: true } });
       } else {
-        setFlag({ ...flags, EMPTY_TAG: false });
+        setFlag({ ...flags, [tagId]: { ...flags[tagId], EMPTY_TAG: false } });
       }
     } else if (name.includes('start')) {
       onTagChange('start', tagId, value);
       if (!/^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(value)) {
-        setFlag({ ...flags, INTERVAL_FORMAT: true });
+        setFlag({ ...flags, [tagId]: { ...flags[tagId], INTERVAL_FORMAT: true } });
       } else {
-        setFlag({ ...flags, INTERVAL_FORMAT: false });
+        setFlag({ ...flags, [tagId]: { ...flags[tagId], INTERVAL_FORMAT: false } });
       }
     } else {
-      onTagChange('end', tagId, value)
+      onTagChange('end', tagId, value);
       if (!/^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(value)) {
-        setFlag({ ...flags, INTERVAL_FORMAT: true });
+        setFlag({ ...flags, [tagId]: { ...flags[tagId], INTERVAL_FORMAT: true } });
       } else {
-        setFlag({ ...flags, INTERVAL_FORMAT: false });
+        setFlag({ ...flags, [tagId]: { ...flags[tagId], INTERVAL_FORMAT: false } });
       }
     }
   };
@@ -184,25 +204,23 @@ const EditableTags = (props) => {
 
     return isNewExists.includes(true);
   };
-  return (
-    <>
-      <div style={{ margin: '0px auto', maxWidth: '950px' }}>
-        <Error flags={flags} />
-      </div>
-      <fieldset className="main">
-        <legend className="label">Tags</legend>
-        <div className="tagsContainer">
-          {Object.entries(tags).map((item) => {
-            const tagId = item[0];
-            const {
-              tag,
-              start,
-              end,
-              new: isNew,
-              edited: isEdited,
-            } = item[1];
 
-            return (
+  return (
+    <fieldset className="main">
+      <legend className="label">Tags</legend>
+      <div className="tagsContainer">
+        {Object.entries(tags).map((item) => {
+          const tagId = item[0];
+          const {
+            tag,
+            start,
+            end,
+            new: isNew,
+            edited: isEdited,
+          } = item[1];
+
+          return (
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
               <div
                 key={tagId}
                 className={getTagClasses(tagId)}
@@ -288,24 +306,27 @@ const EditableTags = (props) => {
                     : null
                 }
               </div>
-            );
-          })}
-          {
-            !isNewTagExist() ? (
-              <div style={{ width: '210px', display: 'flex', justifyContent: 'center' }}>
-                <FontAwesomeIcon
-                  style={{ marginTop: '5px' }}
-                  icon={faPlusCircle}
-                  size="lg"
-                  onClick={() => onAdd()}
-                />
+              <div style={{ margin: '0px auto', maxWidth: '210px' }}>
+                {flags[tagId] ? <Error key={uuidv4()} flags={flags[tagId]} /> : null}
               </div>
-            )
-              : null
-          }
-        </div>
-      </fieldset>
-    </>
+            </div>
+          );
+        })}
+        {
+          !isNewTagExist() ? (
+            <div style={{ width: '210px', display: 'flex', justifyContent: 'center' }}>
+              <FontAwesomeIcon
+                style={{ marginTop: '5px' }}
+                icon={faPlusCircle}
+                size="lg"
+                onClick={() => onAdd()}
+              />
+            </div>
+          )
+            : null
+        }
+      </div>
+    </fieldset>
   );
 };
 EditableTags.propTypes = {
