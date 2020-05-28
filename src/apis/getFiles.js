@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import pretty from 'prettysize';
 const normalizeResponse = (question, submissionDetails, key) => {
     const { name: questionName, answer: questionAnswer } = question;
+    console.log(questionName, questionAnswer)
     switch (questionName) {
         case 'nameSurname':
             submissionDetails = {
@@ -17,6 +18,15 @@ const normalizeResponse = (question, submissionDetails, key) => {
                 submissionDetails.entity = {
                     ...submissionDetails.entites,
                     url: questionAnswer[0]
+                }
+            }
+            return submissionDetails;
+        case 'url':
+            if (questionAnswer) {
+                submissionDetails.entity = {
+                    ...submissionDetails.entites,
+                    url: questionAnswer,
+                    videoByUrl: true
                 }
             }
             return submissionDetails;
@@ -128,7 +138,7 @@ const normalizeResponse = (question, submissionDetails, key) => {
             }
             return submissionDetails
         default:
-            if (questionName !== 'mediaLibrary' && questionName !== 'submit') {
+            if (questionName !== 'mediaLibrary' && questionName !== 'submit' && questionName !== 'localOrUrl') {
                 return submissionDetails = {
                     ...submissionDetails,
                     [questionName]: questionAnswer
@@ -201,16 +211,20 @@ const getFileSizesAndNames = async (files) => {
             const url = file.entity.url
             const name = getFileName(url);
             file.entity.fileName = name
+            const videoByUrl = file.entity.videoByUrl
+            if (!videoByUrl) {
+                const resp = await axios({
+                    method: 'get',
+                    url: url,
+                    responseType: 'blob'
+                })
 
-            const resp = await axios({
-                method: 'get',
-                url: url,
-                responseType: 'blob'
-            })
+                const size = resp.data.size
 
-            const size = resp.data.size
+                return { key: key, size: pretty(size, false, false, 2) };
+            }
 
-            return { key: key, size: pretty(size, false, false, 2) }
+            return { key: key, size: 'N/A' };
         })
     )
 
