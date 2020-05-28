@@ -5,10 +5,10 @@ import app from './app';
 import error from './error';
 
 const rootReducer = combineReducers({
-    app,
-    files,
-    user,
-    error
+  app,
+  files,
+  user,
+  error,
 });
 
 export default rootReducer;

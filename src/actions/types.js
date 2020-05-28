@@ -22,5 +22,5 @@ export const SAVE_TAG_ERROR = 'SAVE TAG ERROR';
 
 export const ADD_DURATION = 'ADD DURATION';
 
-export const SET_ERROR = "SET ERROR";
-export const HIDE_ERROR = "HIDE ERROR";
+export const SET_ERROR = 'SET ERROR';
+export const HIDE_ERROR = 'HIDE ERROR';

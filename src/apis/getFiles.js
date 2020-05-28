@@ -1,232 +1,229 @@
 import axios from 'axios';
-import { apiKey, formId } from '../config/config';
 import { v4 as uuidv4 } from 'uuid';
 import pretty from 'prettysize';
+import { apiKey, formId } from '../config/config';
+
 const normalizeResponse = (question, submissionDetails, key) => {
-    const { name: questionName, answer: questionAnswer } = question;
-    console.log(questionName, questionAnswer)
-    switch (questionName) {
-        case 'nameSurname':
-            submissionDetails = {
-                ...submissionDetails,
-                [questionName]: `${questionAnswer['first']} ${questionAnswer['last']}`
-            }
-            return submissionDetails
-        case 'otherDoc':
-        case 'videoAudio':
-            if (questionAnswer.length) {
-                submissionDetails.entity = {
-                    ...submissionDetails.entites,
-                    url: questionAnswer[0]
-                }
-            }
-            return submissionDetails;
-        case 'url':
-            if (questionAnswer) {
-                submissionDetails.entity = {
-                    ...submissionDetails.entites,
-                    url: questionAnswer,
-                    videoByUrl: true
-                }
-            }
-            return submissionDetails;
-        case 'image':
-            if (questionAnswer) {
-                submissionDetails.entity = {
-                    ...submissionDetails.entity,
-                    url: questionAnswer
-                }
-            }
-            return submissionDetails;
-        case 'tagsImageOther':
-            if (questionAnswer) {
-                try {
-                    const submittedTags = JSON.parse(questionAnswer);
-                    const tagsOfSubmission = tags => {
-                        const newTags = tags.reduce((newTags, item) => {
-                            const keys = Object.keys(item)
-                            newTags[uuidv4()] =
-                                keys.reduce((newObject, key) => {
-                                    const answer = item[key]
-                                    return { ...newObject, tag: answer }
-                                }, {})
-                            return newTags;
-                        }, {})
-                        return newTags;
-                    }
-                    submissionDetails.entity = {
-                        ...submissionDetails.entity,
-                        qid: key,
-                        tags: tagsOfSubmission([...submittedTags])
-                    }
-                } catch (error) {
-                    console.log(error);
-                    submissionDetails.entity = {
-                        ...submissionDetails.entity,
-                        qid: key,
-                        tags: {}
-                    }
-                }
-            } else if (submissionDetails.fileType === 'Image' || submissionDetails.fileType === 'Other') {
-                submissionDetails.entity = {
-                    ...submissionDetails.entity,
-                    qid: key,
-                    tags: []
-                }
-            }
-            return submissionDetails
-        case 'tagsVideoAudio':
-            if (questionAnswer) {
-                try {
-                    const submittedTags = JSON.parse(questionAnswer);
-                    const tagsOfSubmission = tags => {
-                        const newTags = tags.reduce((newTags, item) => {
-                            const keys = Object.keys(item)
-                            newTags[uuidv4()] =
-                                keys.reduce((newObject, key) => {
-                                    const answer = item[key]
-                                    if (key === 'Tag') {
-                                        return { ...newObject, tag: answer }
-                                    } else {
-                                        if (answer
-                                            &&
-                                            /^((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)\/((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)$/g.test(answer)
-                                        ) {
-                                            const trimmed = answer.trim();
-                                            const intervals = trimmed.split('/')
-                                            const start = intervals[0].trim();
-                                            const end = intervals[1].trim();
-                                            const startMinSec = start.split('-');
-                                            const endMinSec = end.split('-');
-                                            return {
-                                                ...newObject,
-                                                start: `${startMinSec[0]}:${startMinSec[1]}:${startMinSec[2]}`,
-                                                end: `${endMinSec[0]}:${endMinSec[1]}:${endMinSec[2]}`
-                                            }
-                                        }
-                                        return {
-                                            ...newObject,
-                                            start: '00:00:00',
-                                            end: '00:00:00'
-                                        }
-                                    }
-                                }, {})
+  let newSubmissionDetails = { ...submissionDetails };
+  const { name: questionName, answer: questionAnswer } = question;
+  switch (questionName) {
+    case 'nameSurname':
+      newSubmissionDetails = {
+        ...newSubmissionDetails,
+        [questionName]: `${questionAnswer.first} ${questionAnswer.last}`,
+      };
+      return newSubmissionDetails;
+    case 'otherDoc':
+    case 'videoAudio':
+      if (questionAnswer.length) {
+        newSubmissionDetails.entity = {
+          ...newSubmissionDetails.entites,
+          url: questionAnswer[0],
+        };
+      }
+      return newSubmissionDetails;
+    case 'url':
+      if (questionAnswer) {
+        newSubmissionDetails.entity = {
+          ...newSubmissionDetails.entites,
+          url: questionAnswer,
+          videoByUrl: true,
+        };
+      }
+      return newSubmissionDetails;
+    case 'image':
+      if (questionAnswer) {
+        newSubmissionDetails.entity = {
+          ...newSubmissionDetails.entity,
+          url: questionAnswer,
+        };
+      }
+      return newSubmissionDetails;
+    case 'tagsImageOther':
+      if (questionAnswer) {
+        try {
+          const submittedTags = JSON.parse(questionAnswer);
+          const tagsOfSubmission = (tags) => {
+            const newTags = tags.reduce((reducedTags, item) => {
+              const returnedObject = { ...reducedTags };
+              const keys = Object.keys(item);
+              returnedObject[uuidv4()] = keys.reduce((newObject, itemKey) => {
+                const answer = item[itemKey];
+                return { ...newObject, tag: answer };
+              }, {});
+              return returnedObject;
+            }, {});
+            return newTags;
+          };
 
-                            return newTags;
-                        }, {})
-                        return newTags;
-                    }
-                    submissionDetails.entity = {
-                        ...submissionDetails.entity,
-                        qid: key,
-                        tags: tagsOfSubmission([...submittedTags])
-                    }
-                } catch (error) {
-                    console.log(error);
-                    submissionDetails.entity = {
-                        ...submissionDetails.entity,
-                        qid: key,
-                        tags: {}
-                    }
-                }
-            } else if (submissionDetails.fileType === 'Video/Audio') {
-                submissionDetails.entity = {
-                    ...submissionDetails.entity,
-                    qid: key,
-                    tags: []
-                }
-            }
-            return submissionDetails
-        default:
-            if (questionName !== 'mediaLibrary' && questionName !== 'submit' && questionName !== 'localOrUrl') {
-                return submissionDetails = {
-                    ...submissionDetails,
-                    [questionName]: questionAnswer
-                }
-            }
-            return submissionDetails;
-    }
-}
-
-const getAnswers = async data => {
-    return data.reduce((answers, item) => {
-        const submission = item.answers
-        const createdAt = item.created_at.split(' ')[0].split('-')
-        const date = `${createdAt[2]}/${createdAt[1]}/${createdAt[0]}`
-
-        const submissionDetails = Object.entries(submission).reduce((submissionDetails, value) => {
-            const key = value[0]
-            const question = value[1]
-            const data = normalizeResponse(question, { ...submissionDetails }, key)
-            return {
-                submissionId: item.id,
-                uploadDate: date,
-                ...data
-            };
-        }, {})
-        answers[item.id] = submissionDetails
-        return answers
-    }, {})
-}
-export const getFiles = async () => {
-    try {
-        const config = {
-            params: {
-                'apiKey': apiKey
-            }
+          newSubmissionDetails.entity = {
+            ...newSubmissionDetails.entity,
+            qid: key,
+            tags: tagsOfSubmission([...submittedTags]),
+          };
+        } catch (error) {
+          newSubmissionDetails.entity = {
+            ...newSubmissionDetails.entity,
+            qid: key,
+            tags: {},
+          };
         }
+      } else if (newSubmissionDetails.fileType === 'Image' || newSubmissionDetails.fileType === 'Other') {
+        newSubmissionDetails.entity = {
+          ...newSubmissionDetails.entity,
+          qid: key,
+          tags: [],
+        };
+      }
+      return newSubmissionDetails;
+    case 'tagsVideoAudio':
+      if (questionAnswer) {
+        try {
+          const submittedTags = JSON.parse(questionAnswer);
+          const tagsOfSubmission = (tags) => {
+            const newTags = tags.reduce((reducedTags, item) => {
+              const returnedObject = { ...reducedTags };
+              const keys = Object.keys(item);
+              returnedObject[uuidv4()] = keys.reduce((newObject, itemKey) => {
+                const answer = item[itemKey];
+                if (itemKey === 'Tag') {
+                  return { ...newObject, tag: answer };
+                }
+                if (answer && /^((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)\/((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)$/g.test(answer)
+                ) {
+                  const trimmed = answer.trim();
+                  const intervals = trimmed.split('/');
+                  const start = intervals[0].trim();
+                  const end = intervals[1].trim();
+                  const startMinSec = start.split('-');
+                  const endMinSec = end.split('-');
+                  return {
+                    ...newObject,
+                    start: `${startMinSec[0]}:${startMinSec[1]}:${startMinSec[2]}`,
+                    end: `${endMinSec[0]}:${endMinSec[1]}:${endMinSec[2]}`,
+                  };
+                }
+                return {
+                  ...newObject,
+                  start: '00:00:00',
+                  end: '00:00:00',
+                };
+              }, {});
 
-        const res = await axios.get(`https://api.jotform.com/form/${formId}/submissions`, config)
-        if (res.data.responseCode === 200) {
-            const content = res.data.content
-            const answers = await getAnswers(Object.values(content))
+              return returnedObject;
+            }, {});
+            return newTags;
+          };
 
-            const sizes = await getFileSizesAndNames({ ...answers })
-
-            const updatedAnswers = (data, sizes) => {
-                sizes.forEach(item => {
-                    data[item['key']].entity = { ...data[item['key']].entity, size: item['size'] }
-                })
-
-                return data;
-            }
-
-            const answersWithSizes = { ...updatedAnswers({ ...answers }, [...sizes]) }
-
-            return { success: true, data: answersWithSizes }
+          newSubmissionDetails.entity = {
+            ...newSubmissionDetails.entity,
+            qid: key,
+            tags: tagsOfSubmission([...submittedTags]),
+          };
+        } catch (error) {
+          newSubmissionDetails.entity = {
+            ...newSubmissionDetails.entity,
+            qid: key,
+            tags: {},
+          };
         }
-        return { success: false, error: res.data.message }
-    } catch (error) {
-        return { success: false, error: error }
-    }
-}
+      } else if (newSubmissionDetails.fileType === 'Video/Audio') {
+        newSubmissionDetails.entity = {
+          ...newSubmissionDetails.entity,
+          qid: key,
+          tags: [],
+        };
+      }
+      return newSubmissionDetails;
+    default:
+      if (questionName !== 'mediaLibrary' && questionName !== 'submit' && questionName !== 'localOrUrl') {
+        newSubmissionDetails = {
+          ...newSubmissionDetails,
+          [questionName]: questionAnswer,
+        };
+      }
+      return newSubmissionDetails;
+  }
+};
 
-const getFileName = (url) => {
-    return url.split('/')[url.split('/').length - 1]
-}
+const getAnswers = async (data) => data.reduce((answers, item) => {
+  const newAnswers = { ...answers };
+  const submission = item.answers;
+  const createdAt = item.created_at.split(' ')[0].split('-');
+  const date = `${createdAt[2]}/${createdAt[1]}/${createdAt[0]}`;
+
+  const submissionDetails = Object.entries(submission).reduce((newSubmissionDetails, value) => {
+    const key = value[0];
+    const question = value[1];
+    const newData = normalizeResponse(question, { ...newSubmissionDetails }, key);
+    return {
+      submissionId: item.id,
+      uploadDate: date,
+      ...newData,
+    };
+  }, {});
+  newAnswers[item.id] = submissionDetails;
+  return newAnswers;
+}, {});
+
+const getFileName = (url) => url.split('/')[url.split('/').length - 1];
 const getFileSizesAndNames = async (files) => {
-    const data = Promise.all(
-        Object.keys(files).map(async (key) => {
-            const file = files[key]
-            const url = file.entity.url
-            const name = getFileName(url);
-            file.entity.fileName = name
-            const videoByUrl = file.entity.videoByUrl
-            if (!videoByUrl) {
-                const resp = await axios({
-                    method: 'get',
-                    url: url,
-                    responseType: 'blob'
-                })
+  const data = Promise.all(
+    Object.keys(files).map(async (key) => {
+      const file = files[key];
+      const { url } = file.entity;
+      const name = getFileName(url);
+      file.entity.fileName = name;
+      const { videoByUrl } = file.entity;
+      if (!videoByUrl) {
+        const resp = await axios({
+          method: 'get',
+          url,
+          responseType: 'blob',
+        });
 
-                const size = resp.data.size
+        const { size } = resp.data;
 
-                return { key: key, size: pretty(size, false, false, 2) };
-            }
+        return { key, size: pretty(size, false, false, 2) };
+      }
 
-            return { key: key, size: 'N/A' };
-        })
-    )
+      return { key, size: 'N/A' };
+    }),
+  );
 
-    return Promise.resolve(data);
+  return Promise.resolve(data);
+};
+
+export default async function getFiles() {
+  try {
+    const config = {
+      params: {
+        apiKey,
+      },
+    };
+
+    const res = await axios.get(`https://api.jotform.com/form/${formId}/submissions`, config);
+    if (res.data.responseCode === 200) {
+      const content = { ...res.data.content };
+      const answers = await getAnswers(Object.values(content));
+
+      const sizes = await getFileSizesAndNames({ ...answers });
+
+      const updatedAnswers = (data) => {
+        const newData = { ...data };
+        sizes.forEach((item) => {
+          newData[item.key].entity = { ...data[item.key].entity, size: item.size };
+        });
+
+        return newData;
+      };
+
+      const answersWithSizes = { ...updatedAnswers({ ...answers }) };
+
+      return { success: true, data: answersWithSizes };
+    }
+    return { success: false, error: res.data.message };
+  } catch (error) {
+    return { success: false, error };
+  }
 }
