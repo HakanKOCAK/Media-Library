@@ -46,7 +46,7 @@ PrivateRoute.propTypes = {
     filesLoaded: PropTypes.bool.isRequired,
   }).isRequired,
   files: PropTypes.shape({
-    entities: PropTypes.shape({}).isRequired,
+    entities: PropTypes.shape({}),
   }).isRequired,
   component: PropTypes.oneOfType([
     PropTypes.elementType,

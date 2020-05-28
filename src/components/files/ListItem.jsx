@@ -117,7 +117,7 @@ ListItem.propTypes = {
     entity: PropTypes.shape({
       fileName: PropTypes.string.isRequired,
       url: PropTypes.string.isRequired,
-      size: PropTypes.string.isRequired,
+      size: PropTypes.string,
       duration: PropTypes.string,
     }).isRequired,
     fileType: PropTypes.string.isRequired,
