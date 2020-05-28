@@ -308,7 +308,6 @@ const EditableTags = (props) => {
     </>
   );
 };
-
 EditableTags.propTypes = {
   tags: PropTypes.shape({}).isRequired,
   type: PropTypes.string.isRequired,
@@ -318,5 +317,4 @@ EditableTags.propTypes = {
   onTagChange: PropTypes.func.isRequired,
   onTagClick: PropTypes.func.isRequired,
 };
-
 export default EditableTags;

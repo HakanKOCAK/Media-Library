@@ -15,16 +15,9 @@ export const removeUserData = () => (dispatch) => {
 };
 
 export const setUserData = (email, token) => (dispatch) => {
-  const localToken = localStorage.getItem('medialibrary.user.token');
-  if (!localToken) {
-    localStorage.setItem('medialibrary.user.token', token);
-    // Set 24 min expire time.
-    localStorage.setItem('medialibrary.user.token.expiresAt', Date.now() + 60 * 1000 * 24);
-  }
-
   dispatch({
     type: SET_USER_DATA,
-    payload: { email, isAuthenticated: true },
+    payload: { email, isAuthenticated: true, token },
   });
   dispatch(setUserLoaded(true));
   dispatch(getAllFiles());
@@ -36,15 +29,7 @@ export const loadUser = () => (dispatch) => {
     if (!authUser) {
       dispatch(removeUserData());
     }
-
-    const isLoggedIn = localStorage.getItem('medialibrary.user.token');
-    const isExpired = Date.now() > localStorage.getItem('medialibrary.user.token.expiresAt');
-
-    if (isLoggedIn && !isExpired) {
-      dispatch(setUserData(authUser.email));
-    } else {
-      dispatch(removeUserData());
-    }
+    dispatch(setUserData(authUser.email, authUser.getIdToken()));
   });
 };
 

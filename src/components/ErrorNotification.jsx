@@ -5,7 +5,7 @@ import { HIDE_ERROR } from '../actions/types';
 
 import '../styles/ErrorNotification.css';
 
-export const ErrorNotification = (props) => {
+const ErrorNotification = (props) => {
   const dispatch = useDispatch();
 
   const { error } = props;
