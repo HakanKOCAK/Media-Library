@@ -4,8 +4,6 @@ import { setUserLoaded, setFilesLoaded } from './app';
 import { getAllFiles } from './files';
 
 export const removeUserData = () => (dispatch) => {
-  localStorage.removeItem('medialibrary.user.token');
-  localStorage.removeItem('medialibrary.user.token.expiresAt');
   dispatch({
     type: REMOVE_USER_DATA,
     payload: false,
@@ -14,10 +12,10 @@ export const removeUserData = () => (dispatch) => {
   dispatch(setFilesLoaded(true));
 };
 
-export const setUserData = (email, token) => (dispatch) => {
+export const setUserData = (email) => (dispatch) => {
   dispatch({
     type: SET_USER_DATA,
-    payload: { email, isAuthenticated: true, token },
+    payload: { email, isAuthenticated: true },
   });
   dispatch(setUserLoaded(true));
   dispatch(getAllFiles());
