@@ -33,27 +33,11 @@ const EditableTags = (props) => {
     INTERVAL_FORMAT: false,
   };
 
-  const configNew = {
-    EMPTY_TAG: true,
-    INTERVAL_FORMAT: false,
-  };
-
   const [flags, setFlag] = useState(Object.entries(tags).reduce((newFlags, [tagId, value]) => {
     const reducedFlags = { ...newFlags };
     reducedFlags[tagId] = config;
     return reducedFlags;
   }, {}));
-
-  useEffect(() => {
-    setFlag(Object.entries(tags).reduce((newFlags, [tagId, value]) => {
-      const reducedFlags = { ...newFlags };
-      reducedFlags[tagId] = { ...flags[tagId] };
-      if (value.new) {
-        reducedFlags[tagId] = configNew;
-      }
-      return reducedFlags;
-    }, {}));
-  }, [tags]);
 
   const isTagValid = (tagId) => tags[tagId].tag !== '';
 
