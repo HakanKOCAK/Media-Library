@@ -30,6 +30,7 @@ export default function getTags(type, data) {
           end: '00:00:00',
         };
       }
+      return { ...newObject };
     }, {});
 
     return returnedObject;
