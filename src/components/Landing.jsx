@@ -1,15 +1,9 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import '../styles/Landing.css';
 
 const Landing = () => {
-  const token = localStorage.getItem('medialibrary.user.token');
-
-  //  Redirect if logged in
-  if (token) {
-    return <Redirect to="/files" />;
-  }
   return (
     <section className="landing">
       <div className="dark-overlay">

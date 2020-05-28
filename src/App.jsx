@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Landing from './components/Landing';
 import Routes from './components/routing/Routes';
 import ErrorNotification from './components/ErrorNotification';
+import PublicRoute from './components/routing/PublicRoute';
 import { loadUser, removeUserData } from './actions/user';
 
 import './App.css';
@@ -54,7 +55,7 @@ const App = () => {
         <Navbar />
         <ErrorNotification />
         <Switch>
-          <Route exact path="/" component={Landing} />
+          <PublicRoute exact path="/" component={Landing} />
           <Route component={Routes} />
         </Switch>
       </Router>
