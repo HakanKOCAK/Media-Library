@@ -1,19 +1,18 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Register from '../Register';
 import Login from '../Login';
 import NoMatch from '../NoMatch';
-import Files from '../files/Files'
-import FileDetails from '../files/FileDetails'
-import { connect } from 'react-redux';
+import Files from '../files/Files';
+import FileDetails from '../files/FileDetails';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
-import PropTypes from 'prop-types';
 
 const Routes = (props) => {
-
-  const { error } = props
-  const { isOpen } = error
+  const { error } = props;
+  const { isOpen } = error;
   return (
     <section className={`container ${isOpen ? 'blur' : ''}`}>
       <Switch>
@@ -22,7 +21,7 @@ const Routes = (props) => {
         <PrivateRoute exact path="/files" component={Files} />
         <PrivateRoute exact path="/files/:id" component={FileDetails} />
         <Route exact path="/error-404" component={NoMatch} />
-        <Redirect from="*" to='/error-404' />
+        <Redirect from="*" to="/error-404" />
       </Switch>
     </section>
   );
@@ -30,16 +29,16 @@ const Routes = (props) => {
 
 Routes.propTypes = {
   error: PropTypes.shape({
-    isOpen: PropTypes.bool.isRequired
-  })
-}
+    isOpen: PropTypes.bool.isRequired,
+  }),
+};
 
 Routes.defaultProps = {
-  error: { isOpen: false }
-}
-const mapStateToProps = state => {
-  return {
-    error: state.error
-  }
-}
+  error: { isOpen: false },
+};
+
+const mapStateToProps = (state) => ({
+  error: state.error,
+});
+
 export default connect(mapStateToProps)(Routes);
