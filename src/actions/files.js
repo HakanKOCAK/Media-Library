@@ -1,3 +1,5 @@
+import pretty from 'prettysize';
+import axios from 'axios';
 import {
   GET_FILES_REQUEST,
   GET_FILES_SUCCESS,
@@ -7,6 +9,7 @@ import {
   DELETE_FILE_SUCCESS,
   DELETE_FILE_ERROR,
   ADD_DURATION,
+  ADD_SIZE,
 } from './types';
 import { setFilesLoaded } from './app';
 import getFiles from '../apis/getFiles';
@@ -76,5 +79,28 @@ export function addDuration({ submissionId, duration }) {
   return {
     type: ADD_DURATION,
     payload: { submissionId, duration },
+  };
+}
+
+export function addSize(submissionId, url) {
+  return async (dispatch) => {
+    try {
+      const resp = await axios({
+        method: 'get',
+        url,
+        responseType: 'blob',
+      });
+
+      const { size } = resp.data;
+      dispatch({
+        type: ADD_SIZE,
+        payload: { submissionId, size: pretty(size, false, false, 2) },
+      });
+    } catch (error) {
+      dispatch({
+        type: ADD_SIZE,
+        payload: { submissionId, size: 'N/A' },
+      });
+    }
   };
 }

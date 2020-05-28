@@ -5,6 +5,7 @@ import {
   SAVE_TAG_REQUEST,
   DELETE_FILE_REQUEST,
   ADD_DURATION,
+  ADD_SIZE,
 } from '../actions/types';
 
 const initialState = {
@@ -84,6 +85,14 @@ export default function (state = initialState, action) {
       const { submissionId, duration } = payload;
       const entities = { ...state.entities };
       entities[submissionId].entity.duration = duration;
+      return {
+        entities,
+      };
+    }
+    case ADD_SIZE: {
+      const { submissionId, size } = payload;
+      const entities = { ...state.entities };
+      entities[submissionId].entity.size = size;
       return {
         entities,
       };

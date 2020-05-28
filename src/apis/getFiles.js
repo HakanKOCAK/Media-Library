@@ -178,31 +178,6 @@ const getFileName = (url) => {
   const splittedUrl = url.split('/');
   return splittedUrl[splittedUrl.length - 1];
 };
-const getFileSizesAndNames = async (files) => {
-  const data = Promise.all(
-    Object.keys(files).map(async (key) => {
-      const file = files[key];
-      const { url } = file.entity;
-      const name = getFileName(url);
-      file.entity.fileName = name;
-      try {
-        const resp = await axios({
-          method: 'get',
-          url,
-          responseType: 'blob',
-        });
-
-        const { size } = resp.data;
-
-        return { key, size: pretty(size, false, false, 2) };
-      } catch (error) {
-        return { key, size: 'N/A' };
-      }
-    }),
-  );
-
-  return Promise.resolve(data);
-};
 
 export default async function getFiles() {
   try {
@@ -217,20 +192,18 @@ export default async function getFiles() {
       const content = { ...res.data.content };
       const answers = await getAnswers(Object.values(content));
 
-      const sizes = await getFileSizesAndNames({ ...answers });
 
       const updatedAnswers = (data) => {
         const newData = { ...data };
-        sizes.forEach((item) => {
-          newData[item.key].entity = { ...data[item.key].entity, size: item.size };
+        Object.entries(newData).forEach(([key, value]) => {
+          newData[key].entity = { ...newData[key].entity, fileName: getFileName(value.entity.url) };
         });
-
         return newData;
       };
 
-      const answersWithSizes = { ...updatedAnswers({ ...answers }) };
+      const answersWithNames = { ...updatedAnswers({ ...answers }) };
 
-      return { success: true, data: answersWithSizes };
+      return { success: true, data: answersWithNames };
     }
     return { success: false, error: res.data.message };
   } catch (error) {

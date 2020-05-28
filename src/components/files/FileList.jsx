@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { formId } from '../../config/config';
-import { deleteFile, addDuration } from '../../actions/files';
+import { deleteFile, addDuration, addSize } from '../../actions/files';
 import ListItem from './ListItem';
 
 import '../../styles/Files.css';
@@ -15,6 +15,10 @@ const FileList = (props) => {
 
   const onReady = (submissionId, duration) => {
     dispatch(addDuration({ submissionId, duration }));
+  };
+
+  const addFileSize = (submissionId, url) => {
+    dispatch(addSize(submissionId, url));
   };
 
   const onEdit = (submissionId) => {
@@ -54,6 +58,7 @@ const FileList = (props) => {
               onEdit={onEdit}
               onDelete={onDelete}
               onReady={onReady}
+              addSize={addFileSize}
               file={item}
             />
           ))}

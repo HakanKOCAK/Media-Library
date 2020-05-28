@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactPlayer from 'react-player';
@@ -41,6 +41,14 @@ const ListItem = (props) => {
     props.onReady(submissionId, prettyMilliseconds(playerDuration * 1000));
   };
 
+  const addSize = () => {
+    props.addSize(submissionId, entity.url);
+  };
+
+  useEffect(() => {
+    addSize();
+  }, []);
+
   const getDurationValue = () => {
     if (fileType === 'Video/Audio') {
       if (duration) {
@@ -51,6 +59,14 @@ const ListItem = (props) => {
 
     return 'N/A';
   };
+
+  const getSizeValue = () => {
+    if (size) {
+      return size;
+    }
+    return <Spinner styled={false} duration />;
+  };
+
   return (
     <tr onClick={(event) => handleClick(event)}>
       <td>
@@ -69,12 +85,10 @@ const ListItem = (props) => {
         {fileType}
       </td>
       <td>
-        {size}
+        {getSizeValue()}
       </td>
       <td>
-        {
-          getDurationValue()
-        }
+        {getDurationValue()}
         {
           fileType === 'Video/Audio'
             ? <ReactPlayer style={{ display: 'none' }} url={file.entity.url} onReady={(state) => onReady(state.getDuration())} />
@@ -112,6 +126,7 @@ ListItem.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   onReady: PropTypes.func.isRequired,
+  addSize: PropTypes.func.isRequired,
 };
 
 export default ListItem;
