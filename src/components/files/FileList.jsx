@@ -3,9 +3,10 @@ import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { formId } from '../../config/config';
-import { addDuration, addSize } from '../../actions/files';
+import { deleteFile, addDuration, addSize } from '../../actions/files';
 import { openDialog } from '../../actions/delete-dialog';
 import ListItem from './ListItem';
+import DeleteDialog from '../DeleteDialog';
 
 import '../../styles/Files.css';
 
@@ -27,7 +28,7 @@ const FileList = (props) => {
   };
 
   const onDelete = (submissionId, fileName) => {
-    dispatch(openDialog({ type: 'file', submissionId, name: fileName }));
+    dispatch(openDialog({ type: 'file', name: fileName, func: deleteFile(submissionId) }));
   };
 
   const handleClick = (classList, submissionId) => {
@@ -38,6 +39,7 @@ const FileList = (props) => {
 
   return (
     <>
+      <DeleteDialog />
       <table className="table">
         <thead>
           <tr>
