@@ -147,7 +147,7 @@ const EditableTags = (props) => {
   };
 
   const getTagClasses = (tagId) => {
-    let classes = 'tag';
+    let classes = '';
     if (type === 'Video/Audio') {
       classes += ' pointer';
       if (edit[tagId]) {
@@ -165,7 +165,7 @@ const EditableTags = (props) => {
   };
 
   const getInputBoxClasses = (tagId) => {
-    let classes = 'tagInput';
+    let classes = '';
     if (type === 'Video/Audio') {
       classes += ' pointer';
     }
@@ -208,7 +208,7 @@ const EditableTags = (props) => {
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <div
                 key={tagId}
-                className={getTagClasses(tagId)}
+                className={`tag ${visible[tagId] ? getTagClasses(tagId) : ''}`}
                 onMouseEnter={() => onEnter(tagId)}
                 onMouseLeave={() => onLeave(tagId)}
                 onClick={() => type === 'Video/Audio' ? onSeekTo(start) : () => { return; }}
@@ -223,19 +223,19 @@ const EditableTags = (props) => {
 
                 <input
                   disabled={!edit[tagId]}
-                  className={getInputBoxClasses(tagId)}
+                  className={`tagInput ${visible[tagId] ? getInputBoxClasses(tagId) : ''}`}
                   name={`tag${tagId}`}
                   type="text"
                   value={tag}
                   onClick={(event) => { event.stopPropagation(); }}
                   onChange={(event) => onChange(event, tagId)}
                 />
-                <div className={`iconContainer ${visible[tagId] ? 'left' : ''}`}>
+                <div className={`iconContainer ${visible[tagId] || isNew ? 'left' : ''}`}>
                   {
                     !edit[tagId]
                       ? (
                         <FontAwesomeIcon
-                          style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
+                          style={visible[tagId] || isNew ? { opacity: '1' } : { opacity: '0' }}
                           className="icon"
                           icon={faEdit}
                           size="1x"
@@ -258,7 +258,7 @@ const EditableTags = (props) => {
                       : null
                   }
                   <FontAwesomeIcon
-                    style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
+                    style={visible[tagId] || isNew ? { opacity: '1' } : { opacity: '0' }}
                     className="icon"
                     icon={faTrashAlt}
                     size="1x"
@@ -266,7 +266,7 @@ const EditableTags = (props) => {
                   />
                 </div>
                 {
-                  edit[tagId] && type === 'Video/Audio'
+                  edit[tagId] && visible[tagId] && type === 'Video/Audio'
                     ? (
                       <div className="intervalContainer">
                         <input
@@ -292,7 +292,7 @@ const EditableTags = (props) => {
                 }
               </div>
               <div style={{ margin: '0px auto', maxWidth: '210px' }}>
-                {flags[tagId] ? <Error key={uuidv4()} flags={flags[tagId]} /> : null}
+                {flags[tagId] && visible[tagId] ? <Error key={uuidv4()} flags={flags[tagId]} /> : null}
               </div>
             </div>
           );
