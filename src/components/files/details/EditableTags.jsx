@@ -233,12 +233,12 @@ const EditableTags = (props) => {
                   onClick={(event) => { event.stopPropagation(); }}
                   onChange={(event) => onChange(event, tagId)}
                 />
-                <div className={`iconContainer ${visible[tagId] || isNew ? 'left' : ''}`}>
+                <div className={`iconContainer ${visible[tagId] ? 'left' : ''}`}>
                   {
                     !edit[tagId]
                       ? (
                         <FontAwesomeIcon
-                          style={visible[tagId] || isNew ? { opacity: '1' } : { opacity: '0' }}
+                          style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
                           className="icon"
                           icon={faEdit}
                           size="1x"
@@ -261,7 +261,7 @@ const EditableTags = (props) => {
                       : null
                   }
                   <FontAwesomeIcon
-                    style={visible[tagId] || isNew ? { opacity: '1' } : { opacity: '0' }}
+                    style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
                     className="icon"
                     icon={faTrashAlt}
                     size="1x"
