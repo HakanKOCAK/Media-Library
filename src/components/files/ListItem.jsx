@@ -29,7 +29,7 @@ const ListItem = (props) => {
   };
 
   const onDelete = () => {
-    props.onDelete(submissionId);
+    props.onDelete(submissionId, fileName);
   };
 
   const onEdit = (event) => {
@@ -100,7 +100,7 @@ const ListItem = (props) => {
         <button type="button" className="icon" onClick={(event) => onEdit(event)}>
           <FontAwesomeIcon icon={faEdit} size="1x" />
         </button>
-        <button type="button" className="icon" onClick={(event) => { event.stopPropagation(); onDelete() }}>
+        <button type="button" className="icon" onClick={(event) => { event.stopPropagation(); onDelete(); }}>
           <FontAwesomeIcon icon={faTrashAlt} size="1x" />
         </button>
       </td>

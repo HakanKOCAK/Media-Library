@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
+import { deleteFile } from '../actions/files';
 import { CLOSE_DIALOG } from '../actions/types';
 
 import '../styles/Dialog.css';
@@ -12,6 +13,9 @@ const DeleteDialog = (props) => {
   const { data, isOpen } = deleteDialog;
 
   const onConfirm = () => {
+    if (data.type === 'file') {
+      dispatch(deleteFile(data.submissionId));
+    }
     dispatch({
       type: CLOSE_DIALOG,
     });
@@ -44,6 +48,7 @@ DeleteDialog.propTypes = {
   deleteDialog: PropTypes.shape({
     data: PropTypes.shape({
       type: PropTypes.string.isRequired,
+      submissionId: PropTypes.string,
       name: PropTypes.string.isRequired,
     }).isRequired,
     isOpen: PropTypes.bool.isRequired,

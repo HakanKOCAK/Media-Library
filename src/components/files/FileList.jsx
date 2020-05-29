@@ -3,7 +3,8 @@ import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { formId } from '../../config/config';
-import { deleteFile, addDuration, addSize } from '../../actions/files';
+import { addDuration, addSize } from '../../actions/files';
+import { openDialog } from '../../actions/delete-dialog';
 import ListItem from './ListItem';
 
 import '../../styles/Files.css';
@@ -25,8 +26,8 @@ const FileList = (props) => {
     window.open(`https://jotform.com/edit/${submissionId}`, '_blank');
   };
 
-  const onDelete = (submissionId) => {
-    dispatch(deleteFile(submissionId));
+  const onDelete = (submissionId, fileName) => {
+    dispatch(openDialog({ type: 'file', submissionId, name: fileName }));
   };
 
   const handleClick = (classList, submissionId) => {
