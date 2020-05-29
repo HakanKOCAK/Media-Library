@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Spinner from '../spinner/Spinner';
@@ -12,39 +12,36 @@ import EditableTags from './details/EditableTags';
 import { deleteTag } from '../../actions/files';
 import updateTag from '../../apis/updateTag';
 import { setError } from '../../actions/error';
-import { SAVE_TAG_REQUEST, SAVE_TAG_ERROR, SAVE_TAG_SUCCESS, DELETE_TAG_SUCCESS, DELETE_TAG_ERROR } from '../../actions/types';
+import {
+  SAVE_TAG_REQUEST,
+  SAVE_TAG_ERROR,
+  SAVE_TAG_SUCCESS,
+  DELETE_TAG_SUCCESS,
+  DELETE_TAG_ERROR,
+} from '../../actions/types';
 
 import '../../styles/FileDetails.css';
 
 const FileDetails = (props) => {
   const dispatch = useDispatch();
-  const { match } = props;
+  const { files, match } = props;
   const { params } = match;
   const { id } = params;
 
-  const { files } = props;
   const file = files.entities[id];
 
-  //  Upload date
-  const { uploadDate } = file;
+  // Get details
+  const {
+    uploadDate,
+    entity,
+    nameSurname: name,
+    fileType: type,
+  } = file;
 
-  // Entity details
-  const { entity } = file;
-
-  //  Qid for the tags to be updated later
-
-  const { qid: tagsQid } = entity;
-
-  //  Submitter name
-  const { nameSurname: name } = file;
-
-  //  File Type
-  const { fileType: type } = file;
+  const { qid: tagsQid, url } = entity;
 
   //  Set submitted tags
   const [tags, setTags] = useState(entity.tags);
-
-  const { url } = entity;
 
   //  seek the player to given seconds
   const [seekTo, setSeekTo] = useState();
@@ -150,10 +147,7 @@ const FileDetails = (props) => {
       </Link>
       <h1 className="h1">Details</h1>
       <p className="p1">
-        Submitted by
-        {name}
-        at
-        {uploadDate}
+        {`Submitted by ${name} at ${uploadDate}`}
       </p>
       {displayFile()}
       <EditableTags
