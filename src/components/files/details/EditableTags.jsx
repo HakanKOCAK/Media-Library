@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTrashAlt,
@@ -12,11 +11,8 @@ import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 import Error from '../../Error';
 import { formatCheckFromInput } from '../../../Utils/regExp';
-import { openDialog } from '../../../actions/delete-dialog';
 
 const EditableTags = (props) => {
-  const dispatch = useDispatch();
-
   const {
     tags,
     type,
@@ -328,7 +324,11 @@ const EditableTags = (props) => {
                 }
               </div>
               <div style={{ margin: '0px auto', maxWidth: '210px' }}>
-                {flags[tagId] && visible[tagId] ? <Error key={uuidv4()} flags={flags[tagId]} /> : null}
+                {
+                  flags[tagId] && visible[tagId]
+                    ? <Error key={uuidv4()} flags={flags[tagId]} />
+                    : null
+                }
               </div>
             </div>
           );
