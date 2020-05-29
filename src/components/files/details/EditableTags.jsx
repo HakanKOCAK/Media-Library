@@ -10,6 +10,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 import Error from '../../Error';
+import { formatCheckFromInput } from '../../../Utils/regExp';
 
 const EditableTags = (props) => {
   const {
@@ -33,7 +34,7 @@ const EditableTags = (props) => {
     INTERVAL_FORMAT: false,
   };
 
-  const [flags, setFlag] = useState(Object.entries(tags).reduce((newFlags, [tagId, value]) => {
+  const [flags, setFlag] = useState(Object.keys(tags).reduce((newFlags, tagId) => {
     const reducedFlags = { ...newFlags };
     reducedFlags[tagId] = config;
     return reducedFlags;
@@ -41,9 +42,9 @@ const EditableTags = (props) => {
 
   const isTagValid = (tagId) => tags[tagId].tag !== '';
 
-  const isStartIntervalValid = (tagId) => /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(tags[tagId].start);
+  const isStartIntervalValid = (tagId) => formatCheckFromInput(tags[tagId].start);
 
-  const isEndIntervalValid = (tagId) => /^((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)$/.test(tags[tagId].end);
+  const isEndIntervalValid = (tagId) => formatCheckFromInput(tags[tagId].end);
 
   const isFormatsValid = (tagId) => {
     if (tags[tagId].start && tags[tagId].end) {

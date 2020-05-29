@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { formatCheckToFromForm } from './regExp';
 
 export default function getTags(type, data) {
   const newTags = data.reduce((reducedTags, item) => {
@@ -10,8 +11,7 @@ export default function getTags(type, data) {
         return { ...newObject, tag: answer };
       }
       if (type === 'videoAudio') {
-        if (answer && /^((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)\/((?:[01]\d|2[0-3])-[0-5]\d-[0-5]\d)$/g.test(answer)
-        ) {
+        if (answer && formatCheckToFromForm(answer)) {
           const trimmed = answer.trim();
           const intervals = trimmed.split('/');
           const start = intervals[0].trim();
