@@ -122,7 +122,18 @@ const FileDetails = (props) => {
     newTags[data.tagId] = data.tag;
     setTags(newTags);
   };
-  
+
+  const displayFile = () => {
+    switch (type) {
+      case 'Video/Audio':
+        return <Video url={url} seekTo={seekTo} />;
+      case 'Image':
+        return <Image url={url} />;
+      default:
+        return <Other url={url} />;
+    }
+  };
+
   useEffect(() => {
     setTags(files.entities[id].entity.tags);
   }, [files]);
@@ -144,17 +155,7 @@ const FileDetails = (props) => {
         at
         {uploadDate}
       </p>
-      {
-        type === 'Image'
-          ?
-          <Image url={url} />
-          :
-          type === 'Video/Audio'
-            ?
-            <Video url={url} seekTo={seekTo} />
-            :
-            <Other url={url} />
-      }
+      {displayFile()}
       <EditableTags
         tags={tags}
         onTagDelete={onDelete}
