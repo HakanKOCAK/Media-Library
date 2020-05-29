@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTrashAlt,
@@ -11,8 +12,11 @@ import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 import Error from '../../Error';
 import { formatCheckFromInput } from '../../../Utils/regExp';
+import { openDialog } from '../../../actions/delete-dialog';
 
 const EditableTags = (props) => {
+  const dispatch = useDispatch();
+
   const {
     tags,
     type,
@@ -118,8 +122,8 @@ const EditableTags = (props) => {
     }
   };
 
-  const onDelete = (tagId) => {
-    onTagDelete(tagId);
+  const onDelete = (name, tagId) => {
+    onTagDelete(name, tagId);
   };
 
   const onSave = (event, tagId) => {
@@ -291,7 +295,7 @@ const EditableTags = (props) => {
                         className="icon"
                         icon={faTrashAlt}
                         size="1x"
-                        onClick={(event) => { event.stopPropagation(); if (window.confirm('Delete the tag?')) { onDelete(tagId); } }}
+                        onClick={(event) => { event.stopPropagation(); onDelete(tag, tagId); }}
                       />
                     )
                       : null
