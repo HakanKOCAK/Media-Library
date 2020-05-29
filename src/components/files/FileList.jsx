@@ -6,7 +6,6 @@ import { formId } from '../../config/config';
 import { deleteFile, addDuration, addSize } from '../../actions/files';
 import { openDialog } from '../../actions/delete-dialog';
 import ListItem from './ListItem';
-import DeleteDialog from '../DeleteDialog';
 
 import '../../styles/Files.css';
 
@@ -39,7 +38,6 @@ const FileList = (props) => {
 
   return (
     <>
-      <DeleteDialog />
       <table className="table">
         <thead>
           <tr>
