@@ -16,8 +16,6 @@ import {
   SAVE_TAG_REQUEST,
   SAVE_TAG_ERROR,
   SAVE_TAG_SUCCESS,
-  DELETE_TAG_SUCCESS,
-  DELETE_TAG_ERROR,
 } from '../../actions/types';
 
 import '../../styles/FileDetails.css';
@@ -60,20 +58,8 @@ const FileDetails = (props) => {
     setTags(newTags);
   };
 
-  const onDelete = async (tagId) => {
+  const onDelete = (tagId) => {
     dispatch(deleteTag({ submissionId: id, tagId }));
-    const newTags = props.files.entities[id].entity.tags;
-    const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags });
-    if (!response.success) {
-      dispatch({
-        type: DELETE_TAG_ERROR,
-      });
-      dispatch(setError(response.error));
-    } else {
-      dispatch({
-        type: DELETE_TAG_SUCCESS,
-      });
-    }
   };
 
   const onSave = async (tagId) => {

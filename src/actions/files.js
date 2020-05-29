@@ -10,11 +10,14 @@ import {
   DELETE_FILE_ERROR,
   ADD_DURATION,
   ADD_SIZE,
+  DELETE_TAG_ERROR,
+  DELETE_TAG_SUCCESS,
 } from './types';
 import { setFilesLoaded } from './app';
 import getFiles from '../apis/getFiles';
 import deleteSubmittedFile from '../apis/deleteFile';
 import { setError } from './error';
+import updateTag from '../apis/updateTag';
 
 export function getAllFiles() {
   return async (dispatch) => {
@@ -69,9 +72,23 @@ export function deleteFile(submissionId) {
 }
 
 export function deleteTag({ submissionId, tagId }) {
-  return {
-    type: DELETE_TAG_REQUEST,
-    payload: { submissionId, tagId },
+  return async (dispatch, getState) => {
+    dispatch({
+      type: DELETE_TAG_REQUEST,
+      payload: { submissionId, tagId },
+    });
+    const { qid, tags } = getState().files.entities[submissionId].entity;
+    const response = await updateTag({ submissionId, qid, data: tags });
+    if (!response.success) {
+      dispatch({
+        type: DELETE_TAG_ERROR,
+      });
+      dispatch(setError(response.error));
+    } else {
+      dispatch({
+        type: DELETE_TAG_SUCCESS,
+      });
+    }
   };
 }
 
