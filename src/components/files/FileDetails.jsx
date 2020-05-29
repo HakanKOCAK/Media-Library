@@ -54,6 +54,8 @@ const FileDetails = (props) => {
     if (!isNew) {
       dispatch(deleteTag({ submissionId: id, tagId }));
       const newTags = props.files.entities[id].entity.tags;
+      console.log('new', newTags);
+      console.log('tags', tags);
       const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags });
       if (!response.success) {
         dispatch({

@@ -144,6 +144,9 @@ const EditableTags = (props) => {
       };
     }
     onTagAdd(obj);
+    const newVisibilites = [...visible];
+    newVisibilites[obj.tagId] = true;
+    setVisible(newVisibilites);
   };
 
   const getTagClasses = (tagId) => {
