@@ -208,10 +208,13 @@ const EditableTags = (props) => {
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <div
                 key={tagId}
+                role="button"
+                tabIndex={0}
                 className={`tag ${visible[tagId] ? getTagClasses(tagId) : ''}`}
                 onMouseEnter={() => onEnter(tagId)}
                 onMouseLeave={() => onLeave(tagId)}
-                onClick={() => type === 'Video/Audio' ? onSeekTo(start) : () => { return; }}
+                onKeyDown={() => { return type === 'Video/Audio' ? onSeekTo(start) : null; }}
+                onClick={() => { return type === 'Video/Audio' ? onSeekTo(start) : null; }}
               >
                 <div className="iconContainer right">
                   {

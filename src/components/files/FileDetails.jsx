@@ -122,7 +122,7 @@ const FileDetails = (props) => {
     newTags[data.tagId] = data.tag;
     setTags(newTags);
   };
-
+  
   useEffect(() => {
     setTags(files.entities[id].entity.tags);
   }, [files]);
