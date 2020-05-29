@@ -1,4 +1,4 @@
-.errorContainer{
+.dialog-container{
     position: fixed;
     z-index: 3;
     top:40%;
@@ -6,7 +6,7 @@
     transform: translateX(-50%);
 }
 
-.errorNotification{
+.dialog-notification{
     margin: 10px;
     border-radius: 5px;
     font-size: 13px;
@@ -20,7 +20,7 @@
     flex-direction: column;
 }
 
-.error-msg{
+.dialog-msg{
     font-size: 11px;
 }
 

@@ -3,7 +3,7 @@ import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { HIDE_ERROR } from '../actions/types';
 
-import '../styles/ErrorNotification.css';
+import '../styles/Dialog.css';
 
 const ErrorNotification = (props) => {
   const dispatch = useDispatch();
@@ -22,11 +22,11 @@ const ErrorNotification = (props) => {
   };
 
   return (
-    <div className="errorContainer">
+    <div className="dialog-container">
       {
         isOpen && message && (
-          <div className="errorNotification">
-            <span className="error-msg">{message}</span>
+          <div className="dialog-notification">
+            <span className="dialog-msg">{message}</span>
             {
               errorTypes.includes('tag') ? <span>Tag cannot be empty</span> : null
             }

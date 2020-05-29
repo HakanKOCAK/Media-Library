@@ -25,3 +25,6 @@ export const ADD_SIZE = 'ADD SIZE';
 
 export const SET_ERROR = 'SET ERROR';
 export const HIDE_ERROR = 'HIDE ERROR';
+
+export const OPEN_DIALOG = 'OPEN DIALOG';
+export const CLOSE_DIALOG = 'CLOSE DIALOG';
