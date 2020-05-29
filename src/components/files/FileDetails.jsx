@@ -50,31 +50,29 @@ const FileDetails = (props) => {
     setSeekTo(time);
   };
 
-  const onDelete = async (tagId, isNew) => {
-    if (!isNew) {
-      dispatch(deleteTag({ submissionId: id, tagId }));
-      const newTags = props.files.entities[id].entity.tags;
-      console.log('new', newTags);
-      console.log('tags', tags);
-      const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags });
-      if (!response.success) {
-        dispatch({
-          type: DELETE_TAG_ERROR,
-        });
-        dispatch(setError(response.error));
-      } else {
-        dispatch({
-          type: DELETE_TAG_SUCCESS,
-        });
+  const onDeleteNewTag = (tagId) => {
+    const newTags = {};
+    Object.entries(tags).forEach(([key, value]) => {
+      if (key !== tagId) {
+        newTags[key] = value;
       }
-    } else {
-      const newTags = {};
-      Object.entries(tags).forEach(([key, value]) => {
-        if (key !== tagId) {
-          newTags[key] = value;
-        }
+    });
+    setTags(newTags);
+  };
+
+  const onDelete = async (tagId) => {
+    dispatch(deleteTag({ submissionId: id, tagId }));
+    const newTags = props.files.entities[id].entity.tags;
+    const response = await updateTag({ submissionId: id, qid: tagsQid, data: newTags });
+    if (!response.success) {
+      dispatch({
+        type: DELETE_TAG_ERROR,
       });
-      setTags(newTags);
+      dispatch(setError(response.error));
+    } else {
+      dispatch({
+        type: DELETE_TAG_SUCCESS,
+      });
     }
   };
 
@@ -159,6 +157,7 @@ const FileDetails = (props) => {
         onTagChange={onChange}
         onTagSave={onSave}
         onTagClick={onTagClick}
+        onDeleteNewTag={onDeleteNewTag}
         type={type}
       />
     </>

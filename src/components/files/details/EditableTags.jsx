@@ -21,13 +21,22 @@ const EditableTags = (props) => {
     onTagSave,
     onTagChange,
     onTagClick,
+    onDeleteNewTag,
   } = props;
 
   //  To check if a tag is editing
-  const [edit, setEdit] = useState([]);
+  const [edit, setEdit] = useState(Object.keys(tags).reduce((editables, key) => {
+    const setReduced = { ...editables };
+    setReduced[key] = false;
+    return setReduced;
+  }, {}));
 
   //  To display edit and delete options of tags
-  const [visible, setVisible] = useState([]);
+  const [visible, setVisible] = useState(Object.keys(tags).reduce((visibilites, key) => {
+    const setReduced = { ...visibilites };
+    setReduced[key] = false;
+    return setReduced;
+  }, {}));
 
   const config = {
     EMPTY_TAG: false,
@@ -59,22 +68,28 @@ const EditableTags = (props) => {
   };
 
   const onEnter = (index) => {
-    const arr = [];
-    arr[index] = true;
-    setVisible(arr);
+    const newVisibilites = { ...visible };
+    newVisibilites[index] = true;
+    setVisible(newVisibilites);
   };
 
   const onLeave = (index) => {
-    const arr = [...edit];
-    arr[index] = false;
-    setVisible(arr);
+    if (!edit[index]) {
+      const newVisibilites = { ...visible };
+      newVisibilites[index] = false;
+      setVisible(newVisibilites);
+    }
   };
 
   const onCancel = (event, index) => {
     event.stopPropagation();
-    const arr = [...edit];
-    arr[index] = false;
-    setEdit(arr);
+    if (!tags[index].new) {
+      const newEditables = { ...edit };
+      newEditables[index] = false;
+      setEdit(newEditables);
+    } else {
+      onDeleteNewTag(index);
+    }
   };
 
   const onChange = (event, tagId) => {
@@ -103,23 +118,23 @@ const EditableTags = (props) => {
     }
   };
 
-  const onDelete = (tagId, isNew) => {
-    onTagDelete(tagId, isNew);
+  const onDelete = (tagId) => {
+    onTagDelete(tagId);
   };
 
   const onSave = (event, tagId) => {
     event.stopPropagation();
     onTagSave(tagId);
-    const arr = [];
-    arr[tagId] = false;
-    setEdit(arr);
+    const newEditables = { ...edit };
+    newEditables[tagId] = false;
+    setEdit(newEditables);
   };
 
   const onEdit = (event, tagId) => {
     event.stopPropagation();
-    const arr = [...edit];
-    arr[tagId] = true;
-    setEdit(arr);
+    const newEditables = { ...edit };
+    newEditables[tagId] = true;
+    setEdit(newEditables);
   };
 
   const onAdd = () => {
@@ -144,9 +159,15 @@ const EditableTags = (props) => {
       };
     }
     onTagAdd(obj);
-    const newVisibilites = [...visible];
+    const newVisibilites = { ...visible };
     newVisibilites[obj.tagId] = true;
+    const newEditables = { ...edit };
+    newEditables[obj.tagId] = true;
+    const newFlags = { ...flags };
+    newFlags[obj.tagId] = { EMPTY_TAG: true };
+    setFlag(newFlags);
     setVisible(newVisibilites);
+    setEdit(newEditables);
   };
 
   const getTagClasses = (tagId) => {
@@ -263,13 +284,18 @@ const EditableTags = (props) => {
                       )
                       : null
                   }
-                  <FontAwesomeIcon
-                    style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
-                    className="icon"
-                    icon={faTrashAlt}
-                    size="1x"
-                    onClick={(event) => { event.stopPropagation(); if (window.confirm('Delete the tag?')) { onDelete(tagId, isNew); } }}
-                  />
+                  {
+                    !isNew ? (
+                      <FontAwesomeIcon
+                        style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
+                        className="icon"
+                        icon={faTrashAlt}
+                        size="1x"
+                        onClick={(event) => { event.stopPropagation(); if (window.confirm('Delete the tag?')) { onDelete(tagId); } }}
+                      />
+                    )
+                      : null
+                  }
                 </div>
                 {
                   edit[tagId] && visible[tagId] && type === 'Video/Audio'
@@ -328,5 +354,6 @@ EditableTags.propTypes = {
   onTagDelete: PropTypes.func.isRequired,
   onTagChange: PropTypes.func.isRequired,
   onTagClick: PropTypes.func.isRequired,
+  onDeleteNewTag: PropTypes.func.isRequired,
 };
 export default EditableTags;
