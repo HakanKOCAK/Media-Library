@@ -11,7 +11,7 @@ import Other from './details/Other';
 import EditableTags from './details/EditableTags';
 import { deleteTag } from '../../actions/files';
 import updateTag from '../../apis/updateTag';
-import { setError } from '../../actions/error';
+import { setNotification } from '../../actions/notification';
 import {
   SAVE_TAG_REQUEST,
   SAVE_TAG_ERROR,
@@ -75,11 +75,7 @@ const FileDetails = (props) => {
       dispatch({
         type: SAVE_TAG_ERROR,
       });
-      if (response.types.length !== 0) {
-        dispatch(setError(response.error, response.types));
-      } else {
-        dispatch(setError(response.error));
-      }
+      dispatch(setNotification('error', { errors: response.errors }));
     } else {
       dispatch({
         type: SAVE_TAG_SUCCESS,

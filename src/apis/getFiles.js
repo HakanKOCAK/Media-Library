@@ -155,8 +155,12 @@ export default async function getFiles() {
 
       return { success: true, data: answersWithNames };
     }
-    return { success: false, error: res.data.message };
+    const errors = [];
+    errors.push(res.data.message);
+    return { success: false, errors };
   } catch (error) {
-    return { success: false, error };
+    const errors = [];
+    errors.push(error);
+    return { success: false, errors };
   }
 }

@@ -21,23 +21,26 @@ export default async function updateTag({ submissionId, qid, data }) {
 
   try {
     let flag = false;
-    const types = [];
+    const errors = [];
     newTags.forEach((item) => {
       if (item.Interval) {
         if (!formatCheckToFromForm(item.Interval)) {
+          console.log('here');
           flag = true;
-          types.push('interval');
+          errors.push('Interval format is: 00:00:00');
         }
+      } else {
+        errors.push('Interval cannot be empty.');
       }
 
       if (!item.Tag) {
         flag = true;
-        types.push('tag');
+        errors.push('Tag cannot be empty');
       }
     });
 
     if (flag) {
-      return { success: false, error: 'Wrong input type', types };
+      return { success: false, errors };
     }
 
     const res = await axios.post(`https://api.jotform.com/submission/${submissionId}?apiKey=${apiKey}&submission[${qid}]=${JSON.stringify(newTags)}`);
@@ -45,11 +48,13 @@ export default async function updateTag({ submissionId, qid, data }) {
     const { data: responseData } = res;
 
     if (responseData.responseCode === 200) {
-      return { success: true, error: null };
+      return { success: true, errors: null };
     }
-
-    return { success: false, error: data.message };
+    errors.push(responseData.message);
+    return { success: false, errors };
   } catch (error) {
-    return { success: false, error };
+    const errors = [];
+    errors.push(error);
+    return { success: false, errors };
   }
 }

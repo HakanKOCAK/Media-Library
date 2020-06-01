@@ -17,7 +17,7 @@ import {
 import { setFilesLoaded } from './app';
 import getFiles from '../apis/getFiles';
 import deleteSubmittedFile from '../apis/deleteFile';
-import { setError } from './error';
+import { setNotification } from './notification';
 import updateTag from '../apis/updateTag';
 
 export function getAllFiles() {
@@ -38,14 +38,16 @@ export function getAllFiles() {
         dispatch({
           type: GET_FILES_FAIL,
         });
-        dispatch(setError(response.error));
+        dispatch(setNotification('error', { errors: response.errors }));
       }
       dispatch(setFilesLoaded(true));
     } catch (error) {
       dispatch({
         type: GET_FILES_FAIL,
       });
-      dispatch(setError(error));
+      const errors = [];
+      errors.push(error);
+      dispatch(('error', { errors }));
       dispatch(setFilesLoaded(true));
     }
   };
@@ -65,7 +67,7 @@ export function deleteFile(submissionId) {
       dispatch({
         type: DELETE_FILE_ERROR,
       });
-      dispatch(setError(response.error));
+      dispatch(setNotification('error', { errors: response.errors }));
     } else {
       dispatch({
         type: DELETE_FILE_SUCCESS,
@@ -86,7 +88,7 @@ export function deleteTag({ submissionId, tagId }) {
       dispatch({
         type: DELETE_TAG_ERROR,
       });
-      dispatch(setError(response.error));
+      dispatch(setNotification('error', { errors: response.errors }));
     } else {
       dispatch({
         type: DELETE_TAG_SUCCESS,

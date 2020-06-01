@@ -8,13 +8,17 @@ export default async function deleteSubmittedFile(submissionId) {
         apiKey,
       },
     };
-    const res = await axios.delete(`https://api.jotform.com/submission/${submissionId}`, config);
+    const res = await axios.delete(`https://api.jotform.com/submsssion/${submissionId}`, config);
     const { data } = res;
     if (data.responseCode === 200) {
-      return { success: true, error: null };
+      return { success: true, errors: null };
     }
-    return { success: false, error: data.message };
+    const errors = [];
+    errors.push(data.message);
+    return { success: false, errors };
   } catch (error) {
-    return { success: false, error };
+    const errors = [];
+    errors.push(error);
+    return { success: false, errors };
   }
 }

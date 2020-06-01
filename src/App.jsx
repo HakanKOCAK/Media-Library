@@ -5,7 +5,7 @@ import IdleTimer from 'react-idle-timer';
 import Navbar from './components/Navbar';
 import Landing from './components/Landing';
 import Routes from './components/routing/Routes';
-import ErrorNotification from './components/ErrorNotification';
+import Notification from './components/Notification';
 import DeleteDialog from './components/DeleteDialog';
 import PublicRoute from './components/routing/PublicRoute';
 import { loadUser, logoutUser } from './actions/user';
@@ -54,7 +54,7 @@ const App = () => {
       />
       <Router>
         <Navbar />
-        <ErrorNotification />
+        <Notification />
         <DeleteDialog />
         <Switch>
           <PublicRoute exact path="/" component={Landing} />
