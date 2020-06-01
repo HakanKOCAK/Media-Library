@@ -1,57 +1,35 @@
 import React from 'react';
-import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { CLOSE_DIALOG } from '../actions/types';
-
-import '../styles/Dialog.css';
 
 const DeleteDialog = (props) => {
-  const dispatch = useDispatch();
-
-  const { deleteDialog } = props;
-  const { data, isOpen } = deleteDialog;
+  const { data, onConfirmDelete, onCloseNotification } = props;
 
   const onConfirm = () => {
-    dispatch(data.func);
-    dispatch({
-      type: CLOSE_DIALOG,
-    });
+    onConfirmDelete();
   };
 
   const onClose = () => {
-    dispatch({
-      type: CLOSE_DIALOG,
-    });
+    onCloseNotification();
   };
 
   return (
-    <div className="dialog-container">
-      {
-        isOpen && data && (
-          <div className="dialog-notification">
-            <span className="dialog-msg">{`Are you sure delete the ${data.type} ${data.name}`}</span>
-            <div className="button-div">
-              <button type="button" className="btn btn-light" onClick={onClose}>No</button>
-              <button type="button" className="btn btn-primary" onClick={onConfirm}>Yes</button>
-            </div>
-          </div>
-        )
-      }
-    </div>
+    <>
+      <span className="dialog-msg">{`Are you sure delete the ${data.type} ${data.name}`}</span>
+      <div className="button-div">
+        <button type="button" className="btn btn-light" onClick={onClose}>No</button>
+        <button type="button" className="btn btn-primary" onClick={onConfirm}>Yes</button>
+      </div>
+    </>
   );
 };
 
 DeleteDialog.propTypes = {
-  deleteDialog: PropTypes.shape({
-    data: PropTypes.shape({
-      type: PropTypes.string.isRequired,
-      func: PropTypes.func.isRequired,
-      name: PropTypes.string.isRequired,
-    }).isRequired,
-    isOpen: PropTypes.bool.isRequired,
+  data: PropTypes.shape({
+    type: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
   }).isRequired,
+  onConfirmDelete: PropTypes.func.isRequired,
+  onCloseNotification: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({ deleteDialog: state.deleteDialog });
-
-export default connect(mapStateToProps)(DeleteDialog);
+export default DeleteDialog;

@@ -2,9 +2,10 @@ import React from 'react';
 import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { HIDE_NOTIFICATION } from '../actions/types';
+import ErrorNotification from './ErrorNotification';
+import DeleteDialog from './DeleteDialog';
 
 import '../styles/Dialog.css';
-import ErrorNotification from './ErrorNotification';
 
 const Notification = (props) => {
   const dispatch = useDispatch();
@@ -16,10 +17,39 @@ const Notification = (props) => {
     window.location.reload();
   };
 
-  const onClose = () => {
+  const onConfirmDelete = () => {
+    dispatch(data.func);
     dispatch({
       type: HIDE_NOTIFICATION,
     });
+  };
+
+  const onCloseNotification = () => {
+    dispatch({
+      type: HIDE_NOTIFICATION,
+    });
+  };
+
+  const displayNotification = () => {
+    switch (type) {
+      case 'error':
+        return (
+          <ErrorNotification
+            messages={data.errors}
+            onReload={onReload}
+          />
+        );
+      case 'delete':
+        return (
+          <DeleteDialog
+            data={{ type: data.type, name: data.name }}
+            onCloseNotification={onCloseNotification}
+            onConfirmDelete={onConfirmDelete}
+          />
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -28,7 +58,7 @@ const Notification = (props) => {
         isOpen && type && (
           <div className="dialog-notification">
             <span>{type.toUpperCase()}</span>
-            {type === 'error' ? <ErrorNotification messages={data.errors} onReload={onReload} /> : null}
+            {displayNotification()}
           </div>
         )
       }
@@ -42,6 +72,9 @@ Notification.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     data: PropTypes.shape({
       errors: PropTypes.array,
+      type: PropTypes.string,
+      name: PropTypes.string,
+      func: PropTypes.func,
     }).isRequired,
   }).isRequired,
 };

@@ -17,8 +17,6 @@ import {
   SAVE_TAG_ERROR,
   SAVE_TAG_SUCCESS,
 } from '../../actions/types';
-import { openDialog } from '../../actions/delete-dialog';
-
 import '../../styles/FileDetails.css';
 
 const FileDetails = (props) => {
@@ -60,7 +58,7 @@ const FileDetails = (props) => {
   };
 
   const onDelete = (tagName, tagId) => {
-    dispatch(openDialog({ type: 'tag', name: tagName, func: deleteTag({ submissionId: id, tagId }) }));
+    dispatch(setNotification('delete', { type: 'tag', name: tagName, func: deleteTag({ submissionId: id, tagId }) }));
   };
 
   const onSave = async (tagId) => {
