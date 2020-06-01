@@ -13,14 +13,14 @@
     border: 1px solid black;
 }
 
-.mediaContainer{
+.media-container{
     display: flex;
     justify-content: center;
     margin-top:15px;
     margin-bottom: 30px;
 }
 
-.imageContainer{
+.image-container{
     position: relative;
     margin-left: auto;
     margin-right: auto;
@@ -46,7 +46,7 @@
     margin-right: auto; 
 }
 
-.tagsContainer{
+.tags-container{
     margin-left: auto;
     margin-right: auto;
     flex-wrap: wrap;
@@ -72,38 +72,38 @@
     background: var(--light-color);
 }
 
-.editTag{
+.edit-tag{
    background: var(--dark-color);
     color: white;
     cursor: text;
 }
 
-.tagInput{
+.tag-input{
     flex-grow: 2;
     background: transparent;
     border: 0.5px var(--light-color) solid;
     text-align: center;
 }
 
-.tagInput:focus{
+.tag-input:focus{
     outline-width: 0.5px;
 }
 
-.editInput{
+.edit-input{
     background: var(--dark-color);
     color: white;
     border: 0.5px var(--dark-color) solid;
     cursor: text;
 }
 
-.editTagExtended{
+.edit-tag-extended{
     background: var(--dark-color);
     height: 60px;
     color: white;
     cursor: text;
 }
 
-.intervalContainer{
+.interval-container{
     border: none;
     width: 150px;
     display: flex;
@@ -112,7 +112,7 @@
     background: var(--dark-color);
 }
 
-.intervalInput{
+.interval-input{
     background: transparent;
     width: 50px;
     height: 25px;
@@ -121,16 +121,16 @@
     text-align: center;
 }
 
-.intervalInput:focus{
+.interval-input:focus{
     outline-width: 0.5px;
 }
 
-.redBorder{
+.red-border{
      border: 1px #c4302b solid;
 }
 
 
-.iconContainer{
+.icon-container{
     display: flex;
     min-width: 30px;
     flex-grow: 1;

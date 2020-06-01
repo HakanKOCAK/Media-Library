@@ -27,7 +27,7 @@ const Video = (props) => {
   }, [seekTo]);
 
   return (
-    <div className="mediaContainer">
+    <div className="media-container">
       <ReactPlayer
         ref={playerRef}
         url={url}

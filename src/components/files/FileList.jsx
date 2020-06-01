@@ -69,7 +69,7 @@ const FileList = (props) => {
         rel="noopener noreferrer"
         target="_blank"
         href={`https://form.jotform.com/${formId}`}
-        className="newLink"
+        className="new-link"
       >
         New File
       </a>

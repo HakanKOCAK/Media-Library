@@ -175,14 +175,14 @@ const EditableTags = (props) => {
     if (type === 'Video/Audio') {
       classes += ' pointer';
       if (edit[tagId]) {
-        classes += ' editTagExtended';
+        classes += ' edit-tag-extended';
       }
     } else if (edit[tagId]) {
-      classes += ' editInput';
+      classes += ' edit-input';
     }
 
     if (!isFormatsValid(tagId)) {
-      classes += ' redBorder';
+      classes += ' red-border';
     }
 
     return classes;
@@ -194,10 +194,10 @@ const EditableTags = (props) => {
       classes += ' pointer';
     }
     if (edit[tagId]) {
-      classes += ' editInput';
+      classes += ' edit-input';
     }
     if (!isTagValid(tagId)) {
-      classes += ' redBorder';
+      classes += ' red-border';
     }
 
     return classes;
@@ -217,7 +217,7 @@ const EditableTags = (props) => {
   return (
     <fieldset className="main">
       <legend className="label">Tags</legend>
-      <div className="tagsContainer">
+      <div className="tags-container">
         {Object.entries(tags).map((item) => {
           const tagId = item[0];
           const {
@@ -240,7 +240,7 @@ const EditableTags = (props) => {
                 onKeyDown={() => { return type === 'Video/Audio' ? onSeekTo(start) : null; }}
                 onClick={() => { return type === 'Video/Audio' ? onSeekTo(start) : null; }}
               >
-                <div className="iconContainer right">
+                <div className="icon-container right">
                   {
                     (isNew || isEdited) && isFormatsValid(tagId)
                       ? <FontAwesomeIcon className="icon" icon={faSave} size="1x" onClick={(event) => onSave(event, tagId)} />
@@ -250,14 +250,14 @@ const EditableTags = (props) => {
 
                 <input
                   disabled={!edit[tagId]}
-                  className={`tagInput ${visible[tagId] ? getInputBoxClasses(tagId) : ''}`}
+                  className={`tag-input ${visible[tagId] ? getInputBoxClasses(tagId) : ''}`}
                   name={`tag${tagId}`}
                   type="text"
                   value={tag}
                   onClick={(event) => { event.stopPropagation(); }}
                   onChange={(event) => onChange(event, tagId)}
                 />
-                <div className={`iconContainer ${visible[tagId] ? 'left' : ''}`}>
+                <div className={`icon-container ${visible[tagId] ? 'left' : ''}`}>
                   {
                     !edit[tagId]
                       ? (
@@ -300,9 +300,9 @@ const EditableTags = (props) => {
                 {
                   edit[tagId] && visible[tagId] && type === 'Video/Audio'
                     ? (
-                      <div className="intervalContainer">
+                      <div className="interval-container">
                         <input
-                          className={`intervalInput ${!isStartIntervalValid(tagId) ? 'redBorder' : ''}`}
+                          className={`interval-input ${!isStartIntervalValid(tagId) ? 'red-border' : ''}`}
                           name={`start${tagId}`}
                           type="text"
                           value={start}
@@ -311,7 +311,7 @@ const EditableTags = (props) => {
                         />
                         /
                         <input
-                          className={`intervalInput ${!isEndIntervalValid(tagId) ? 'redBorder' : ''}`}
+                          className={`interval-input ${!isEndIntervalValid(tagId) ? 'red-border' : ''}`}
                           name={`end${tagId}`}
                           type="text"
                           value={end}

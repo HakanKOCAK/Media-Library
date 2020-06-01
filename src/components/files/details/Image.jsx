@@ -12,7 +12,7 @@ const Image = (props) => {
   };
 
   return (
-    <div className="imageContainer">
+    <div className="image-container">
       <Spinner styled={false} />
       <img
         alt="submittedImage"
