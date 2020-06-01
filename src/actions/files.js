@@ -12,6 +12,7 @@ import {
   ADD_SIZE,
   DELETE_TAG_ERROR,
   DELETE_TAG_SUCCESS,
+  REMOVE_FILES,
 } from './types';
 import { setFilesLoaded } from './app';
 import getFiles from '../apis/getFiles';
@@ -49,6 +50,8 @@ export function getAllFiles() {
     }
   };
 }
+
+export const removeFiles = () => ({ type: REMOVE_FILES });
 
 export function deleteFile(submissionId) {
   return async (dispatch) => {

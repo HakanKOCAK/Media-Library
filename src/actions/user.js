@@ -1,7 +1,7 @@
 import authService from '../services/auth.service';
 import { SET_USER_DATA, REMOVE_USER_DATA } from './types';
 import { setUserLoaded, setFilesLoaded } from './app';
-import { getAllFiles } from './files';
+import { getAllFiles, removeFiles } from './files';
 
 export const removeUserData = () => (dispatch) => {
   dispatch({
@@ -26,12 +26,14 @@ export const loadUser = () => (dispatch) => {
   authService.onAuthStateChanged((authUser) => {
     if (!authUser) {
       dispatch(removeUserData());
+    } else {
+      dispatch(setUserData(authUser.email));
     }
-    dispatch(setUserData(authUser.email, authUser.getIdToken()));
   });
 };
 
 export const logoutUser = () => (dispatch) => {
   authService.signOut();
+  dispatch(removeFiles());
   dispatch(removeUserData());
 };

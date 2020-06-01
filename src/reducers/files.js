@@ -6,6 +6,7 @@ import {
   DELETE_FILE_REQUEST,
   ADD_DURATION,
   ADD_SIZE,
+  REMOVE_FILES,
 } from '../actions/types';
 
 const initialState = {
@@ -97,6 +98,10 @@ export default function (state = initialState, action) {
         entities,
       };
     }
+    case REMOVE_FILES:
+      return {
+        initialState,
+      };
     default:
       return state;
   }

@@ -8,7 +8,7 @@ import Routes from './components/routing/Routes';
 import ErrorNotification from './components/ErrorNotification';
 import DeleteDialog from './components/DeleteDialog';
 import PublicRoute from './components/routing/PublicRoute';
-import { loadUser, removeUserData } from './actions/user';
+import { loadUser, logoutUser } from './actions/user';
 
 import './App.css';
 
@@ -25,7 +25,7 @@ const App = () => {
 
   useEffect(() => {
     if (isTimedOut) {
-      removeUserData()(dispatch);
+      logoutUser()(dispatch);
     }
   }, [isTimedOut, dispatch]);
 
