@@ -30,3 +30,11 @@
 .navbar a:hover{
     color:#17a2b8
 }
+
+.profile-div{
+  margin-right: 10px;
+}
+
+.profile-div:hover{
+    color:#17a2b8
+}

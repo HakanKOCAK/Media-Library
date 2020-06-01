@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useDispatch, connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTape, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTape, faSignOutAlt, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { logoutUser } from '../actions/user';
 
 import '../styles/Navbar.css';
@@ -25,7 +25,13 @@ const Navbar = ({ user: { isAuthenticated, displayName } }) => {
   const authLinks = (
     <>
       <li>
-        <span>{displayName}</span>
+        <Link to="/profile">
+          <FontAwesomeIcon
+            style={{ marginRight: '3px' }}
+            icon={faUserCircle}
+          />
+          <span>{displayName}</span>
+        </Link>
       </li>
       <li>
         <Link to="/" onClick={(event) => logout(event)}>
