@@ -85,7 +85,9 @@ export default function (state = initialState, action) {
     case ADD_DURATION: {
       const { submissionId, duration } = payload;
       const entities = { ...state.entities };
-      entities[submissionId].entity.duration = duration;
+      if (Object.prototype.hasOwnProperty.call(entities, submissionId)) {
+        entities[submissionId].entity.duration = duration;
+      }
       return {
         entities,
       };
@@ -93,7 +95,9 @@ export default function (state = initialState, action) {
     case ADD_SIZE: {
       const { submissionId, size } = payload;
       const entities = { ...state.entities };
-      entities[submissionId].entity.size = size;
+      if (Object.prototype.hasOwnProperty.call(entities, submissionId)) {
+        entities[submissionId].entity.size = size;
+      }
       return {
         entities,
       };
