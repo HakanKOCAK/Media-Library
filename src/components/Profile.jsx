@@ -117,7 +117,7 @@ const Profile = (props) => {
             required
           />
         </div>
-        {flags.CHANGE_SUCCESSFUL ? <p className="my-1 success">Password successfully changed.</p> : null}
+        {flags.CHANGE_SUCCESSFUL ? <p className="mtop-1 m-bottom-1 success">Password successfully changed.</p> : null}
         <Error flags={flags} />
         <input className="btn btn-primary" type="submit" value="Update Password" />
       </form>

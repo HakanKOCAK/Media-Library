@@ -326,7 +326,7 @@ const EditableTags = (props) => {
               <div style={{ margin: '0px auto', maxWidth: '210px' }}>
                 {
                   flags[tagId] && visible[tagId]
-                    ? <Error key={uuidv4()} flags={flags[tagId]} />
+                    ? <Error key={uuidv4()} flags={flags[tagId]} isForTag />
                     : null
                 }
               </div>

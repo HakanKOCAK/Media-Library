@@ -128,7 +128,7 @@ body {
 }
 
 .success{
-   color:var(--primary-color);
+   color:var(--primary-color) !important;
 }
 
 .red{
@@ -173,8 +173,8 @@ button {
   margin: 1rem 0;
 }
 
-.my-02{
-  margin: 0.2rem 0;
+.mtop-02{
+  margin-top: 0.2rem;
 }
 
 .mx-05 {
