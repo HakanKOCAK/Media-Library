@@ -5,6 +5,9 @@ import getTags from '../Utils/getTags';
 const normalizeResponse = (question, submissionDetails, key) => {
   let newSubmissionDetails = { ...submissionDetails };
   const { name: questionName, answer: questionAnswer } = question;
+  const fileType = [];
+  fileType.push(newSubmissionDetails.fileType);
+  console.log('filetype', fileType);
   switch (questionName) {
     case 'nameSurname':
       newSubmissionDetails = {
@@ -57,7 +60,7 @@ const normalizeResponse = (question, submissionDetails, key) => {
           qid: key,
           tags: getTags('imageOther', [...submittedTags]),
         };
-      } else if (newSubmissionDetails.fileType.includes(['Image', 'Other'])) {
+      } else if (fileType.some((element) => ['Image', 'Other'].includes(element))) {
         newSubmissionDetails.entity = {
           ...newSubmissionDetails.entity,
           qid: key,
@@ -84,7 +87,7 @@ const normalizeResponse = (question, submissionDetails, key) => {
           qid: key,
           tags: getTags('videoAudio', [...submittedTags]),
         };
-      } else if (newSubmissionDetails.fileType === 'Video/Audio') {
+      } else if (fileType.includes('Video/Audio')) {
         newSubmissionDetails.entity = {
           ...newSubmissionDetails.entity,
           qid: key,
