@@ -3,11 +3,15 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Error from './Error';
 import submitRegister from '../actions/register';
+import { nameSurnameCheck } from '../Utils/regExp';
 
 const Register = () => {
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [secondName, setSecondName] = useState('');
+  const [surname, setSurname] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
 
@@ -16,9 +20,27 @@ const Register = () => {
     PASSWORD_LENGTH: false,
     USER_EXIST: false,
     EMAIL_FORMAT: false,
+    INVALID_NAME: false,
+    INVALID_SURNAME: false,
   };
 
   const [flags, setFlag] = useState(config);
+
+  useEffect(() => {
+    if (!nameSurnameCheck(firstName)) {
+      setFlag({ ...flags, INVALID_NAME: true });
+    } else {
+      setFlag({ ...flags, INVALID_NAME: false });
+    }
+  }, [firstName]);
+
+  useEffect(() => {
+    if (!nameSurnameCheck(surname)) {
+      setFlag({ ...flags, INVALID_SURNAME: true });
+    } else {
+      setFlag({ ...flags, INVALID_SURNAME: false });
+    }
+  }, [surname]);
 
   useEffect(() => {
     if (!/^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/.test(email)) {
@@ -48,6 +70,15 @@ const Register = () => {
     const { name, value } = event.currentTarget;
 
     switch (name) {
+      case 'firstName':
+        setFirstName(value);
+        break;
+      case 'secondName':
+        setSecondName(value);
+        break;
+      case 'surname':
+        setSurname(value);
+        break;
       case 'userEmail':
         if (!value.includes(' ')) {
           setEmail(value);
@@ -64,12 +95,25 @@ const Register = () => {
     }
   };
 
-  const onSubmit = async (event, submittedEmail, submittedPassword, submittedPassword2) => {
+  const onSubmit = async (
+    event,
+    submittedFirstName,
+    submittedSecondName,
+    submittedSurname,
+    submittedEmail,
+    submittedPassword,
+    submittedPassword2,
+  ) => {
     event.preventDefault();
-
     if (submittedPassword === submittedPassword2) {
-      dispatch(submitRegister(submittedEmail, submittedPassword)).then((response) => {
-        if (response.error.code === 'auth/email-already-in-use') {
+      dispatch(submitRegister(
+        submittedFirstName,
+        submittedSecondName,
+        submittedSurname,
+        submittedEmail,
+        submittedPassword,
+      )).then((response) => {
+        if (response.error && response.error.code === 'auth/email-already-in-use') {
           setFlag({ ...flags, USER_EXIST: true });
         }
       });
@@ -85,7 +129,38 @@ const Register = () => {
         <i className="fas fa-user" />
         Create Your Account
       </p>
-      <form className="form" onSubmit={(event) => onSubmit(event, email, password, password2)}>
+      <form className="form" onSubmit={(event) => onSubmit(event, firstName, secondName, surname, email, password, password2)}>
+        <div className="form-group">
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <input
+              type="text"
+              placeholder="First Name"
+              name="firstName"
+              style={{ marginRight: '5px' }}
+              className={flags.EMPTY_NAME ? 'error' : ''}
+              value={firstName}
+              onChange={(event) => onChange(event)}
+              required
+            />
+            <input
+              type="text"
+              placeholder="Second Name"
+              style={{ marginRight: '5px' }}
+              name="secondName"
+              value={secondName}
+              onChange={(event) => onChange(event)}
+            />
+            <input
+              type="text"
+              placeholder="Surname"
+              name="surname"
+              className={flags.EMPTY_SURNAME ? 'error' : ''}
+              value={surname}
+              onChange={(event) => onChange(event)}
+              required
+            />
+          </div>
+        </div>
         <div className="form-group">
           <input
             type="email"

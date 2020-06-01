@@ -12,10 +12,10 @@ export const removeUserData = () => (dispatch) => {
   dispatch(setFilesLoaded(true));
 };
 
-export const setUserData = (email) => (dispatch) => {
+export const setUserData = (email, displayName) => (dispatch) => {
   dispatch({
     type: SET_USER_DATA,
-    payload: { email, isAuthenticated: true },
+    payload: { email, displayName, isAuthenticated: true },
   });
   dispatch(setUserLoaded(true));
   dispatch(getAllFiles());
@@ -27,7 +27,7 @@ export const loadUser = () => (dispatch) => {
     if (!authUser) {
       dispatch(removeUserData());
     } else {
-      dispatch(setUserData(authUser.email));
+      dispatch(setUserData(authUser.email, authUser.displayName));
     }
   });
 };

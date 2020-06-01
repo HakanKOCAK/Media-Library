@@ -8,13 +8,13 @@ class Service {
     auth.onAuthStateChanged(callback);
   }
 
-  createUserWithEmailAndPassword(email, password) {
+  createUserWithEmailAndPassword(displayName, email, password) {
     return new Promise((resolve, reject) => {
       auth.createUserWithEmailAndPassword(email.trim(), password)
-        .then(resp => {
-          resp.user.getIdToken(true).then(token => {
-            resolve(token);
-          })
+        .then((resp) => {
+          resp.user.updateProfile({
+            displayName,
+          }).then(resolve(resp.user));
         })
         .catch(error => {
           reject(error);

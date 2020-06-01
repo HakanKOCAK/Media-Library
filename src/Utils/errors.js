@@ -6,6 +6,8 @@ const errorMessages = {
   USER_DISABLED: 'Sorry, it seems like the account has been disabled by an administrator.',
   USER_EXIST: 'User already exist.',
   EMPTY_TAG: 'Tag cannot be empty.',
+  INVALID_NAME: 'Invalid name.',
+  INVALID_SURNAME: 'Invalid surname.',
   INTERVAL_FORMAT: 'Interval format should be like 00:00:00',
 };
 
