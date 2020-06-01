@@ -9,6 +9,7 @@ const errorMessages = {
   INVALID_NAME: 'Invalid name.',
   INVALID_SURNAME: 'Invalid surname.',
   INTERVAL_FORMAT: 'Interval format should be like 00:00:00',
+  RECENT_LOGIN: 'This operation is sensitive and requires recent authentication. Log in again before retrying this request.',
 };
 
 export default errorMessages;

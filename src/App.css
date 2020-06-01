@@ -127,6 +127,10 @@ body {
    color:#c4302b !important;
 }
 
+.success{
+   color:var(--primary-color);
+}
+
 .red{
    color:#c4302b !important;
 }

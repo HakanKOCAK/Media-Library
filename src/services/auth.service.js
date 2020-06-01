@@ -36,6 +36,17 @@ class Service {
     });
   }
 
+  updatePassword(password) {
+    return new Promise((resolve, reject) => {
+      auth.currentUser.updatePassword(password)
+        .then(() => {
+          resolve({ success: true });
+        }).catch((error) => {
+          reject(error);
+        })
+    })
+  }
+
   signOut() {
     if (!auth) {
       return;

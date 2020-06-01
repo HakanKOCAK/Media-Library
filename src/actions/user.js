@@ -1,7 +1,14 @@
 import authService from '../services/auth.service';
-import { SET_USER_DATA, REMOVE_USER_DATA } from './types';
+import {
+  SET_USER_DATA,
+  REMOVE_USER_DATA,
+  UPDATE_PASSWORD_ERROR,
+  UPDATE_PASSWORD_REQUEST,
+  UPDATE_PASSWORD_SUCCESS,
+} from './types';
 import { setUserLoaded, setFilesLoaded } from './app';
 import { getAllFiles, removeFiles } from './files';
+import { setNotification } from './notification';
 
 export const removeUserData = () => (dispatch) => {
   dispatch({
@@ -21,6 +28,16 @@ export const setUserData = (email, displayName) => (dispatch) => {
   dispatch(getAllFiles());
 };
 
+export const updatePassword = (password) => (dispatch) => (
+  authService.updatePassword(password)
+    .then(() => {
+      dispatch({
+        type: UPDATE_PASSWORD_SUCCESS,
+      });
+      return { success: true };
+    })
+    .catch((error) => ({ success: false, code: error.code, message: error.message }))
+);
 
 export const loadUser = () => (dispatch) => {
   authService.onAuthStateChanged((authUser) => {
