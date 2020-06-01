@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Error from './Error';
 import submitRegister from '../actions/register';
-import { nameSurnameCheck } from '../Utils/regExp';
+import { nameSurnameCheck, emailCheck } from '../Utils/regExp';
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -43,7 +43,7 @@ const Register = () => {
   }, [surname]);
 
   useEffect(() => {
-    if (!/^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/.test(email)) {
+    if (!emailCheck(email)) {
       setFlag({ ...flags, EMAIL_FORMAT: true, USER_EXIST: false });
     } else {
       setFlag({ ...flags, EMAIL_FORMAT: false, USER_EXIST: false });
