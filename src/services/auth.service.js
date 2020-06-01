@@ -27,9 +27,7 @@ class Service {
     return new Promise((resolve, reject) => {
       auth.signInWithEmailAndPassword(email.trim(), password)
         .then(resp => {
-          resp.user.getIdToken(true).then(token => {
-            resolve(token);
-          })
+          resolve(resp.user);
         })
         .catch(error => {
           console.log(error)

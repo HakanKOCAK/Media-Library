@@ -8,7 +8,7 @@ import { logoutUser } from '../actions/user';
 
 import '../styles/Navbar.css';
 
-const Navbar = ({ user: { isAuthenticated } }) => {
+const Navbar = ({ user: { isAuthenticated, displayName } }) => {
   const dispatch = useDispatch();
 
   const logout = (event) => {
@@ -24,6 +24,9 @@ const Navbar = ({ user: { isAuthenticated } }) => {
 
   const authLinks = (
     <>
+      <li>
+        <span>{displayName}</span>
+      </li>
       <li>
         <Link to="/" onClick={(event) => logout(event)}>
           <FontAwesomeIcon icon={faSignOutAlt} />
@@ -61,6 +64,7 @@ const Navbar = ({ user: { isAuthenticated } }) => {
 Navbar.propTypes = {
   user: PropTypes.shape({
     isAuthenticated: PropTypes.bool.isRequired,
+    displayName: PropTypes.string.isRequired,
   }).isRequired,
 };
 
