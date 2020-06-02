@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { formId } from '../../config/config';
-import { deleteFile, addDuration, addSize } from '../../actions/files';
+import { deleteFile, getAllFiles, addDuration, addSize } from '../../actions/files';
 import { setDialog } from '../../actions/dialog';
 import ListItem from './ListItem';
-import { getAllFiles } from '../../actions/files';
 
 import '../../styles/Files.css';
 
@@ -14,6 +13,32 @@ const FileList = (props) => {
   const dispatch = useDispatch();
   const { files } = props;
   const filesArray = Object.values(files);
+
+  const [isLoading, setLoading] = useState(false);
+  const handleScroll = () => {
+    if (
+      window.innerHeight
+      + document.documentElement.scrollTop !== document.documentElement.offsetHeight
+    ) return;
+    setLoading(true);
+  };
+
+  const loadMoreFiles = () => {
+    setLoading(true);
+    dispatch(getAllFiles(filesArray.length, 10)).then((response) => {
+      if (response.success) setLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!isLoading) return;
+    loadMoreFiles();
+  }, [isLoading]);
 
   const onReady = (submissionId, duration) => {
     dispatch(addDuration({ submissionId, duration }));

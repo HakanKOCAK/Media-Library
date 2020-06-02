@@ -41,6 +41,7 @@ export function getAllFiles(offset, limit) {
         dispatch(setDialog('error', { errors: response.errors }));
       }
       dispatch(setFilesLoaded(true));
+      return { success: true };
     } catch (error) {
       dispatch({
         type: GET_FILES_FAIL,
