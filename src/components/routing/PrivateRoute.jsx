@@ -21,11 +21,7 @@ const PrivateRoute = ({
       return <Redirect to="/" />;
     }
 
-    if (files.entities) {
-      return <Component {...props} {...storeProps} />;
-    }
-
-    return <Spinner />;
+    return <Component {...props} {...storeProps} />;
   };
 
   return (

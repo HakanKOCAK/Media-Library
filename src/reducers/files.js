@@ -10,17 +10,22 @@ import {
 } from '../actions/types';
 
 const initialState = {
-  entities: null,
+  entities: {},
 };
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case GET_FILES_SUCCESS:
+    case GET_FILES_SUCCESS: {
+      const newEntities = { ...state.entities };
+      Object.entries(payload).forEach(([key, value]) => {
+        newEntities[key] = value;
+      });
       return {
-        entities: payload,
+        entities: newEntities,
       };
+    }
     case GET_FILES_FAIL:
       return {
         entities: {},

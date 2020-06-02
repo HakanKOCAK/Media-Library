@@ -6,6 +6,7 @@ import { formId } from '../../config/config';
 import { deleteFile, addDuration, addSize } from '../../actions/files';
 import { setDialog } from '../../actions/dialog';
 import ListItem from './ListItem';
+import { getAllFiles } from '../../actions/files';
 
 import '../../styles/Files.css';
 
