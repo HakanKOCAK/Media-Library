@@ -58,7 +58,12 @@ const FileDetails = (props) => {
   };
 
   const onDelete = (tagName, tagId) => {
-    dispatch(setNotification('delete', { type: 'tag', name: tagName, func: deleteTag({ submissionId: id, tagId }) }));
+    dispatch(setNotification('delete', {
+      type: 'tag',
+      name: tagName,
+      func: deleteTag({ submissionId: id, tagId }),
+      isAuthRequired: true,
+    }));
   };
 
   const onSave = async (tagId) => {

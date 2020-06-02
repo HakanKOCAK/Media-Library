@@ -27,7 +27,12 @@ const FileList = (props) => {
   };
 
   const onDelete = (submissionId, fileName) => {
-    dispatch(setNotification('delete', { type: 'file', name: fileName, func: deleteFile(submissionId) }));
+    dispatch(setNotification('delete', {
+      type: 'file',
+      name: fileName,
+      func: deleteFile(submissionId),
+      isAuthRequired: true,
+    }));
   };
 
   const handleClick = (classList, submissionId) => {
