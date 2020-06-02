@@ -15,10 +15,6 @@ const Dialog = (props) => {
   const { dialog } = props;
   const { type, data, isOpen } = dialog;
 
-  const onReload = () => {
-    window.location.reload();
-  };
-
   const onConfirmDelete = (password) => {
     if (!data.isAuthRequired) {
       dispatch(data.func);
@@ -61,7 +57,7 @@ const Dialog = (props) => {
         return (
           <ErrorDialog
             messages={data.errors}
-            onReload={onReload}
+            onCloseDialog={onCloseDialog}
           />
         );
       case 'delete':
