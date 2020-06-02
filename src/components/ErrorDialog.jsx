@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ErrorNotification = (props) => {
+const ErrorDialog = (props) => {
   const { messages, onReload } = props;
 
   const onReloadClick = () => {
@@ -16,9 +16,9 @@ const ErrorNotification = (props) => {
   );
 };
 
-ErrorNotification.propTypes = {
+ErrorDialog.propTypes = {
   messages: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string])).isRequired,
   onReload: PropTypes.func.isRequired,
 };
 
-export default ErrorNotification;
+export default ErrorDialog;

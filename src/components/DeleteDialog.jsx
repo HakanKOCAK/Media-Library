@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const DeleteDialog = (props) => {
-  const { data, onConfirmDelete, onCloseNotification } = props;
+  const { data, onConfirmDelete, onCloseDialog } = props;
 
   const onConfirm = () => {
     onConfirmDelete();
   };
 
   const onClose = () => {
-    onCloseNotification();
+    onCloseDialog();
   };
 
   return (
@@ -29,7 +29,7 @@ DeleteDialog.propTypes = {
     name: PropTypes.string.isRequired,
   }).isRequired,
   onConfirmDelete: PropTypes.func.isRequired,
-  onCloseNotification: PropTypes.func.isRequired,
+  onCloseDialog: PropTypes.func.isRequired,
 };
 
 export default DeleteDialog;

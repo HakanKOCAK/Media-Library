@@ -5,7 +5,7 @@ import IdleTimer from 'react-idle-timer';
 import Navbar from './components/Navbar';
 import Landing from './components/Landing';
 import Routes from './components/routing/Routes';
-import Notification from './components/Notification';
+import Dialog from './components/Dialog';
 import PublicRoute from './components/routing/PublicRoute';
 import { loadUser, logoutUser } from './actions/user';
 
@@ -53,7 +53,7 @@ const App = () => {
       />
       <Router>
         <Navbar />
-        <Notification />
+        <Dialog />
         <Switch>
           <PublicRoute exact path="/" component={Landing} />
           <Route component={Routes} />

@@ -12,8 +12,8 @@ import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
 const Routes = (props) => {
-  const { notification } = props;
-  const { isOpen } = notification;
+  const { dialog } = props;
+  const { isOpen } = dialog;
   return (
     <section className={`container ${isOpen ? 'blur' : ''}`}>
       <Switch>
@@ -30,17 +30,17 @@ const Routes = (props) => {
 };
 
 Routes.propTypes = {
-  notification: PropTypes.shape({
+  dialog: PropTypes.shape({
     isOpen: PropTypes.bool.isRequired,
   }),
 };
 
 Routes.defaultProps = {
-  notification: { isOpen: false },
+  dialog: { isOpen: false },
 };
 
 const mapStateToProps = (state) => ({
-  notification: state.notification,
+  dialog: state.dialog,
 });
 
 export default connect(mapStateToProps)(Routes);

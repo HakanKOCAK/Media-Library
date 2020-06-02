@@ -11,7 +11,7 @@ import Other from './details/Other';
 import EditableTags from './details/EditableTags';
 import { deleteTag } from '../../actions/files';
 import updateTag from '../../apis/updateTag';
-import { setNotification } from '../../actions/notification';
+import { setDialog } from '../../actions/dialog';
 import {
   SAVE_TAG_REQUEST,
   SAVE_TAG_ERROR,
@@ -58,7 +58,7 @@ const FileDetails = (props) => {
   };
 
   const onDelete = (tagName, tagId) => {
-    dispatch(setNotification('delete', {
+    dispatch(setDialog('delete', {
       type: 'tag',
       name: tagName,
       func: deleteTag({ submissionId: id, tagId }),
@@ -78,7 +78,7 @@ const FileDetails = (props) => {
       dispatch({
         type: SAVE_TAG_ERROR,
       });
-      dispatch(setNotification('error', { errors: response.errors }));
+      dispatch(setDialog('error', { errors: response.errors }));
     } else {
       dispatch({
         type: SAVE_TAG_SUCCESS,

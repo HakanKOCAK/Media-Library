@@ -7,7 +7,7 @@ import {
 } from './types';
 import { setUserLoaded, setFilesLoaded } from './app';
 import { getAllFiles, removeFiles } from './files';
-import { setNotification } from './notification';
+import { setDialog } from './dialog';
 
 export const removeUserData = () => (dispatch) => {
   dispatch({
@@ -40,7 +40,7 @@ export const updatePassword = (password) => (dispatch) => (
       });
       const errors = [];
       errors.push(error.message);
-      dispatch(setNotification('error', { errors }));
+      dispatch(setDialog('error', { errors }));
     })
 );
 

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Error from './Error';
 import { updatePassword } from '../actions/user';
 import { UPDATE_PASSWORD_REQUEST } from '../actions/types';
-import { setNotification } from '../actions/notification';
+import { setDialog } from '../actions/dialog';
 
 const Profile = (props) => {
   const dispatch = useDispatch();
@@ -59,7 +59,7 @@ const Profile = (props) => {
     event.preventDefault();
     if (submittedPassword === submittedPassword2) {
       dispatch({ type: UPDATE_PASSWORD_REQUEST });
-      dispatch(setNotification('authentication', { func: updatePassword(submittedPassword), isAuthRequired: true }));
+      dispatch(setDialog('authentication', { func: updatePassword(submittedPassword), isAuthRequired: true }));
       // dispatch(updatePassword(submittedPassword)).then((resp) => {
       //   if (resp.success) {
       //     setFlag({ ...flags, CHANGE_SUCCESSFUL: true });

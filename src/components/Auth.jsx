@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const Auth = (props) => {
-  const { onConfirmDelete, onCloseNotification } = props;
+  const { onConfirmDelete, onCloseDialog } = props;
   const [password, setPassword] = useState('');
 
   const onConfirm = () => {
@@ -10,7 +10,7 @@ const Auth = (props) => {
   };
 
   const onClose = () => {
-    onCloseNotification();
+    onCloseDialog();
   };
 
   return (
@@ -33,7 +33,7 @@ const Auth = (props) => {
 
 Auth.propTypes = {
   onConfirmDelete: PropTypes.func.isRequired,
-  onCloseNotification: PropTypes.func.isRequired,
+  onCloseDialog: PropTypes.func.isRequired,
 };
 
 export default Auth;

@@ -2,13 +2,13 @@ import { combineReducers } from 'redux';
 import files from './files';
 import user from './user';
 import app from './app';
-import notification from './notification';
+import dialog from './dialog';
 
 const rootReducer = combineReducers({
   app,
   files,
   user,
-  notification,
+  dialog,
 });
 
 export default rootReducer;

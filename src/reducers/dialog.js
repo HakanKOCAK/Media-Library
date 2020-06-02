@@ -1,4 +1,4 @@
-import { SET_NOTIFICATION, HIDE_NOTIFICATION } from '../actions/types';
+import { SET_DIALOG, HIDE_DIALOG } from '../actions/types';
 
 const initState = {
   type: '',
@@ -10,13 +10,13 @@ export default function (state = initState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case SET_NOTIFICATION:
+    case SET_DIALOG:
       return {
         type: payload.type,
         isOpen: true,
         data: payload.data,
       };
-    case HIDE_NOTIFICATION:
+    case HIDE_DIALOG:
       return {
         type: '',
         data: {},

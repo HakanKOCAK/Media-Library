@@ -1,19 +1,19 @@
 import React from 'react';
 import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { HIDE_NOTIFICATION, SET_NOTIFICATION } from '../actions/types';
-import ErrorNotification from './ErrorNotification';
+import { HIDE_DIALOG, SET_DIALOG } from '../actions/types';
+import ErrorDialog from './ErrorDialog';
 import DeleteDialog from './DeleteDialog';
 import Auth from './Auth';
 import submitLogin from '../actions/login';
 
 import '../styles/Dialog.css';
 
-const Notification = (props) => {
+const Dialog = (props) => {
   const dispatch = useDispatch();
 
-  const { notification } = props;
-  const { type, data, isOpen } = notification;
+  const { dialog } = props;
+  const { type, data, isOpen } = dialog;
 
   const onReload = () => {
     window.location.reload();
@@ -23,11 +23,11 @@ const Notification = (props) => {
     if (!data.isAuthRequired) {
       dispatch(data.func);
       dispatch({
-        type: HIDE_NOTIFICATION,
+        type: HIDE_DIALOG,
       });
     } else if (type !== 'authentication') {
       dispatch({
-        type: SET_NOTIFICATION,
+        type: SET_DIALOG,
         payload: { type: 'authentication', data: { func: data.func, isAuthRequired: true } },
       });
     } else {
@@ -35,13 +35,13 @@ const Notification = (props) => {
         if (resp.success) {
           dispatch(data.func);
           dispatch({
-            type: HIDE_NOTIFICATION,
+            type: HIDE_DIALOG,
           });
         } else {
           const errors = [];
           errors.push(resp.error.message);
           dispatch({
-            type: SET_NOTIFICATION,
+            type: SET_DIALOG,
             payload: { type: 'error', data: { errors } },
           });
         }
@@ -49,17 +49,17 @@ const Notification = (props) => {
     }
   };
 
-  const onCloseNotification = () => {
+  const onCloseDialog = () => {
     dispatch({
-      type: HIDE_NOTIFICATION,
+      type: HIDE_DIALOG,
     });
   };
 
-  const displayNotification = () => {
+  const displayDialog = () => {
     switch (type) {
       case 'error':
         return (
-          <ErrorNotification
+          <ErrorDialog
             messages={data.errors}
             onReload={onReload}
           />
@@ -68,14 +68,14 @@ const Notification = (props) => {
         return (
           <DeleteDialog
             data={{ type: data.type, name: data.name }}
-            onCloseNotification={onCloseNotification}
+            onCloseDialog={onCloseDialog}
             onConfirmDelete={onConfirmDelete}
           />
         );
       case 'authentication':
         return (
           <Auth
-            onCloseNotification={onCloseNotification}
+            onCloseDialog={onCloseDialog}
             onConfirmDelete={onConfirmDelete}
           />
         );
@@ -90,7 +90,7 @@ const Notification = (props) => {
         isOpen && type && (
           <div className="dialog-notification">
             <span>{type.toUpperCase()}</span>
-            {displayNotification()}
+            {displayDialog()}
           </div>
         )
       }
@@ -98,8 +98,8 @@ const Notification = (props) => {
   );
 };
 
-Notification.propTypes = {
-  notification: PropTypes.shape({
+Dialog.propTypes = {
+  dialog: PropTypes.shape({
     type: PropTypes.string.isRequired,
     isOpen: PropTypes.bool.isRequired,
     data: PropTypes.shape({
@@ -116,8 +116,8 @@ Notification.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  notification: state.notification,
+  dialog: state.dialog,
   user: state.user,
 });
 
-export default connect(mapStateToProps)(Notification);
+export default connect(mapStateToProps)(Dialog);

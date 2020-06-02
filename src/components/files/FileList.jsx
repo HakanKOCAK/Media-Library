@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { formId } from '../../config/config';
 import { deleteFile, addDuration, addSize } from '../../actions/files';
-import { setNotification } from '../../actions/notification';
+import { setDialog } from '../../actions/dialog';
 import ListItem from './ListItem';
 
 import '../../styles/Files.css';
@@ -27,7 +27,7 @@ const FileList = (props) => {
   };
 
   const onDelete = (submissionId, fileName) => {
-    dispatch(setNotification('delete', {
+    dispatch(setDialog('delete', {
       type: 'file',
       name: fileName,
       func: deleteFile(submissionId),

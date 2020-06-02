@@ -27,8 +27,6 @@ export const SAVE_TAG_ERROR = 'SAVE TAG ERROR';
 export const ADD_DURATION = 'ADD DURATION';
 export const ADD_SIZE = 'ADD SIZE';
 
-export const SET_NOTIFICATION = 'SET NOTIFICATION';
-export const HIDE_NOTIFICATION = 'HIDE NOTIFICATION';
+export const SET_DIALOG = 'SET DIALOG';
+export const HIDE_DIALOG = 'HIDE DIALOG';
 
-export const OPEN_DIALOG = 'OPEN DIALOG';
-export const CLOSE_DIALOG = 'CLOSE DIALOG';
