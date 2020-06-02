@@ -96,6 +96,7 @@ body {
 
 .blur{
   filter: blur(8px);
+  pointer-events: none;
   -webkit-filter: blur(8px);
 }
 
