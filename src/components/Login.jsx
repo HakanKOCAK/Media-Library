@@ -124,7 +124,11 @@ const Login = () => {
         {
           !onProgress
             ? <input type="submit" className="btn btn-primary" value="Sign in" />
-            : <Spinner styled={false} />
+            : (
+              <div style={{ width: '100px', textAlign: 'center' }}>
+                <Spinner modified />
+              </div>
+            )
         }
       </form>
       <p className="my-1">

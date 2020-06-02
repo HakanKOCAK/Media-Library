@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import spinner from './spinner.gif';
 
-const styles = {
+const defaultContainerStyles = {
   height: '80vh',
   justifyContent: 'center',
   alignItems: 'center',
@@ -10,39 +10,53 @@ const styles = {
   display: 'flex',
 };
 
+const inLineImageStyles = {
+  width: '22px',
+};
+
+const defaultImageStyles = {
+  width: '45px',
+  margin: 'auto',
+  display: 'block',
+};
+
 const Spinner = (props) => {
-  const { styled, duration } = props;
+  const { modified } = props;
+
+  const displaySpinner = () => {
+    if (!modified) {
+      return (
+        <div style={defaultContainerStyles}>
+          <img
+            src={spinner}
+            style={defaultImageStyles}
+            alt="Loading..."
+          />
+        </div>
+      );
+    }
+    return (
+      <div>
+        <img
+          src={spinner}
+          style={inLineImageStyles}
+          alt="Loading..."
+        />
+      </div>
+    );
+  };
+
   return (
-    <div style={styled ? styles : {}}>
-      {
-        !duration
-          ? (
-            <img
-              src={spinner}
-              style={{ width: '45px', margin: 'auto', display: 'block' }}
-              alt="Loading..."
-            />
-          )
-          : (
-            <img
-              src={spinner}
-              style={{ width: '22px' }}
-              alt="Loading..."
-            />
-          )
-      }
-    </div>
+    displaySpinner()
   );
 };
 
 Spinner.propTypes = {
-  styled: PropTypes.bool,
-  duration: PropTypes.bool,
+  modified: PropTypes.bool,
 };
 
 Spinner.defaultProps = {
-  styled: true,
-  duration: false,
+  modified: false,
 };
 
 export default Spinner;

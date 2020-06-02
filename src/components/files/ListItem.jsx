@@ -54,7 +54,7 @@ const ListItem = (props) => {
       if (duration) {
         return duration;
       }
-      return <Spinner styled={false} duration />;
+      return <Spinner modified />;
     }
 
     return 'N/A';
@@ -64,7 +64,7 @@ const ListItem = (props) => {
     if (size) {
       return size;
     }
-    return <Spinner styled={false} duration />;
+    return <Spinner modified />;
   };
 
   return (
