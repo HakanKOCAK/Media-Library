@@ -3,7 +3,6 @@ import {
   SET_USER_DATA,
   REMOVE_USER_DATA,
   UPDATE_PASSWORD_ERROR,
-  UPDATE_PASSWORD_REQUEST,
   UPDATE_PASSWORD_SUCCESS,
 } from './types';
 import { setUserLoaded, setFilesLoaded } from './app';
@@ -34,9 +33,15 @@ export const updatePassword = (password) => (dispatch) => (
       dispatch({
         type: UPDATE_PASSWORD_SUCCESS,
       });
-      return { success: true };
     })
-    .catch((error) => ({ success: false, code: error.code, message: error.message }))
+    .catch((error) => {
+      dispatch({
+        type: UPDATE_PASSWORD_ERROR,
+      });
+      const errors = [];
+      errors.push(error.message);
+      dispatch(setNotification('error', { errors }));
+    })
 );
 
 export const loadUser = () => (dispatch) => {

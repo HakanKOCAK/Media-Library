@@ -4,12 +4,10 @@ import PropTypes from 'prop-types';
 import Error from './Error';
 import { updatePassword } from '../actions/user';
 import { UPDATE_PASSWORD_REQUEST } from '../actions/types';
+import { setNotification } from '../actions/notification';
 
 const Profile = (props) => {
   const dispatch = useDispatch();
-
-  const { user } = props;
-
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
 
@@ -61,23 +59,24 @@ const Profile = (props) => {
     event.preventDefault();
     if (submittedPassword === submittedPassword2) {
       dispatch({ type: UPDATE_PASSWORD_REQUEST });
-      dispatch(updatePassword(submittedPassword)).then((resp) => {
-        if (resp.success) {
-          setFlag({ ...flags, CHANGE_SUCCESSFUL: true });
-          setTimeout(() => { setFlag({ ...flags, CHANGE_SUCCESSFUL: false }); }, 3000);
-        } else {
-          switch (resp.code) {
-            case 'auth/weak-password':
-              setFlag({ ...flags, PASSWORD_LENGTH: true });
-              break;
-            case 'auth/requires-recent-login':
-              setFlag({ ...flags, RECENT_LOGIN: true });
-              break;
-            default:
-              break;
-          }
-        }
-      });
+      dispatch(setNotification('authentication', { func: updatePassword(submittedPassword), isAuthRequired: true }));
+      // dispatch(updatePassword(submittedPassword)).then((resp) => {
+      //   if (resp.success) {
+      //     setFlag({ ...flags, CHANGE_SUCCESSFUL: true });
+      //     setTimeout(() => { setFlag({ ...flags, CHANGE_SUCCESSFUL: false }); }, 3000);
+      //   } else {
+      //     switch (resp.code) {
+      //       case 'auth/weak-password':
+      //         setFlag({ ...flags, PASSWORD_LENGTH: true });
+      //         break;
+      //       case 'auth/requires-recent-login':
+      //         setFlag({ ...flags, RECENT_LOGIN: true });
+      //         break;
+      //       default:
+      //         break;
+      //     }
+      //   }
+      // });
       setPassword('');
       setPassword2('');
     } else {
