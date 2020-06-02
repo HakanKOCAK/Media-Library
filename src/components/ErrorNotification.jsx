@@ -17,7 +17,7 @@ const ErrorNotification = (props) => {
 };
 
 ErrorNotification.propTypes = {
-  messages: PropTypes.shape([]).isRequired,
+  messages: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string])).isRequired,
   onReload: PropTypes.func.isRequired,
 };
 
