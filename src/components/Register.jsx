@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Error from './Error';
 import submitRegister from '../actions/register';
 import { nameSurnameCheck, emailCheck } from '../Utils/regExp';
+import Spinner from './spinner/Spinner';
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const Register = () => {
   const [surname, setSurname] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
+  const [onProgress, setProgress] = useState(false);
 
   const config = {
     PASSWORDS_DO_NOT_MATCH: false,
@@ -106,6 +108,7 @@ const Register = () => {
   ) => {
     event.preventDefault();
     if (submittedPassword === submittedPassword2) {
+      setProgress(true);
       dispatch(submitRegister(
         submittedFirstName,
         submittedSecondName,
@@ -113,6 +116,7 @@ const Register = () => {
         submittedEmail,
         submittedPassword,
       )).then((response) => {
+        setProgress(false);
         if (response.error && response.error.code === 'auth/email-already-in-use') {
           setFlag({ ...flags, USER_EXIST: true });
         }
@@ -196,7 +200,15 @@ const Register = () => {
           />
         </div>
         <Error flags={flags} />
-        <input className="btn btn-primary" type="submit" value="Register" />
+        {
+          !onProgress
+            ? <input type="submit" className="btn btn-primary" value="Register" />
+            : (
+              <div style={{ width: '100px', textAlign: 'center' }}>
+                <Spinner modified />
+              </div>
+            )
+        }
       </form>
       <p className="my-1">
         Already have an account?
