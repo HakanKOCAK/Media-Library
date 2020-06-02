@@ -60,23 +60,6 @@ const Profile = (props) => {
     if (submittedPassword === submittedPassword2) {
       dispatch({ type: UPDATE_PASSWORD_REQUEST });
       dispatch(setDialog('authentication', { func: updatePassword(submittedPassword), isAuthRequired: true }));
-      // dispatch(updatePassword(submittedPassword)).then((resp) => {
-      //   if (resp.success) {
-      //     setFlag({ ...flags, CHANGE_SUCCESSFUL: true });
-      //     setTimeout(() => { setFlag({ ...flags, CHANGE_SUCCESSFUL: false }); }, 3000);
-      //   } else {
-      //     switch (resp.code) {
-      //       case 'auth/weak-password':
-      //         setFlag({ ...flags, PASSWORD_LENGTH: true });
-      //         break;
-      //       case 'auth/requires-recent-login':
-      //         setFlag({ ...flags, RECENT_LOGIN: true });
-      //         break;
-      //       default:
-      //         break;
-      //     }
-      //   }
-      // });
       setPassword('');
       setPassword2('');
     } else {

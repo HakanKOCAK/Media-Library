@@ -27,12 +27,19 @@ export const setUserData = (email, displayName) => (dispatch) => {
   dispatch(getAllFiles());
 };
 
+export const logoutUser = () => (dispatch) => {
+  authService.signOut();
+  dispatch(removeFiles());
+  dispatch(removeUserData());
+};
+
 export const updatePassword = (password) => (dispatch) => (
   authService.updatePassword(password)
     .then(() => {
       dispatch({
         type: UPDATE_PASSWORD_SUCCESS,
       });
+      dispatch(logoutUser());
     })
     .catch((error) => {
       dispatch({
@@ -52,10 +59,4 @@ export const loadUser = () => (dispatch) => {
       dispatch(setUserData(authUser.email, authUser.displayName));
     }
   });
-};
-
-export const logoutUser = () => (dispatch) => {
-  authService.signOut();
-  dispatch(removeFiles());
-  dispatch(removeUserData());
 };
