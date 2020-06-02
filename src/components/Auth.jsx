@@ -8,7 +8,7 @@ const Auth = (props) => {
   const [onProgress, setProgress] = useState(false);
 
   const config = {
-    PASSWORD_LENGTH: false,
+    PASSWORD_LENGTH: true,
   };
 
   const [flags, setFlags] = useState(config);
