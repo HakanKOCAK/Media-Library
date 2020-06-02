@@ -24,7 +24,7 @@ export const setUserData = (email, displayName) => (dispatch) => {
     payload: { email, displayName, isAuthenticated: true },
   });
   dispatch(setUserLoaded(true));
-  dispatch(getAllFiles());
+  dispatch(getAllFiles(0, 10));
 };
 
 export const logoutUser = () => (dispatch) => {

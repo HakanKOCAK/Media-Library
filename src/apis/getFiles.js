@@ -2,11 +2,13 @@ import axios from 'axios';
 import { apiKey, formId } from '../config/config';
 import getAnswers from '../Utils/getAnswers';
 
-export default async function getFiles() {
+export default async function getFiles(offset, limit) {
   try {
     const config = {
       params: {
         apiKey,
+        offset,
+        limit,
       },
     };
 

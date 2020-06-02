@@ -20,14 +20,14 @@ import deleteSubmittedFile from '../apis/deleteFile';
 import { setDialog } from './dialog';
 import updateTag from '../apis/updateTag';
 
-export function getAllFiles() {
+export function getAllFiles(offset, limit) {
   return async (dispatch) => {
     try {
       dispatch({
         type: GET_FILES_REQUEST,
       });
 
-      const response = await getFiles();
+      const response = await getFiles(offset, limit);
 
       if (response.success) {
         dispatch({
