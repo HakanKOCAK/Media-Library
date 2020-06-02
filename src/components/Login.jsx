@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Error from './Error';
 import submitLogin from '../actions/login';
+import { emailCheck } from '../Utils/regExp';
+import Spinner from './spinner/Spinner';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -18,9 +20,10 @@ const Login = () => {
   };
 
   const [flags, setFlag] = useState(config);
+  const [onProgress, setProgress] = useState(false);
 
   useEffect(() => {
-    if (!/^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/.test(email) && email.length) {
+    if (!emailCheck(email) && email.length) {
       setFlag({ ...flags, EMAIL_FORMAT: true });
     } else {
       setFlag({ ...flags, EMAIL_FORMAT: false });
@@ -48,8 +51,11 @@ const Login = () => {
   };
 
   const onSubmit = async (event, submittedEmail, submittedPassword) => {
+    console.log('here');
     event.preventDefault();
+    setProgress(true);
     dispatch(submitLogin(submittedEmail, submittedPassword)).then((response) => {
+      setProgress(false);
       if (response.error) {
         switch (response.error.code) {
           case 'auth/wrong-password':
@@ -91,7 +97,7 @@ const Login = () => {
         <i className="fas fa-user" />
         Sign Into Your Account
       </p>
-      <form className="form" onSubmit={(event) => onSubmit(event, email, password)}>
+      <form className="form" onSubmit={(event) => (!onProgress ? onSubmit(event, email, password) : event.preventDefault())}>
         <div className="form-group">
           <input
             type="email"
@@ -115,7 +121,11 @@ const Login = () => {
           />
         </div>
         <Error flags={flags} />
-        <input type="submit" className="btn btn-primary" value="Sign In" />
+        {
+          !onProgress
+            ? <input type="submit" className="btn btn-primary" value="Sign in" />
+            : <Spinner styled={false} />
+        }
       </form>
       <p className="my-1">
         Do not have an account?
