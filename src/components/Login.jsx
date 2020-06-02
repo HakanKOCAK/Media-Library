@@ -5,6 +5,7 @@ import Error from './Error';
 import submitLogin from '../actions/login';
 import { emailCheck } from '../Utils/regExp';
 import Spinner from './spinner/Spinner';
+import { setFilesLoaded } from '../actions/app';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -51,9 +52,9 @@ const Login = () => {
   };
 
   const onSubmit = async (event, submittedEmail, submittedPassword) => {
-    console.log('here');
     event.preventDefault();
     setProgress(true);
+    dispatch(setFilesLoaded(false));
     dispatch(submitLogin(submittedEmail, submittedPassword)).then((response) => {
       setProgress(false);
       if (response.error) {

@@ -5,6 +5,7 @@ import Error from './Error';
 import submitRegister from '../actions/register';
 import { nameSurnameCheck, emailCheck } from '../Utils/regExp';
 import Spinner from './spinner/Spinner';
+import { setFilesLoaded } from '../actions/app';
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -109,6 +110,7 @@ const Register = () => {
     event.preventDefault();
     if (submittedPassword === submittedPassword2) {
       setProgress(true);
+      dispatch(setFilesLoaded(false));
       dispatch(submitRegister(
         submittedFirstName,
         submittedSecondName,
