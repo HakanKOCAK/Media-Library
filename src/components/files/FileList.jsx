@@ -24,7 +24,6 @@ const FileList = (props) => {
   const toDisplay = filesArray.slice(offset, limit);
   const [isLoading, setLoading] = useState(false);
   const [noMore, setNoMore] = useState(false);
-
   const [scrollPosition, setScrollPosition] = useState();
 
   const handleScroll = () => {
@@ -34,7 +33,7 @@ const FileList = (props) => {
 
   const loadMoreFiles = () => {
     if (limit > filesArray.length) {
-      dispatch(getAllFiles(filesArray.length, 6)).then((response) => {
+      dispatch(getAllFiles(filesArray.length, 12)).then((response) => {
         if (response.success) {
           setLoading(false);
           setNoMore(response.noMore);
@@ -59,7 +58,9 @@ const FileList = (props) => {
       + document.documentElement.scrollTop === document.documentElement.offsetHeight
     ) {
       if (limit <= filesArray.length) {
-        setOffSet(offset + parseInt(limit / 18, 10) * 6);
+        if (limit / 18 >= 1) {
+          setOffSet(offset + 6);
+        }
         setLimit(limit + 6);
       }
       if (!noMore) {
