@@ -14,11 +14,12 @@ const PrivateRoute = ({
   const storeProps = { files, app, user };
 
   const result = (props) => {
-    if (!app.userLoaded || !app.filesLoaded) {
-      return <Spinner />;
-    }
     if (!user.isAuthenticated) {
       return <Redirect to="/" />;
+    }
+
+    if (!app.userLoaded || !app.filesLoaded) {
+      return <Spinner />;
     }
 
     return <Component {...props} {...storeProps} />;

@@ -15,7 +15,7 @@ export const removeUserData = () => (dispatch) => {
     payload: false,
   });
   dispatch(setUserLoaded(true));
-  dispatch(setFilesLoaded(true));
+  dispatch(setFilesLoaded(false));
 };
 
 export const setUserData = (email, displayName) => (dispatch) => {

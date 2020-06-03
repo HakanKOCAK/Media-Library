@@ -110,7 +110,6 @@ const Register = () => {
     event.preventDefault();
     if (submittedPassword === submittedPassword2) {
       setProgress(true);
-      dispatch(setFilesLoaded(false));
       dispatch(submitRegister(
         submittedFirstName,
         submittedSecondName,

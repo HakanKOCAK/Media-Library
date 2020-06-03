@@ -6,13 +6,13 @@ import Spinner from '../spinner/Spinner';
 
 const PublicRoute = ({
   component: Component,
-  app: { userLoaded, filesLoaded },
+  app: { userLoaded },
   user: { isAuthenticated },
   ...rest
 }) => {
 
   const result = (props) => {
-    if (!userLoaded || !filesLoaded) {
+    if (!userLoaded) {
       return <Spinner />;
     }
 
@@ -37,7 +37,6 @@ PublicRoute.propTypes = {
   }).isRequired,
   app: PropTypes.shape({
     userLoaded: PropTypes.bool.isRequired,
-    filesLoaded: PropTypes.bool.isRequired,
   }).isRequired,
   component: PropTypes.oneOfType([
     PropTypes.elementType,

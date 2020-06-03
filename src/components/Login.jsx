@@ -54,7 +54,6 @@ const Login = () => {
   const onSubmit = async (event, submittedEmail, submittedPassword) => {
     event.preventDefault();
     setProgress(true);
-    dispatch(setFilesLoaded(false));
     dispatch(submitLogin(submittedEmail, submittedPassword)).then((response) => {
       setProgress(false);
       if (response.error) {
