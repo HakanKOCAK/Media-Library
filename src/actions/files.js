@@ -29,19 +29,19 @@ export function getAllFiles(offset, limit) {
 
       const response = await getFiles(offset, limit);
 
-      if (response.success) {
+      if (response.success && !response.noMore) {
         dispatch({
           type: GET_FILES_SUCCESS,
           payload: response.data,
         });
-      } else {
+      } else if (response.successs) {
         dispatch({
           type: GET_FILES_FAIL,
         });
         dispatch(setDialog('error', { errors: response.errors }));
       }
       dispatch(setFilesLoaded(true));
-      return { success: true };
+      return { success: true, noMore: response.noMore };
     } catch (error) {
       dispatch({
         type: GET_FILES_FAIL,

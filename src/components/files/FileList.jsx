@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { formId } from '../../config/config';
-import { deleteFile, getAllFiles, addDuration, addSize } from '../../actions/files';
+import {
+  deleteFile,
+  getAllFiles,
+  addDuration,
+  addSize,
+} from '../../actions/files';
 import { setDialog } from '../../actions/dialog';
 import ListItem from './ListItem';
 
@@ -12,27 +17,63 @@ import '../../styles/Files.css';
 const FileList = (props) => {
   const dispatch = useDispatch();
   const { files } = props;
-  const filesArray = Object.values(files);
+  const [offset, setOffSet] = useState(0);
+  const [limit, setLimit] = useState(6);
 
+  const filesArray = Object.values(files);
+  const toDisplay = filesArray.slice(offset, limit);
   const [isLoading, setLoading] = useState(false);
+  const [noMore, setNoMore] = useState(false);
+
+  const [scrollPosition, setScrollPosition] = useState();
+
   const handleScroll = () => {
-    if (
-      window.innerHeight
-      + document.documentElement.scrollTop !== document.documentElement.offsetHeight
-    ) return;
-    setLoading(true);
+    const position = window.pageYOffset;
+    setScrollPosition(position);
   };
 
   const loadMoreFiles = () => {
-    setLoading(true);
-    dispatch(getAllFiles(filesArray.length, 10)).then((response) => {
-      if (response.success) setLoading(false);
-    });
+    if (limit > filesArray.length) {
+      dispatch(getAllFiles(filesArray.length, 6)).then((response) => {
+        if (response.success) {
+          setLoading(false);
+          setNoMore(response.noMore);
+        }
+      });
+    } else {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Scrolled to top of the page
+    if (window.scrollY === 0) {
+      if (offset > 0 && limit > 18) {
+        setOffSet(offset - 6);
+        setLimit(limit - 6);
+      }
+    }
+    // Scrolled to bottom of the page
+    if (
+      window.innerHeight
+      + document.documentElement.scrollTop === document.documentElement.offsetHeight
+    ) {
+      if (limit <= filesArray.length) {
+        setOffSet(offset + parseInt(limit / 18, 10) * 6);
+        setLimit(limit + 6);
+      }
+      if (!noMore) {
+        setLoading(true);
+      }
+    }
+  }, [scrollPosition]);
+
+  useLayoutEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -83,7 +124,7 @@ const FileList = (props) => {
           </tr>
         </thead>
         <tbody>
-          {filesArray.map((item) => (
+          {toDisplay.map((item) => (
             <ListItem
               key={item.submissionId}
               handleClick={handleClick}

@@ -24,6 +24,10 @@ const ListItem = (props) => {
     duration,
   } = entity;
 
+  const addSize = () => {
+    props.addSize(submissionId, entity.url);
+  };
+
   const handleClick = (event) => {
     props.handleClick(Array.from(event.target.classList), submissionId);
   };
@@ -38,16 +42,8 @@ const ListItem = (props) => {
   };
 
   const onReady = (playerDuration) => {
-    props.onReady(submissionId, prettyMilliseconds(playerDuration * 1000));
+    if (!duration) props.onReady(submissionId, prettyMilliseconds(playerDuration * 1000));
   };
-
-  const addSize = () => {
-    props.addSize(submissionId, entity.url);
-  };
-
-  useEffect(() => {
-    addSize();
-  }, []);
 
   const getDurationValue = () => {
     if (fileType === 'Video/Audio') {
@@ -67,8 +63,14 @@ const ListItem = (props) => {
     return <Spinner modified />;
   };
 
+  useEffect(() => {
+    if (!size) {
+      addSize();
+    }
+  }, []);
+
   return (
-    <tr onClick={(event) => handleClick(event)}>
+    <tr id={submissionId} onClick={(event) => handleClick(event)}>
       <td>
         {nameSurname}
       </td>

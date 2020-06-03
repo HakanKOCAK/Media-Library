@@ -14,8 +14,11 @@ export default async function getFiles(offset, limit) {
 
     const res = await axios.get(`https://api.jotform.com/form/${formId}/submissions`, config);
     if (res.data.responseCode === 200) {
-      const content = { ...res.data.content };
-      const answers = await getAnswers(Object.values(content));
+      const content = [...res.data.content];
+      if (!content.length) {
+        return { success: true, noMore: true };
+      }
+      const answers = await getAnswers(content);
 
 
       const updatedAnswers = (data) => {
@@ -33,7 +36,7 @@ export default async function getFiles(offset, limit) {
 
       const answersWithNames = { ...updatedAnswers({ ...answers }) };
 
-      return { success: true, data: answersWithNames };
+      return { success: true, data: answersWithNames, noMore: false };
     }
     const errors = [];
     errors.push(res.data.message);
