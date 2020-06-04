@@ -19,7 +19,7 @@ const FileList = (props) => {
   const dispatch = useDispatch();
   const { files } = props;
 
-  const totalDisplayedEntries = 18;
+  // const totalDisplayedEntries = 18;
   const increaseDecreaseBy = 6;
   const numberOfNewEntries = 12;
   const [limitAndOffset, setLimitAndOffset] = useState({
@@ -46,7 +46,6 @@ const FileList = (props) => {
       dispatch(getAllFiles(filesArray.length, numberOfNewEntries)).then((response) => {
         if (response.success) {
           setLoading(false);
-          console.log(response);
           setNoMore(response.noMore);
         }
       });
@@ -65,11 +64,12 @@ const FileList = (props) => {
     //     offset: prev.offset - increaseDecreaseBy,
     //     limit: prev.limit - increaseDecreaseBy,
     //   }));
-    // } else
+    // }
 
     if (
       window.innerHeight
       + document.documentElement.scrollTop === document.documentElement.offsetHeight
+      && !isLoading
     ) {
       if (limitAndOffset.limit <= filesArray.length) {
         // const updatedOffset = () => {
@@ -87,7 +87,7 @@ const FileList = (props) => {
         }
       }
     }
-  }, [scrollPosition]);
+  }, [scrollPosition, isLoading]);
 
   useLayoutEffect(() => {
     const debounceWrapper = debounce(handleScroll, 300);
@@ -131,7 +131,6 @@ const FileList = (props) => {
   };
 
   const notificationMessage = () => {
-    console.log('notMes', noMore);
     if (isLoading) {
       return (
         <div style={{ textAlign: 'center' }}>
