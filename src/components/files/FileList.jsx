@@ -72,15 +72,14 @@ const FileList = (props) => {
         setLoading(true);
       }
       if (limitAndOffset.limit <= filesArray.length) {
-        const updatedOffset = () => {
-          if (limitAndOffset.limit / totalDisplayedEntries >= 1) {
-            return limitAndOffset.offset + increaseDecreaseBy;
-          }
-          return limitAndOffset.offset;
-        };
+        // const updatedOffset = () => {
+        //   if (limitAndOffset.limit / totalDisplayedEntries >= 1) {
+        //     return limitAndOffset.offset + increaseDecreaseBy;
+        //   }
+        //   return limitAndOffset.offset;
+        // };
 
         setLimitAndOffset((prev) => ({
-          offset: updatedOffset(),
           limit: prev.limit + increaseDecreaseBy,
         }));
       }
