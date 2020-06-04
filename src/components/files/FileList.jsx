@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { debounce } from 'lodash';
 import PropTypes from 'prop-types';
-import { formId } from '../../config/config';
 import {
   deleteFile,
   getAllFiles,
@@ -17,63 +17,82 @@ import '../../styles/Files.css';
 const FileList = (props) => {
   const dispatch = useDispatch();
   const { files } = props;
-  const [offset, setOffSet] = useState(0);
-  const [limit, setLimit] = useState(6);
 
+  const totalDisplayedEntries = 18;
+  const increaseDecreaseBy = 6;
+  const numberOfNewEntries = 12;
+  const [limitAndOffset, setLimitAndOffset] = useState({
+    offset: 0,
+    limit: 6,
+  });
   const filesArray = Object.values(files);
-  const toDisplay = filesArray.slice(offset, limit);
   const [isLoading, setLoading] = useState(false);
   const [noMore, setNoMore] = useState(false);
-  const [scrollPosition, setScrollPosition] = useState();
+  const [scrollPosition, setScrollPosition] = useState({
+    y: window.scrollY,
+    direction: '',
+  });
 
   const handleScroll = () => {
-    const position = window.pageYOffset;
-    setScrollPosition(position);
+    setScrollPosition((prev) => ({
+      y: window.scrollY,
+      direction: prev.y > window.scrollY ? 'up' : 'down',
+    }));
   };
 
   const loadMoreFiles = () => {
-    if (limit > filesArray.length) {
-      dispatch(getAllFiles(filesArray.length, 12)).then((response) => {
+    if (limitAndOffset.limit > filesArray.length && !noMore) {
+      dispatch(getAllFiles(filesArray.length, numberOfNewEntries)).then((response) => {
         if (response.success) {
           setLoading(false);
           setNoMore(response.noMore);
         }
       });
-    } else {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
     // Scrolled to top of the page
-    if (window.scrollY === 0) {
-      if (offset > 0 && limit > 18) {
-        setOffSet(offset - 6);
-        setLimit(limit - 6);
-      }
-    }
-    // Scrolled to bottom of the page
+    // if (
+    //   scrollPosition.direction === 'up'
+    //   && limitAndOffset.limit > totalDisplayedEntries
+    // ) {
+    //   setLimitAndOffset((prev) => ({
+    //     offset: prev.offset - increaseDecreaseBy,
+    //     limit: prev.limit - increaseDecreaseBy,
+    //   }));
+    // } else
+
     if (
       window.innerHeight
       + document.documentElement.scrollTop === document.documentElement.offsetHeight
     ) {
-      if (limit <= filesArray.length) {
-        if (limit / 18 >= 1) {
-          setOffSet(offset + 6);
-        }
-        setLimit(limit + 6);
-      }
       if (!noMore) {
         setLoading(true);
+      }
+      if (limitAndOffset.limit <= filesArray.length) {
+        const updatedOffset = () => {
+          if (limitAndOffset.limit / totalDisplayedEntries >= 1) {
+            return limitAndOffset.offset + increaseDecreaseBy;
+          }
+          return limitAndOffset.offset;
+        };
+
+        setLimitAndOffset((prev) => ({
+          offset: updatedOffset(),
+          limit: prev.limit + increaseDecreaseBy,
+        }));
       }
     }
   }, [scrollPosition]);
 
   useLayoutEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    const debounceWrapper = debounce(handleScroll, 300);
+    window.addEventListener('scroll', debounceWrapper);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', debounceWrapper);
     };
   }, []);
 
@@ -125,7 +144,7 @@ const FileList = (props) => {
           </tr>
         </thead>
         <tbody>
-          {toDisplay.map((item) => (
+          {filesArray.slice(limitAndOffset.offset, limitAndOffset.limit).map((item) => (
             <ListItem
               key={item.submissionId}
               handleClick={handleClick}
@@ -138,14 +157,6 @@ const FileList = (props) => {
           ))}
         </tbody>
       </table>
-      <a
-        rel="noopener noreferrer"
-        target="_blank"
-        href={`https://form.jotform.com/${formId}`}
-        className="new-link"
-      >
-        New File
-      </a>
     </>
   );
 };
