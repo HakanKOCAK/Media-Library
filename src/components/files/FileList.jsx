@@ -13,6 +13,7 @@ import { setDialog } from '../../actions/dialog';
 import ListItem from './ListItem';
 
 import '../../styles/Files.css';
+import Spinner from '../spinner/Spinner';
 
 const FileList = (props) => {
   const dispatch = useDispatch();
@@ -41,15 +42,17 @@ const FileList = (props) => {
   };
 
   const loadMoreFiles = () => {
-    if (limitAndOffset.limit > filesArray.length && !noMore) {
+    if (limitAndOffset.limit >= filesArray.length) {
       dispatch(getAllFiles(filesArray.length, numberOfNewEntries)).then((response) => {
         if (response.success) {
           setLoading(false);
+          console.log(response);
           setNoMore(response.noMore);
         }
       });
+    } else {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -68,9 +71,6 @@ const FileList = (props) => {
       window.innerHeight
       + document.documentElement.scrollTop === document.documentElement.offsetHeight
     ) {
-      if (!noMore) {
-        setLoading(true);
-      }
       if (limitAndOffset.limit <= filesArray.length) {
         // const updatedOffset = () => {
         //   if (limitAndOffset.limit / totalDisplayedEntries >= 1) {
@@ -78,10 +78,13 @@ const FileList = (props) => {
         //   }
         //   return limitAndOffset.offset;
         // };
-
         setLimitAndOffset((prev) => ({
           limit: prev.limit + increaseDecreaseBy,
         }));
+
+        if (!noMore) {
+          setLoading(true);
+        }
       }
     }
   }, [scrollPosition]);
@@ -127,6 +130,34 @@ const FileList = (props) => {
     }
   };
 
+  const notificationMessage = () => {
+    console.log('notMes', noMore);
+    if (isLoading) {
+      return (
+        <div style={{ textAlign: 'center' }}>
+          <Spinner modified />
+        </div>
+      );
+    }
+
+    if (noMore) {
+      return (
+        <span
+          style={{ fontSize: '10px', display: 'block', textAlign: 'center' }}
+        >
+          No more files
+        </span>
+      );
+    }
+    return (
+      <span
+        style={{ fontSize: '10px', display: 'block', textAlign: 'center' }}
+      >
+        Scroll down to load more
+      </span>
+    );
+  };
+
   return (
     <>
       <table className="table">
@@ -156,6 +187,7 @@ const FileList = (props) => {
           ))}
         </tbody>
       </table>
+      {notificationMessage()}
     </>
   );
 };
