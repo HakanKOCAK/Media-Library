@@ -50,3 +50,17 @@
   max-height: 25px;
   background-color: transparent;
 }
+
+.search-bar{
+  height: 30px;
+  border-radius: 10px;
+  border: 0.5px var(--dark-color) solid;
+  width: 250px;
+  padding: 5px;
+}
+
+.search-bar:focus{
+  outline: none;
+   border-radius: 10px;
+  box-shadow: 0px 0px 2px #0066ff;
+}

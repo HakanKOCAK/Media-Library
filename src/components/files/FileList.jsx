@@ -52,6 +52,26 @@ const FileList = (props) => {
     sortBy: {},
   });
 
+  const [searchTag, setSearchTag] = useState('');
+
+  useEffect(() => {
+    if (searchTag) {
+      const filteredElements = [];
+      filesArray.slice(limitAndOffset.offset, limitAndOffset.limit).forEach((submission) => {
+        const tags = Object.values(submission.entity.tags);
+        tags.forEach((t) => {
+          if (t.tag.toLowerCase().includes(searchTag.toLowerCase())) {
+            filteredElements.push(submission);
+          }
+        });
+      });
+
+      setToDisplay(filteredElements);
+    } else {
+      setToDisplay(filesArray.slice(limitAndOffset.offset, limitAndOffset.limit));
+    }
+  }, [searchTag, filesArray, limitAndOffset]);
+
   const handleScroll = () => {
     setScrollPosition((prev) => ({
       y: window.scrollY,
@@ -238,6 +258,15 @@ const FileList = (props) => {
 
   return (
     <>
+      <div style={{ textAlign: 'center', marginTop: '10px' }}>
+        <input
+          type="text"
+          className="search-bar"
+          value={searchTag}
+          placeholder="Search a tag"
+          onChange={(event) => (setSearchTag(event.target.value))}
+        />
+      </div>
       <table className="table">
         <thead>
           <tr>
