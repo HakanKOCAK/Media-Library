@@ -88,22 +88,22 @@ export default function (state = initialState, action) {
       };
     }
     case ADD_DURATION: {
-      const { submissionId, realDuration, prettifiedDuration } = payload;
+      const { submissionId, duration, prettifiedDuration } = payload;
       const entities = { ...state.entities };
       if (entities[submissionId]) {
         entities[submissionId].entity.prettifiedDuration = prettifiedDuration;
-        entities[submissionId].entity.realDuration = realDuration;
+        entities[submissionId].entity.duration = duration;
       }
       return {
         entities,
       };
     }
     case ADD_SIZE: {
-      const { submissionId, realSize, prettifiedSize } = payload;
+      const { submissionId, size, prettifiedSize } = payload;
       const entities = { ...state.entities };
       if (entities[submissionId]) {
         entities[submissionId].entity.prettifiedSize = prettifiedSize;
-        entities[submissionId].entity.realSize = realSize;
+        entities[submissionId].entity.size = size;
       }
       return {
         entities,

@@ -121,8 +121,8 @@ const FileList = (props) => {
     loadMoreFiles();
   }, [isLoading]);
 
-  const onReady = (submissionId, realDuration, prettifiedDuration) => {
-    dispatch(addDuration({ submissionId, realDuration, prettifiedDuration }));
+  const onReady = (submissionId, duration, prettifiedDuration) => {
+    dispatch(addDuration({ submissionId, duration, prettifiedDuration }));
   };
 
   const addFileSize = (submissionId, url) => {
@@ -146,20 +146,23 @@ const FileList = (props) => {
     let sortOrder = 1;
     if (order === 'decrease') sortOrder = -1;
     return (a, b) => {
-      const updatedSortBy = `real${property.slice(0, 1).toUpperCase()}${property.slice(1, property.length)}`;
-      const updatedA = { ...a };
-      const updatedB = { ...b };
+      let sortedValA = a.entity[property];
+      let sortedValB = b.entity[property];
+      if (property === 'date') {
+        sortedValA = a.uploadDate.split('').reverse().join('');
+        sortedValB = b.uploadDate.split('').reverse().join('');
+      }
       let val1;
       let val2;
-      if (!updatedA.entity[updatedSortBy]) {
+      if (!sortedValA) {
         val1 = 0;
       } else {
-        val1 = updatedA.entity[updatedSortBy];
+        val1 = sortedValA;
       }
-      if (!updatedB.entity[updatedSortBy]) {
+      if (!sortedValB) {
         val2 = 0;
       } else {
-        val2 = updatedB.entity[updatedSortBy];
+        val2 = sortedValB;
       }
 
       const getResult = () => {
@@ -240,7 +243,24 @@ const FileList = (props) => {
           <tr>
             <th>Name Surname</th>
             <th>E-mail</th>
-            <th>Upload Date</th>
+            <th
+              className="clickable"
+              onClick={() => onHeaderClick('date')}
+            >
+              Upload Date
+              <FontAwesomeIcon
+                style={
+                  { opacity: `${filter.active.date && filter.sortBy.date === 'increase' ? '1' : '0'}` }
+                }
+                icon={faArrowDown}
+                size="1x"
+              />
+              <FontAwesomeIcon
+                style={{ opacity: `${filter.active.date && filter.sortBy.date === 'decrease' ? '1' : '0'}` }}
+                icon={faArrowUp}
+                size="1x"
+              />
+            </th>
             <th>File Name</th>
             <th>File Type</th>
             <th
