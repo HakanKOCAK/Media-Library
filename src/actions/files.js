@@ -98,10 +98,10 @@ export function deleteTag({ submissionId, tagId }) {
   };
 }
 
-export function addDuration({ submissionId, duration }) {
+export function addDuration({ submissionId, realDuration, prettifiedDuration }) {
   return {
     type: ADD_DURATION,
-    payload: { submissionId, duration },
+    payload: { submissionId, realDuration, prettifiedDuration },
   };
 }
 
@@ -117,7 +117,7 @@ export function addSize(submissionId, url) {
       const { size } = resp.data;
       dispatch({
         type: ADD_SIZE,
-        payload: { submissionId, size: pretty(size, false, false, 2) },
+        payload: { submissionId, realSize: size, prettifiedSize: pretty(size, false, false, 2) },
       });
     } catch (error) {
       dispatch({

@@ -20,8 +20,8 @@ const ListItem = (props) => {
 
   const {
     fileName,
-    size,
-    duration,
+    prettifiedSize: size,
+    prettifiedDuration: duration,
   } = entity;
 
   const addSize = () => {
@@ -42,7 +42,7 @@ const ListItem = (props) => {
   };
 
   const onReady = (playerDuration) => {
-    if (!duration) props.onReady(submissionId, prettyMilliseconds(playerDuration * 1000));
+    if (!duration) props.onReady(submissionId, playerDuration, prettyMilliseconds(playerDuration * 1000));
   };
 
   const getDurationValue = () => {
@@ -119,8 +119,8 @@ ListItem.propTypes = {
     entity: PropTypes.shape({
       fileName: PropTypes.string.isRequired,
       url: PropTypes.string.isRequired,
-      size: PropTypes.string,
-      duration: PropTypes.string,
+      prettifiedSize: PropTypes.string,
+      prettifiedDuration: PropTypes.string,
     }).isRequired,
     fileType: PropTypes.string.isRequired,
   }).isRequired,

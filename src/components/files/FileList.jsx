@@ -2,6 +2,8 @@ import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { debounce } from 'lodash';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import {
   deleteFile,
@@ -26,12 +28,28 @@ const FileList = (props) => {
     offset: 0,
     limit: 6,
   });
-  const filesArray = Object.values(files);
+
+  const [filesArray, setFilesArray] = useState([]);
+  const [toDisplay, setToDisplay] = useState([]);
+
+  useEffect(() => {
+    setFilesArray(Object.values(files));
+  }, [files]);
+
+  useEffect(() => {
+    setToDisplay(filesArray.slice(limitAndOffset.offset, limitAndOffset.limit));
+  }, [filesArray, limitAndOffset]);
+
   const [isLoading, setLoading] = useState(false);
   const [noMore, setNoMore] = useState(false);
   const [scrollPosition, setScrollPosition] = useState({
     y: window.scrollY,
     direction: '',
+  });
+
+  const [filter, setFilter] = useState({
+    active: {},
+    sortBy: {},
   });
 
   const handleScroll = () => {
@@ -103,8 +121,8 @@ const FileList = (props) => {
     loadMoreFiles();
   }, [isLoading]);
 
-  const onReady = (submissionId, duration) => {
-    dispatch(addDuration({ submissionId, duration }));
+  const onReady = (submissionId, realDuration, prettifiedDuration) => {
+    dispatch(addDuration({ submissionId, realDuration, prettifiedDuration }));
   };
 
   const addFileSize = (submissionId, url) => {
@@ -122,6 +140,64 @@ const FileList = (props) => {
       func: deleteFile(submissionId),
       isAuthRequired: true,
     }));
+  };
+
+  const sortByProperty = (property, order) => {
+    let sortOrder = 1;
+    if (order === 'decrease') sortOrder = -1;
+    return (a, b) => {
+      const updatedSortBy = `real${property.slice(0, 1).toUpperCase()}${property.slice(1, property.length)}`;
+      const updatedA = { ...a };
+      const updatedB = { ...b };
+      let val1;
+      let val2;
+      if (!updatedA.entity[updatedSortBy]) {
+        val1 = 0;
+      } else {
+        val1 = updatedA.entity[updatedSortBy];
+      }
+      if (!updatedB.entity[updatedSortBy]) {
+        val2 = 0;
+      } else {
+        val2 = updatedB.entity[updatedSortBy];
+      }
+
+      const getResult = () => {
+        if (val1 < val2) return -1;
+        if (val1 > val2) return 1;
+        return 0;
+      };
+
+      const result = getResult();
+      return result * sortOrder;
+    };
+  };
+
+  const sortingFunction = (types, orders) => (obj1, obj2) => {
+    let i = 0;
+    let result = 0;
+    const numberOfProperties = types.length;
+    while (result === 0 && i < numberOfProperties) {
+      result = sortByProperty(types[i], orders[i])(obj1, obj2);
+      i += 1;
+    }
+    return result;
+  };
+
+  const onHeaderClick = (clickedHeader) => {
+    const active = { ...filter.active };
+    if (!active[clickedHeader]) active[clickedHeader] = true;
+
+    const sortBy = { ...filter.sortBy };
+    if (sortBy[clickedHeader] === 'increase') {
+      sortBy[clickedHeader] = 'decrease';
+    } else {
+      sortBy[clickedHeader] = 'increase';
+    }
+    setToDisplay(toDisplay.sort(
+      sortingFunction(Object.keys(sortBy), Object.values(sortBy)),
+    ));
+    setFilter((prev) => ({ ...prev, active, sortBy }));
   };
 
   const handleClick = (classList, submissionId) => {
@@ -167,13 +243,43 @@ const FileList = (props) => {
             <th>Upload Date</th>
             <th>File Name</th>
             <th>File Type</th>
-            <th>File Size</th>
-            <th>Duration</th>
+            <th
+              className="clickable"
+              onClick={() => onHeaderClick('size')}
+            >
+              File Size
+              <FontAwesomeIcon
+                style={{ opacity: `${filter.active.size && filter.sortBy.size === 'increase' ? '1' : '0'}` }}
+                icon={faArrowDown}
+                size="1x"
+              />
+              <FontAwesomeIcon
+                style={{ opacity: `${filter.active.size && filter.sortBy.size === 'decrease' ? '1' : '0'}` }}
+                icon={faArrowUp}
+                size="1x"
+              />
+            </th>
+            <th
+              className="clickable"
+              onClick={() => onHeaderClick('duration')}
+            >
+              Duration
+              <FontAwesomeIcon
+                style={{ opacity: `${filter.active.duration && filter.sortBy.duration === 'increase' ? '1' : '0'}` }}
+                icon={faArrowDown}
+                size="1x"
+              />
+              <FontAwesomeIcon
+                style={{ opacity: `${filter.active.duration && filter.sortBy.duration === 'decrease' ? '1' : '0'}` }}
+                icon={faArrowUp}
+                size="1x"
+              />
+            </th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {filesArray.slice(limitAndOffset.offset, limitAndOffset.limit).map((item) => (
+          {toDisplay.slice(limitAndOffset.offset, limitAndOffset.limit).map((item) => (
             <ListItem
               key={item.submissionId}
               handleClick={handleClick}
