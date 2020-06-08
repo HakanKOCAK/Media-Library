@@ -36,10 +36,6 @@ const FileList = (props) => {
     setFilesArray(Object.values(files));
   }, [files]);
 
-  useEffect(() => {
-    setToDisplay(filesArray.slice(limitAndOffset.offset, limitAndOffset.limit));
-  }, [filesArray, limitAndOffset]);
-
   const [isLoading, setLoading] = useState(false);
   const [noMore, setNoMore] = useState(false);
   const [scrollPosition, setScrollPosition] = useState({
@@ -296,6 +292,20 @@ const FileList = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (Object.values(filter.active).filter((property) => property).length > 0) {
+      const newSortBy = {};
+      Object.entries(filter.active).forEach(([key, value]) => {
+        if (value) newSortBy[key] = filter.sortBy[key];
+      });
+      setToDisplay(filesArray.slice(limitAndOffset.offset, limitAndOffset.limit).sort(
+        sortingFunction(Object.keys(newSortBy), Object.values(newSortBy)),
+      ));
+    } else {
+      setToDisplay(filesArray.slice(limitAndOffset.offset, limitAndOffset.limit));
+    }
+  }, [filesArray, limitAndOffset]);
+
   const notificationMessage = () => {
     if (isLoading) {
       return (
@@ -345,7 +355,7 @@ const FileList = (props) => {
             >
               Upload Date
               {' '}
-              {`${filter.active.date ? filter.priority.indexOf('date') + 1 : ''}`}
+              {`${filter.active.date ? `(${filter.priority.indexOf('date') + 1})` : ''}`}
               {' '}
               {getArrowType('date')}
             </th>
@@ -357,7 +367,7 @@ const FileList = (props) => {
             >
               File Size
               {' '}
-              {`${filter.active.size ? filter.priority.indexOf('size') + 1 : ''}`}
+              {`${filter.active.size ? `(${filter.priority.indexOf('size') + 1})` : ''}`}
               {' '}
               {getArrowType('size')}
             </th>
@@ -367,7 +377,7 @@ const FileList = (props) => {
             >
               Duration
               {' '}
-              {`${filter.active.duration ? filter.priority.indexOf('duration') + 1 : ''}`}
+              {`${filter.active.duration ? `(${filter.priority.indexOf('duration') + 1})` : ''}`}
               {' '}
               {getArrowType('duration')}
             </th>
