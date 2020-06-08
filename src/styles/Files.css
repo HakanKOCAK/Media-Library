@@ -26,6 +26,7 @@
 }
 
 .clickable{
+  text-decoration: underline;
   min-width: 145px;
   cursor: pointer !important;
 }
