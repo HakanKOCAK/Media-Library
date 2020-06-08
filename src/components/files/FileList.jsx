@@ -58,12 +58,22 @@ const FileList = (props) => {
     if (searchTag) {
       const filteredElements = [];
       filesArray.slice(limitAndOffset.offset, limitAndOffset.limit).forEach((submission) => {
-        const tags = Object.values(submission.entity.tags);
-        tags.forEach((t) => {
-          if (t.tag.toLowerCase().includes(searchTag.toLowerCase())) {
-            filteredElements.push(submission);
-          }
-        });
+        let flag = false;
+        if (
+          submission.nameSurname.toLowerCase().includes(searchTag.toLowerCase())
+          || submission.email.toLowerCase().includes(searchTag.toLowerCase())
+        ) {
+          filteredElements.push(submission);
+          flag = true;
+        }
+        if (!flag) {
+          const tags = Object.values(submission.entity.tags);
+          tags.forEach((t) => {
+            if (t.tag.toLowerCase().includes(searchTag.toLowerCase())) {
+              filteredElements.push(submission);
+            }
+          });
+        }
       });
 
       setToDisplay(filteredElements);
@@ -260,10 +270,10 @@ const FileList = (props) => {
     <>
       <div style={{ textAlign: 'center', marginTop: '10px' }}>
         <input
-          type="text"
+          type="search"
           className="search-bar"
           value={searchTag}
-          placeholder="Search a tag"
+          placeholder="Search (tag, name, email)"
           onChange={(event) => (setSearchTag(event.target.value))}
         />
       </div>
