@@ -47,6 +47,7 @@ const FileList = (props) => {
     direction: '',
   });
 
+  // 0 = decrease , 1 = increase, 2 = no sort
   const [filter, setFilter] = useState({
     active: {},
     sortBy: {},
@@ -217,19 +218,54 @@ const FileList = (props) => {
     return result;
   };
 
+  const getArrowType = (type) => {
+    const sortBy = { ...filter.sortBy };
+    if (sortBy[type] === 'increase') {
+      return (
+        <FontAwesomeIcon
+          icon={faArrowDown}
+          size="1x"
+        />
+      );
+    }
+
+    if (sortBy[type] === 'decrease') {
+      return (
+        <FontAwesomeIcon
+          icon={faArrowUp}
+          size="1x"
+        />
+      );
+    }
+
+    return '-';
+  };
+
   const onHeaderClick = (clickedHeader) => {
     const active = { ...filter.active };
     if (!active[clickedHeader]) active[clickedHeader] = true;
 
     const sortBy = { ...filter.sortBy };
-    if (sortBy[clickedHeader] === 'increase') {
+    if (!sortBy[clickedHeader]) {
+      sortBy[clickedHeader] = 'increase';
+    } else if (sortBy[clickedHeader] === 'increase') {
       sortBy[clickedHeader] = 'decrease';
     } else {
-      sortBy[clickedHeader] = 'increase';
+      active[clickedHeader] = false;
+      sortBy[clickedHeader] = '';
     }
-    setToDisplay(toDisplay.sort(
-      sortingFunction(Object.keys(sortBy), Object.values(sortBy)),
-    ));
+    if (Object.values(active).filter((property) => property).length > 0) {
+      const newSortBy = {};
+      Object.entries(active).forEach(([key, value]) => {
+        if (value) newSortBy[key] = sortBy[key];
+      });
+      setToDisplay(toDisplay.sort(
+        sortingFunction(Object.keys(newSortBy), Object.values(newSortBy)),
+      ));
+    } else {
+      setToDisplay(filesArray.slice(limitAndOffset.offset, limitAndOffset.limit));
+    }
+
     setFilter((prev) => ({ ...prev, active, sortBy }));
   };
 
@@ -287,18 +323,8 @@ const FileList = (props) => {
               onClick={() => onHeaderClick('date')}
             >
               Upload Date
-              <FontAwesomeIcon
-                style={
-                  { opacity: `${filter.active.date && filter.sortBy.date === 'increase' ? '1' : '0'}` }
-                }
-                icon={faArrowDown}
-                size="1x"
-              />
-              <FontAwesomeIcon
-                style={{ opacity: `${filter.active.date && filter.sortBy.date === 'decrease' ? '1' : '0'}` }}
-                icon={faArrowUp}
-                size="1x"
-              />
+              {' '}
+              {getArrowType('date')}
             </th>
             <th>File Name</th>
             <th>File Type</th>
@@ -307,32 +333,16 @@ const FileList = (props) => {
               onClick={() => onHeaderClick('size')}
             >
               File Size
-              <FontAwesomeIcon
-                style={{ opacity: `${filter.active.size && filter.sortBy.size === 'increase' ? '1' : '0'}` }}
-                icon={faArrowDown}
-                size="1x"
-              />
-              <FontAwesomeIcon
-                style={{ opacity: `${filter.active.size && filter.sortBy.size === 'decrease' ? '1' : '0'}` }}
-                icon={faArrowUp}
-                size="1x"
-              />
+              {' '}
+              {getArrowType('size')}
             </th>
             <th
               className="clickable"
               onClick={() => onHeaderClick('duration')}
             >
               Duration
-              <FontAwesomeIcon
-                style={{ opacity: `${filter.active.duration && filter.sortBy.duration === 'increase' ? '1' : '0'}` }}
-                icon={faArrowDown}
-                size="1x"
-              />
-              <FontAwesomeIcon
-                style={{ opacity: `${filter.active.duration && filter.sortBy.duration === 'decrease' ? '1' : '0'}` }}
-                icon={faArrowUp}
-                size="1x"
-              />
+              {' '}
+              {getArrowType('duration')}
             </th>
             <th>Actions</th>
           </tr>
