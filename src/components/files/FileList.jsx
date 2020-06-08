@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { debounce } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faSortUp, faSortDown, faSort } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import {
   deleteFile,
@@ -223,7 +223,7 @@ const FileList = (props) => {
     if (sortBy[type] === 'increase') {
       return (
         <FontAwesomeIcon
-          icon={faArrowDown}
+          icon={faSortDown}
           size="1x"
         />
       );
@@ -232,13 +232,18 @@ const FileList = (props) => {
     if (sortBy[type] === 'decrease') {
       return (
         <FontAwesomeIcon
-          icon={faArrowUp}
+          icon={faSortUp}
           size="1x"
         />
       );
     }
 
-    return '-';
+    return (
+      <FontAwesomeIcon
+        icon={faSort}
+        size="1x"
+      />
+    );
   };
 
   const onHeaderClick = (clickedHeader) => {
