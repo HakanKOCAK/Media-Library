@@ -9,7 +9,7 @@ export default function normalizeResponse(question, submissionDetails, key) {
     case 'nameSurname':
       newSubmissionDetails = {
         ...newSubmissionDetails,
-        [questionName]: `${questionAnswer.first} ${questionAnswer.last}`,
+        [questionName]: `${questionAnswer.first.trim()} ${questionAnswer.last.trim()}`,
       };
       return newSubmissionDetails;
     case 'otherDoc':
