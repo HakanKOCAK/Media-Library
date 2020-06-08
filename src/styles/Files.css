@@ -22,12 +22,13 @@
 .table th{
   cursor: default;
   padding: 1rem;
+  font-size: 13px;
   text-align: left;
 }
 
 .clickable{
   text-decoration: underline;
-  min-width: 145px;
+  min-width: 130px;
   cursor: pointer !important;
 }
 

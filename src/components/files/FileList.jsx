@@ -47,10 +47,11 @@ const FileList = (props) => {
     direction: '',
   });
 
-  // 0 = decrease , 1 = increase, 2 = no sort
+  // 0 = ascending , 1 = descending, 2 = no sort
   const [filter, setFilter] = useState({
     active: {},
     sortBy: {},
+    priority: [],
   });
 
   const [searchTag, setSearchTag] = useState('');
@@ -175,7 +176,7 @@ const FileList = (props) => {
 
   const sortByProperty = (property, order) => {
     let sortOrder = 1;
-    if (order === 'decrease') sortOrder = -1;
+    if (order === 'descending') sortOrder = -1;
     return (a, b) => {
       let sortedValA = a.entity[property];
       let sortedValB = b.entity[property];
@@ -220,7 +221,7 @@ const FileList = (props) => {
 
   const getArrowType = (type) => {
     const sortBy = { ...filter.sortBy };
-    if (sortBy[type] === 'increase') {
+    if (sortBy[type] === 'ascending') {
       return (
         <FontAwesomeIcon
           icon={faSortDown}
@@ -229,7 +230,7 @@ const FileList = (props) => {
       );
     }
 
-    if (sortBy[type] === 'decrease') {
+    if (sortBy[type] === 'descending') {
       return (
         <FontAwesomeIcon
           icon={faSortUp}
@@ -248,16 +249,24 @@ const FileList = (props) => {
 
   const onHeaderClick = (clickedHeader) => {
     const active = { ...filter.active };
-    if (!active[clickedHeader]) active[clickedHeader] = true;
+    const priority = [...filter.priority];
+    if (!active[clickedHeader]) {
+      active[clickedHeader] = true;
+      if (!priority.includes(clickedHeader)) priority.push(clickedHeader);
+    }
 
     const sortBy = { ...filter.sortBy };
     if (!sortBy[clickedHeader]) {
-      sortBy[clickedHeader] = 'increase';
-    } else if (sortBy[clickedHeader] === 'increase') {
-      sortBy[clickedHeader] = 'decrease';
+      sortBy[clickedHeader] = 'ascending';
+    } else if (sortBy[clickedHeader] === 'ascending') {
+      sortBy[clickedHeader] = 'descending';
     } else {
       active[clickedHeader] = false;
       sortBy[clickedHeader] = '';
+      const index = priority.indexOf(clickedHeader);
+      if (index > -1) {
+        priority.splice(index, 1);
+      }
     }
     if (Object.values(active).filter((property) => property).length > 0) {
       const newSortBy = {};
@@ -271,7 +280,14 @@ const FileList = (props) => {
       setToDisplay(filesArray.slice(limitAndOffset.offset, limitAndOffset.limit));
     }
 
-    setFilter((prev) => ({ ...prev, active, sortBy }));
+    setFilter((prev) => (
+      {
+        ...prev,
+        active,
+        sortBy,
+        priority,
+      }
+    ));
   };
 
   const handleClick = (classList, submissionId) => {
@@ -329,6 +345,8 @@ const FileList = (props) => {
             >
               Upload Date
               {' '}
+              {`${filter.active.date ? filter.priority.indexOf('date') + 1 : ''}`}
+              {' '}
               {getArrowType('date')}
             </th>
             <th>File Name</th>
@@ -339,6 +357,8 @@ const FileList = (props) => {
             >
               File Size
               {' '}
+              {`${filter.active.size ? filter.priority.indexOf('size') + 1 : ''}`}
+              {' '}
               {getArrowType('size')}
             </th>
             <th
@@ -346,6 +366,8 @@ const FileList = (props) => {
               onClick={() => onHeaderClick('duration')}
             >
               Duration
+              {' '}
+              {`${filter.active.duration ? filter.priority.indexOf('duration') + 1 : ''}`}
               {' '}
               {getArrowType('duration')}
             </th>
