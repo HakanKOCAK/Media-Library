@@ -30,14 +30,14 @@ const Navbar = ({ user: { isAuthenticated, displayName } }) => {
             style={{ marginRight: '3px' }}
             icon={faUserCircle}
           />
-          <span>{displayName}</span>
+          <span className="navbar-profile-name">{displayName}</span>
         </Link>
       </li>
       <li>
         <Link to="/" onClick={(event) => logout(event)}>
           <FontAwesomeIcon icon={faSignOutAlt} />
           {' '}
-          <span>Signout</span>
+          <span className="navbar-logout">Signout</span>
         </Link>
       </li>
     </>

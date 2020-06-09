@@ -38,3 +38,20 @@
 .profile-div:hover{
     color:#17a2b8
 }
+
+.navbar-profile-name{
+  display: none;
+}
+
+.navbar-logout{
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+    .navbar-logout {
+        display: inherit;
+    }
+    .navbar-profile-name{
+        display: inherit;
+    }
+}
