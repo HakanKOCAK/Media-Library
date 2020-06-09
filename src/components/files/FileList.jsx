@@ -355,7 +355,7 @@ const FileList = (props) => {
               <button type="button" className="header-button" onClick={() => onHeaderClick('date')}>
                 Upload Date
                 {' '}
-                {`${filter.active.date ? `(${filter.priority.indexOf('date') + 1})` : ''}`}
+                {`${filter.active.date && filter.priority.length > 1 ? `(${filter.priority.indexOf('date') + 1})` : ''}`}
                 {' '}
                 {getArrowType('date')}
               </button>
@@ -368,7 +368,7 @@ const FileList = (props) => {
               <button type="button" className="header-button" onClick={() => onHeaderClick('size')}>
                 File Size
                 {' '}
-                {`${filter.active.size ? `(${filter.priority.indexOf('size') + 1})` : ''}`}
+                {`${filter.active.size && filter.priority.length > 1 ? `(${filter.priority.indexOf('size') + 1})` : ''}`}
                 {' '}
                 {getArrowType('size')}
               </button>
@@ -380,7 +380,7 @@ const FileList = (props) => {
               <button type="button" className="header-button" onClick={() => onHeaderClick('duration')}>
                 Duration
                 {' '}
-                {`${filter.active.duration ? `(${filter.priority.indexOf('duration') + 1})` : ''}`}
+                {`${filter.active.duration && filter.priority.length > 1 ? `(${filter.priority.indexOf('duration') + 1})` : ''}`}
                 {' '}
                 {getArrowType('duration')}
               </button>
