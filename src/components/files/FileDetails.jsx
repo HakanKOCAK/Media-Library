@@ -126,13 +126,13 @@ const FileDetails = (props) => {
   }
 
   return (
-    <>
+    <div role="dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
       <Link to="/files" className="link">
         <FontAwesomeIcon icon={faLongArrowAltLeft} size="lg" />
         <span className="mx-05">Back to Files</span>
       </Link>
-      <h1 className="h1">Details</h1>
-      <p className="p1">
+      <h1 id="dialog-title" className="h1">Details</h1>
+      <p id="dialog-description" className="p1">
         {`Submitted by ${name} at ${uploadDate}`}
       </p>
       {displayFile()}
@@ -146,7 +146,7 @@ const FileDetails = (props) => {
         onDeleteNewTag={onDeleteNewTag}
         type={type}
       />
-    </>
+    </div>
   );
 };
 

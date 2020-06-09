@@ -233,6 +233,8 @@ const EditableTags = (props) => {
               <div
                 key={tagId}
                 role="button"
+                onFocus={() => onEnter(tagId)}
+                onBlur={() => onLeave(tagId)}
                 tabIndex={0}
                 className={`tag ${visible[tagId] ? getTagClasses(tagId) : ''}`}
                 onMouseEnter={() => onEnter(tagId)}
@@ -243,7 +245,16 @@ const EditableTags = (props) => {
                 <div className="icon-container right">
                   {
                     (isNew || isEdited) && isFormatsValid(tagId)
-                      ? <FontAwesomeIcon className="icon" icon={faSave} size="1x" onClick={(event) => onSave(event, tagId)} />
+                      ? (
+                        <button
+                          type="button"
+                          className={`tag-button ${edit[tagId] ? 'edit-color' : ''}`}
+                          onClick={(event) => onSave(event, tagId)}
+                        >
+                          Save
+                          <FontAwesomeIcon icon={faSave} />
+                        </button>
+                      )
                       : null
                   }
                 </div>
@@ -252,6 +263,7 @@ const EditableTags = (props) => {
                   disabled={!edit[tagId]}
                   className={`tag-input ${visible[tagId] ? getInputBoxClasses(tagId) : ''}`}
                   name={`tag${tagId}`}
+                  placeholder="Tag name"
                   type="text"
                   value={tag}
                   onClick={(event) => { event.stopPropagation(); }}
@@ -261,38 +273,50 @@ const EditableTags = (props) => {
                   {
                     !edit[tagId]
                       ? (
-                        <FontAwesomeIcon
+                        <button
                           style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
-                          className="icon"
-                          icon={faEdit}
-                          size="1x"
+                          type="button"
+                          className={`tag-button ${edit[tagId] ? 'edit-color' : ''}`}
                           onClick={(event) => onEdit(event, tagId)}
-                        />
+                        >
+                          Edit
+                          <FontAwesomeIcon
+                            icon={faEdit}
+                          />
+                        </button>
                       )
                       : null
                   }
                   {
                     edit[tagId]
                       ? (
-                        <FontAwesomeIcon
+                        <button
+                          type="button"
                           style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
-                          className="icon"
-                          icon={faTimesCircle}
-                          size="1x"
+                          className={`tag-button ${edit[tagId] ? 'edit-color' : ''}`}
                           onClick={(event) => { onCancel(event, tagId); }}
-                        />
+                        >
+                          Cancel
+                          <FontAwesomeIcon
+                            icon={faTimesCircle}
+                          />
+                        </button>
                       )
                       : null
                   }
                   {
                     !isNew ? (
-                      <FontAwesomeIcon
+                      <button
+                        type="button"
                         style={visible[tagId] ? { opacity: '1' } : { opacity: '0' }}
-                        className="icon"
-                        icon={faTrashAlt}
-                        size="1x"
+                        className={`tag-button ${edit[tagId] ? 'edit-color' : ''}`}
                         onClick={(event) => { event.stopPropagation(); onDelete(tag, tagId); }}
-                      />
+                      >
+                        Del
+                        <FontAwesomeIcon
+                          icon={faTrashAlt}
+                        />
+                      </button>
                     )
                       : null
                   }
@@ -335,13 +359,15 @@ const EditableTags = (props) => {
         })}
         {
           !isNewTagExist() ? (
-            <div style={{ width: '210px', display: 'flex', justifyContent: 'center' }}>
-              <FontAwesomeIcon
-                style={{ marginTop: '5px' }}
-                icon={faPlusCircle}
-                size="lg"
-                onClick={() => onAdd()}
-              />
+            <div style={{ width: '220px', display: 'flex', justifyContent: 'center' }}>
+              <button type="button" className="new-tag-button" onClick={() => onAdd()}>
+                New Tag
+                <FontAwesomeIcon
+                  style={{ marginTop: '5px' }}
+                  icon={faPlusCircle}
+                  size="lg"
+                />
+              </button>
             </div>
           )
             : null

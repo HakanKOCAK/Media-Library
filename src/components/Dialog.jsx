@@ -81,16 +81,20 @@ const Dialog = (props) => {
   };
 
   return (
-    <div className="dialog-container">
-      {
-        isOpen && type && (
-          <div className="dialog-notification">
-            <span>{type.toUpperCase()}</span>
-            {displayDialog()}
-          </div>
-        )
-      }
-    </div>
+    isOpen && type && (
+      <div
+        role="alertdialog"
+        aria-labelledby="dialog-title"
+        className="dialog-container"
+        aria-modal="true"
+        aria-describedby="dialog-description"
+      >
+        <div className="dialog-notification">
+          <span id="dialog-title">{type.toUpperCase()}</span>
+          {displayDialog()}
+        </div>
+      </div>
+    )
   );
 };
 

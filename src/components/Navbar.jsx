@@ -56,12 +56,12 @@ const Navbar = ({ user: { isAuthenticated, displayName } }) => {
 
   return (
     <nav className="navbar bg-dark">
-      <h1>
+      <span style={{ fontSize: '25px' }}>
         <Link to="/">
           <FontAwesomeIcon icon={faTape} />
           Media Library
         </Link>
-      </h1>
+      </span>
       <ul>{isAuthenticated ? authLinks : guestLinks}</ul>
     </nav>
   );

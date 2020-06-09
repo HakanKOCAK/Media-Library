@@ -5,7 +5,6 @@ import Error from './Error';
 import submitLogin from '../actions/login';
 import { emailCheck } from '../Utils/regExp';
 import Spinner from './spinner/Spinner';
-import { setFilesLoaded } from '../actions/app';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -91,9 +90,9 @@ const Login = () => {
   };
 
   return (
-    <>
-      <h1 className="large text-primary">Sign In</h1>
-      <p className="lead">
+    <div role="dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
+      <h1 id="dialog-title" className="large text-primary">Sign In</h1>
+      <p id="dialog-description" className="lead">
         <i className="fas fa-user" />
         Sign Into Your Account
       </p>
@@ -101,6 +100,8 @@ const Login = () => {
         <div className="form-group">
           <input
             type="email"
+            aria-label="Email Adress"
+            aria-required="true"
             placeholder="Email Address"
             className={flags.EMAIL_FORMAT || flags.NO_ACCOUNT ? 'error' : ''}
             name="userEmail"
@@ -112,6 +113,8 @@ const Login = () => {
         <div className="form-group">
           <input
             type="password"
+            aria-label="Password"
+            aria-required="true"
             className={flags.INCORRECT_PASSWORD || flags.PASSWORD_LENGHT ? 'error' : ''}
             placeholder="Password"
             name="userPassword"
@@ -135,7 +138,7 @@ const Login = () => {
         Do not have an account?
         <Link to="/register">Sign Up</Link>
       </p>
-    </>
+    </div>
   );
 };
 

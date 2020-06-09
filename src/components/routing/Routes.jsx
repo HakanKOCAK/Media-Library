@@ -15,7 +15,7 @@ const Routes = (props) => {
   const { dialog } = props;
   const { isOpen } = dialog;
   return (
-    <section className={`container ${isOpen ? 'blur' : ''}`}>
+    <div className={`container ${isOpen ? 'blur' : ''}`} role="document" aria-hidden={isOpen}>
       <Switch>
         <PublicRoute exact path="/register" component={Register} />
         <PublicRoute exact path="/login" component={Login} />
@@ -25,7 +25,7 @@ const Routes = (props) => {
         <Route exact path="/error-404" component={NoMatch} />
         <Redirect from="*" to="/error-404" />
       </Switch>
-    </section>
+    </div>
   );
 };
 

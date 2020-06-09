@@ -8,8 +8,8 @@ import '../../styles/Files.css';
 const Files = (props) => {
   const { files } = props;
   return (
-    <>
-      <h1 className="h1">Files</h1>
+    <div role="dialog" aria-labelledby="dialog-title">
+      <h1 id="dialog-title" className="h1">Files</h1>
       <div className="new-link">
         <a
           rel="noopener noreferrer"
@@ -20,7 +20,7 @@ const Files = (props) => {
         </a>
       </div>
       <FileList files={files.entities} />
-    </>
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Spinner from './spinner/Spinner';
 
@@ -21,6 +21,12 @@ const Auth = (props) => {
     }
   }, [password]);
 
+  const passwordRef = useRef(null);
+
+  useEffect(() => {
+    passwordRef.current.focus();
+  }, []);
+
   const onConfirm = () => {
     setProgress(true);
     onConfirmDelete(password);
@@ -32,12 +38,15 @@ const Auth = (props) => {
 
   return (
     <>
-      <span className="dialog-msg">Please Enter Your Current Password</span>
+      <span id="dialog-description" className="dialog-msg">Please Enter Your Current Password</span>
       <input
         type="password"
         name="password"
+        aria-label="Current Password"
+        aria-required="true"
+        ref={passwordRef}
         className={flags.PASSWORD_LENGTH ? 'error' : ''}
-        placeholder="Password"
+        placeholder="Current Passoword"
         onChange={(event) => { event.preventDefault(); setPassword(event.target.value); }}
         value={password}
       />

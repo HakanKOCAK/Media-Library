@@ -5,7 +5,6 @@ import Error from './Error';
 import submitRegister from '../actions/register';
 import { nameSurnameCheck, emailCheck } from '../Utils/regExp';
 import Spinner from './spinner/Spinner';
-import { setFilesLoaded } from '../actions/app';
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -141,6 +140,8 @@ const Register = () => {
               type="text"
               placeholder="First Name"
               name="firstName"
+              aria-label="First Name"
+              aria-required="true"
               style={{ marginRight: '5px' }}
               className={flags.EMPTY_NAME ? 'error' : ''}
               value={firstName}
@@ -150,6 +151,7 @@ const Register = () => {
             <input
               type="text"
               placeholder="Second Name"
+              aria-label="Second Name"
               style={{ marginRight: '5px' }}
               name="secondName"
               value={secondName}
@@ -158,6 +160,8 @@ const Register = () => {
             <input
               type="text"
               placeholder="Surname"
+              aria-label="Surname"
+              aria-required="true"
               name="surname"
               className={flags.EMPTY_SURNAME ? 'error' : ''}
               value={surname}
@@ -170,6 +174,8 @@ const Register = () => {
           <input
             type="email"
             placeholder="Email Address"
+            aria-label="Email Adress"
+            aria-required="true"
             name="userEmail"
             className={flags.USER_EXIST || flags.EMAIL_FORMAT ? 'error' : ''}
             value={email}
@@ -181,6 +187,8 @@ const Register = () => {
           <input
             type="password"
             placeholder="Password"
+            aria-label="Password"
+            aria-required="true"
             name="userPassword"
             className={flags.PASSWORDS_DO_NOT_MATCH ? 'error' : ''}
             value={password}
@@ -193,6 +201,8 @@ const Register = () => {
           <input
             type="password"
             placeholder="Confirm Password"
+            aria-label="Confirm Password"
+            aria-required="true"
             name="userPassword2"
             className={flags.PASSWORDS_DO_NOT_MATCH ? 'error' : ''}
             value={password2}

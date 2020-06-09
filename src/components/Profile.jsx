@@ -78,8 +78,10 @@ const Profile = (props) => {
         <div className="form-group">
           <input
             type="password"
-            placeholder="Password"
+            placeholder="New Password"
             name="userPassword"
+            aria-label="New Password"
+            aria-required="true"
             className={flags.PASSWORDS_DO_NOT_MATCH ? 'error' : ''}
             value={password}
             onChange={(event) => onChange(event)}
@@ -91,6 +93,8 @@ const Profile = (props) => {
           <input
             type="password"
             placeholder="Confirm Password"
+            aria-label="Confirm Password"
+            aria-required="true"
             name="userPassword2"
             minLength="6"
             className={flags.PASSWORDS_DO_NOT_MATCH ? 'error' : ''}

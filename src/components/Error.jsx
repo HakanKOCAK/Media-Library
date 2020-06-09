@@ -6,7 +6,7 @@ import errorMessages from '../Utils/errors';
 const Error = (props) => {
   const { flags, isForTag } = props;
   return (
-    <div className="error-div">
+    <div id="dialog-description" className="error-div">
       {
         Object.keys(flags).map((key) => {
           const val = flags[key];

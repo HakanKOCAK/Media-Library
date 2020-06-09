@@ -351,35 +351,39 @@ const FileList = (props) => {
             <th>E-mail</th>
             <th
               className="clickable"
-              onClick={() => onHeaderClick('date')}
             >
-              Upload Date
-              {' '}
-              {`${filter.active.date ? `(${filter.priority.indexOf('date') + 1})` : ''}`}
-              {' '}
-              {getArrowType('date')}
+              <button type="button" className="header-button" onClick={() => onHeaderClick('date')}>
+                Upload Date
+                {' '}
+                {`${filter.active.date ? `(${filter.priority.indexOf('date') + 1})` : ''}`}
+                {' '}
+                {getArrowType('date')}
+              </button>
             </th>
             <th>File Name</th>
             <th>File Type</th>
             <th
               className="clickable"
-              onClick={() => onHeaderClick('size')}
             >
-              File Size
-              {' '}
-              {`${filter.active.size ? `(${filter.priority.indexOf('size') + 1})` : ''}`}
-              {' '}
-              {getArrowType('size')}
+              <button type="button" className="header-button" onClick={() => onHeaderClick('size')}>
+                File Size
+                {' '}
+                {`${filter.active.size ? `(${filter.priority.indexOf('size') + 1})` : ''}`}
+                {' '}
+                {getArrowType('size')}
+              </button>
             </th>
             <th
               className="clickable"
               onClick={() => onHeaderClick('duration')}
             >
-              Duration
-              {' '}
-              {`${filter.active.duration ? `(${filter.priority.indexOf('duration') + 1})` : ''}`}
-              {' '}
-              {getArrowType('duration')}
+              <button type="button" className="header-button" onClick={() => onHeaderClick('duration')}>
+                Duration
+                {' '}
+                {`${filter.active.duration ? `(${filter.priority.indexOf('duration') + 1})` : ''}`}
+                {' '}
+                {getArrowType('duration')}
+              </button>
             </th>
             <th>Actions</th>
           </tr>

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactPlayer from 'react-player';
-import { faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt, faEdit, faSearch } from '@fortawesome/free-solid-svg-icons';
 import prettyMilliseconds from 'pretty-ms';
 import Spinner from '../spinner/Spinner';
 
@@ -42,7 +42,9 @@ const ListItem = (props) => {
   };
 
   const onReady = (playerDuration) => {
-    if (!duration) props.onReady(submissionId, playerDuration, prettyMilliseconds(playerDuration * 1000));
+    if (!duration) {
+      props.onReady(submissionId, playerDuration, prettyMilliseconds(playerDuration * 1000));
+    }
   };
 
   const getDurationValue = () => {
@@ -99,10 +101,16 @@ const ListItem = (props) => {
 
       </td>
       <td className="toolbar">
+        <button type="button" className="icon" onClick={(event) => handleClick(event)}>
+          Details
+          <FontAwesomeIcon icon={faSearch} size="1x" />
+        </button>
         <button type="button" className="icon" onClick={(event) => onEdit(event)}>
+          Edit
           <FontAwesomeIcon icon={faEdit} size="1x" />
         </button>
         <button type="button" className="icon" onClick={(event) => { event.stopPropagation(); onDelete(); }}>
+          Delete
           <FontAwesomeIcon icon={faTrashAlt} size="1x" />
         </button>
       </td>
