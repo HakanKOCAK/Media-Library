@@ -34,11 +34,6 @@ export function getAllFiles(offset, limit) {
           type: GET_FILES_SUCCESS,
           payload: response.data,
         });
-      } else if (response.successs) {
-        dispatch({
-          type: GET_FILES_FAIL,
-        });
-        dispatch(setDialog('error', { errors: response.errors }));
       }
       dispatch(setFilesLoaded(true));
       return { success: true, noMore: response.noMore };
@@ -123,7 +118,7 @@ export function addSize(submissionId, url) {
     } catch (error) {
       dispatch({
         type: ADD_SIZE,
-        payload: { submissionId, prettifiedSize: 'N/A' },
+        payload: { submissionId, size: 'N/A', prettifiedSize: 'N/A' },
       });
     }
   };
