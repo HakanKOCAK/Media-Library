@@ -12,15 +12,18 @@ const Image = (props) => {
   };
 
   return (
-    <div className="image-container">
-      <Spinner styled={false} />
-      <img
-        alt="submitted-img"
-        className="image"
-        src={url}
-        style={loaded ? { opacity: '1' } : { opacity: '0' }}
-        onLoad={() => handleImageLoaded()}
-      />
+    <div className="media-container">
+      <div style={loaded ? { display: 'none' } : {}}>
+        <Spinner modified />
+      </div>
+      <div style={loaded ? {} : { display: 'none' }}>
+        <img
+          alt="submitted-img"
+          className="media"
+          src={url}
+          onLoad={() => handleImageLoaded()}
+        />
+      </div>
     </div>
   );
 };
