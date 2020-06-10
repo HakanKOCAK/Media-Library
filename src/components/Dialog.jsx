@@ -22,6 +22,7 @@ const Dialog = (props) => {
         type: HIDE_DIALOG,
       });
     } else if (type !== 'authentication') {
+      console.log('here');
       dispatch({
         type: SET_DIALOG,
         payload: { type: 'authentication', data: { func: data.func, isAuthRequired: true } },
