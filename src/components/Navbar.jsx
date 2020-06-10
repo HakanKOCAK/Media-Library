@@ -30,14 +30,14 @@ const Navbar = ({ user: { isAuthenticated, displayName } }) => {
             style={{ marginRight: '3px' }}
             icon={faUserCircle}
           />
-          <span className="navbar-profile-name">{displayName}</span>
+          <span className="ignore">{displayName}</span>
         </Link>
       </li>
       <li>
         <Link to="/" onClick={(event) => logout(event)}>
           <FontAwesomeIcon icon={faSignOutAlt} />
           {' '}
-          <span className="navbar-logout">Signout</span>
+          <span className="ignore">Signout</span>
         </Link>
       </li>
     </>
@@ -46,10 +46,10 @@ const Navbar = ({ user: { isAuthenticated, displayName } }) => {
   const guestLinks = (
     <>
       <li>
-        <Link to="/register">Sign Up</Link>
+        <Link className="ignore" to="/register">Sign Up</Link>
       </li>
       <li>
-        <Link to="/login">Sign In</Link>
+        <Link className="ignore" to="/login">Sign In</Link>
       </li>
     </>
   );

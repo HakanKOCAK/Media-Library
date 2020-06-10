@@ -39,19 +39,12 @@
     color:#17a2b8
 }
 
-.navbar-profile-name{
-  display: none;
-}
-
-.navbar-logout{
+.ignore{
   display: none;
 }
 
 @media screen and (min-width: 768px) {
-    .navbar-logout {
-        display: inherit;
-    }
-    .navbar-profile-name{
+    .ignore {
         display: inherit;
     }
 }
