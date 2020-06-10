@@ -307,6 +307,14 @@ const FileList = (props) => {
   }, [filesArray, limitAndOffset]);
 
   const notificationMessage = () => {
+    if (filesArray.length === 0) {
+      return (
+        <div style={{ textAlign: 'center' }}>
+          There are no files.
+        </div>
+      );
+    }
+
     if (isLoading) {
       return (
         <div style={{ textAlign: 'center' }}>
@@ -324,13 +332,18 @@ const FileList = (props) => {
         </span>
       );
     }
-    return (
-      <span
-        style={{ fontSize: '10px', display: 'block', textAlign: 'center' }}
-      >
-        Scroll down to load more
-      </span>
-    );
+    if (filesArray.length > 6) {
+      return (
+        <span
+          style={{ fontSize: '10px', display: 'block', textAlign: 'center' }}
+        >
+          Scroll down to load more
+        </span>
+      );
+    }
+
+    return null;
+
   };
 
   return (
