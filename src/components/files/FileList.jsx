@@ -357,64 +357,66 @@ const FileList = (props) => {
           onChange={(event) => (setSearchTag(event.target.value))}
         />
       </div>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Name Surname</th>
-            <th>E-mail</th>
-            <th
-              className="clickable"
-            >
-              <button type="button" className="header-button" onClick={() => onHeaderClick('date')}>
-                Upload Date
-                {' '}
-                {`${filter.active.date && filter.priority.length > 1 ? `(${filter.priority.indexOf('date') + 1})` : ''}`}
-                {' '}
-                {getArrowType('date')}
-              </button>
-            </th>
-            <th>File Name</th>
-            <th>File Type</th>
-            <th
-              className="clickable"
-            >
-              <button type="button" className="header-button" onClick={() => onHeaderClick('size')}>
-                File Size
-                {' '}
-                {`${filter.active.size && filter.priority.length > 1 ? `(${filter.priority.indexOf('size') + 1})` : ''}`}
-                {' '}
-                {getArrowType('size')}
-              </button>
-            </th>
-            <th
-              className="clickable"
-              onClick={() => onHeaderClick('duration')}
-            >
-              <button type="button" className="header-button" onClick={() => onHeaderClick('duration')}>
-                Duration
-                {' '}
-                {`${filter.active.duration && filter.priority.length > 1 ? `(${filter.priority.indexOf('duration') + 1})` : ''}`}
-                {' '}
-                {getArrowType('duration')}
-              </button>
-            </th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {toDisplay.slice(limitAndOffset.offset, limitAndOffset.limit).map((item) => (
-            <ListItem
-              key={item.submissionId}
-              handleClick={handleClick}
-              onEdit={onEdit}
-              onDelete={onDelete}
-              onReady={onReady}
-              addSize={addFileSize}
-              file={item}
-            />
-          ))}
-        </tbody>
-      </table>
+      <div className="table-container">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Name Surname</th>
+              <th>E-mail</th>
+              <th
+                className="clickable"
+              >
+                <button type="button" className="header-button" onClick={() => onHeaderClick('date')}>
+                  Upload Date
+                  {' '}
+                  {`${filter.active.date && filter.priority.length > 1 ? `(${filter.priority.indexOf('date') + 1})` : ''}`}
+                  {' '}
+                  {getArrowType('date')}
+                </button>
+              </th>
+              <th>File Name</th>
+              <th>File Type</th>
+              <th
+                className="clickable"
+              >
+                <button type="button" className="header-button" onClick={() => onHeaderClick('size')}>
+                  File Size
+                  {' '}
+                  {`${filter.active.size && filter.priority.length > 1 ? `(${filter.priority.indexOf('size') + 1})` : ''}`}
+                  {' '}
+                  {getArrowType('size')}
+                </button>
+              </th>
+              <th
+                className="clickable"
+                onClick={() => onHeaderClick('duration')}
+              >
+                <button type="button" className="header-button" onClick={() => onHeaderClick('duration')}>
+                  Duration
+                  {' '}
+                  {`${filter.active.duration && filter.priority.length > 1 ? `(${filter.priority.indexOf('duration') + 1})` : ''}`}
+                  {' '}
+                  {getArrowType('duration')}
+                </button>
+              </th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {toDisplay.slice(limitAndOffset.offset, limitAndOffset.limit).map((item) => (
+              <ListItem
+                key={item.submissionId}
+                handleClick={handleClick}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                onReady={onReady}
+                addSize={addFileSize}
+                file={item}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
       {notificationMessage()}
     </>
   );
