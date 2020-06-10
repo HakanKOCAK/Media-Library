@@ -111,7 +111,7 @@ export default function (state = initialState, action) {
     }
     case REMOVE_FILES:
       return {
-        initialState,
+        entities: {},
       };
     default:
       return state;

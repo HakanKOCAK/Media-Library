@@ -21,20 +21,17 @@ const Profile = (props) => {
   const [flags, setFlag] = useState(config);
 
   useEffect(() => {
-    if (password.length < 6) {
-      setFlag({ ...flags, PASSWORD_LENGTH: true });
+    if (password && password.length < 6) {
+      setFlag((prev) => ({ ...prev, PASSWORD_LENGTH: true }));
     } else {
-      setFlag({ ...flags, PASSWORD_LENGTH: false });
+      setFlag((prev) => ({ ...prev, PASSWORD_LENGTH: false }));
     }
-  }, [password]);
-
-  useEffect(() => {
     if (password2 !== password) {
-      setFlag({ ...flags, PASSWORDS_DO_NOT_MATCH: true });
+      setFlag((prev) => ({ ...prev, PASSWORDS_DO_NOT_MATCH: true }));
     } else {
-      setFlag({ ...flags, PASSWORDS_DO_NOT_MATCH: false });
+      setFlag((prev) => ({ ...prev, PASSWORDS_DO_NOT_MATCH: false }));
     }
-  }, [password2]);
+  }, [password, password2]);
 
   const onChange = (event) => {
     const { name, value } = event.currentTarget;

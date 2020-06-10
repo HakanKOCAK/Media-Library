@@ -15,9 +15,9 @@ const Auth = (props) => {
 
   useEffect(() => {
     if (password && password.length < 6) {
-      setFlags({ ...flags, PASSWORD_LENGTH: true });
+      setFlags((prev) => ({ ...prev, PASSWORD_LENGTH: true }));
     } else {
-      setFlags({ ...flags, PASSWORD_LENGTH: false });
+      setFlags((prev) => ({ ...prev, PASSWORD_LENGTH: false }));
     }
   }, [password]);
 

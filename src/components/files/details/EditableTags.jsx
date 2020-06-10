@@ -227,11 +227,9 @@ const EditableTags = (props) => {
             new: isNew,
             edited: isEdited,
           } = item[1];
-
           return (
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div key={tagId} style={{ display: 'flex', flexDirection: 'column' }}>
               <div
-                key={tagId}
                 role="button"
                 onFocus={() => onEnter(tagId)}
                 onBlur={() => onLeave(tagId)}
@@ -239,7 +237,7 @@ const EditableTags = (props) => {
                 className={`tag ${visible[tagId] ? getTagClasses(tagId) : ''}`}
                 onMouseEnter={() => onEnter(tagId)}
                 onMouseLeave={() => onLeave(tagId)}
-                onKeyDown={() => { return type === 'Video/Audio' ? onSeekTo(start) : null; }}
+                onKeyDown={() => { }}
                 onClick={() => { return type === 'Video/Audio' ? onSeekTo(start) : null; }}
               >
                 <div className="icon-container right">
@@ -258,7 +256,6 @@ const EditableTags = (props) => {
                       : null
                   }
                 </div>
-
                 <input
                   disabled={!edit[tagId]}
                   className={`tag-input ${visible[tagId] ? getInputBoxClasses(tagId) : ''}`}

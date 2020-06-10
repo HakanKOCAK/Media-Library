@@ -24,17 +24,17 @@ const Login = () => {
 
   useEffect(() => {
     if (!emailCheck(email) && email.length) {
-      setFlag({ ...flags, EMAIL_FORMAT: true });
+      setFlag((prev) => ({ ...prev, EMAIL_FORMAT: true }));
     } else {
-      setFlag({ ...flags, EMAIL_FORMAT: false });
+      setFlag((prev) => ({ ...prev, EMAIL_FORMAT: false }));
     }
   }, [email]);
 
   useEffect(() => {
     if (password.length < 6 && password.length) {
-      setFlag({ ...flags, PASSWORD_LENGTH: true });
+      setFlag((prev) => ({ ...prev, PASSWORD_LENGTH: true }));
     } else {
-      setFlag({ ...flags, PASSWORD_LENGTH: false });
+      setFlag((prev) => ({ ...prev, PASSWORD_LENGTH: false }));
     }
   }, [password]);
 
@@ -54,8 +54,8 @@ const Login = () => {
     event.preventDefault();
     setProgress(true);
     dispatch(submitLogin(submittedEmail, submittedPassword)).then((response) => {
-      setProgress(false);
       if (response.error) {
+        setProgress(false);
         switch (response.error.code) {
           case 'auth/wrong-password':
             setFlag({

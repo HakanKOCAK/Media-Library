@@ -29,44 +29,41 @@ const Register = () => {
   const [flags, setFlag] = useState(config);
 
   useEffect(() => {
-    if (!nameSurnameCheck(firstName)) {
-      setFlag({ ...flags, INVALID_NAME: true });
+    if (firstName && !nameSurnameCheck(firstName)) {
+      setFlag((prev) => ({ ...prev, INVALID_NAME: true }));
     } else {
-      setFlag({ ...flags, INVALID_NAME: false });
+      setFlag((prev) => ({ ...prev, INVALID_NAME: false }));
     }
   }, [firstName]);
 
   useEffect(() => {
-    if (!nameSurnameCheck(surname)) {
-      setFlag({ ...flags, INVALID_SURNAME: true });
+    if (surname && !nameSurnameCheck(surname)) {
+      setFlag((prev) => ({ ...prev, INVALID_SURNAME: true }));
     } else {
-      setFlag({ ...flags, INVALID_SURNAME: false });
+      setFlag((prev) => ({ ...prev, INVALID_SURNAME: false }));
     }
   }, [surname]);
 
   useEffect(() => {
-    if (!emailCheck(email)) {
-      setFlag({ ...flags, EMAIL_FORMAT: true, USER_EXIST: false });
+    if (email && !emailCheck(email)) {
+      setFlag((prev) => ({ ...prev, EMAIL_FORMAT: true, USER_EXIST: false }));
     } else {
-      setFlag({ ...flags, EMAIL_FORMAT: false, USER_EXIST: false });
+      setFlag((prev) => ({ ...prev, EMAIL_FORMAT: false, USER_EXIST: false }));
     }
   }, [email]);
 
   useEffect(() => {
-    if (password.length < 6) {
-      setFlag({ ...flags, PASSWORD_LENGTH: true });
+    if (password && password.length < 6) {
+      setFlag((prev) => ({ ...prev, PASSWORD_LENGTH: true }));
     } else {
-      setFlag({ ...flags, PASSWORD_LENGTH: false });
+      setFlag((prev) => ({ ...prev, PASSWORD_LENGTH: false }));
     }
-  }, [password]);
-
-  useEffect(() => {
     if (password2 !== password) {
-      setFlag({ ...flags, PASSWORDS_DO_NOT_MATCH: true });
+      setFlag((prev) => ({ ...prev, PASSWORDS_DO_NOT_MATCH: true }));
     } else {
-      setFlag({ ...flags, PASSWORDS_DO_NOT_MATCH: false });
+      setFlag((prev) => ({ ...prev, PASSWORDS_DO_NOT_MATCH: false }));
     }
-  }, [password2]);
+  }, [password, password2]);
 
   const onChange = (event) => {
     const { name, value } = event.currentTarget;
@@ -116,8 +113,8 @@ const Register = () => {
         submittedEmail,
         submittedPassword,
       )).then((response) => {
-        setProgress(false);
         if (response.error && response.error.code === 'auth/email-already-in-use') {
+          setProgress(false);
           setFlag({ ...flags, USER_EXIST: true });
         }
       });
@@ -143,7 +140,7 @@ const Register = () => {
               aria-label="First Name"
               aria-required="true"
               style={{ marginRight: '5px' }}
-              className={flags.EMPTY_NAME ? 'error' : ''}
+              className={flags.INVALID_NAME ? 'error' : ''}
               value={firstName}
               onChange={(event) => onChange(event)}
               required
@@ -163,7 +160,7 @@ const Register = () => {
               aria-label="Surname"
               aria-required="true"
               name="surname"
-              className={flags.EMPTY_SURNAME ? 'error' : ''}
+              className={flags.INVALID_SURNAME ? 'error' : ''}
               value={surname}
               onChange={(event) => onChange(event)}
               required

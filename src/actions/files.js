@@ -50,6 +50,7 @@ export function getAllFiles(offset, limit) {
       errors.push(error);
       dispatch(('error', { errors }));
       dispatch(setFilesLoaded(true));
+      return { success: false };
     }
   };
 }
@@ -122,7 +123,7 @@ export function addSize(submissionId, url) {
     } catch (error) {
       dispatch({
         type: ADD_SIZE,
-        payload: { submissionId, size: 'N/A' },
+        payload: { submissionId, prettifiedSize: 'N/A' },
       });
     }
   };

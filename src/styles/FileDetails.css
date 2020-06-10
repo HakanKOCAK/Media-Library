@@ -136,7 +136,7 @@
 
 .icon-container{
     display: flex;
-    min-width: 40px;
+    min-width: 35px;
     flex-grow: 1;
     justify-content: space-evenly;
 }

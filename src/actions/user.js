@@ -14,11 +14,10 @@ export const removeUserData = () => (dispatch) => {
     type: REMOVE_USER_DATA,
     payload: false,
   });
-  dispatch(setUserLoaded(true));
-  dispatch(setFilesLoaded(false));
 };
 
 export const setUserData = (email, displayName) => (dispatch) => {
+  dispatch(setFilesLoaded(false));
   dispatch({
     type: SET_USER_DATA,
     payload: { email, displayName, isAuthenticated: true },
@@ -55,6 +54,8 @@ export const loadUser = () => (dispatch) => {
   authService.onAuthStateChanged((authUser) => {
     if (!authUser) {
       dispatch(removeUserData());
+      dispatch(setUserLoaded(true));
+      dispatch(setFilesLoaded(true));
     } else {
       dispatch(setUserData(authUser.email, authUser.displayName));
     }

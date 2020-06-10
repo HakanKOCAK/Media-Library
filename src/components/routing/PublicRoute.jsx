@@ -10,7 +10,6 @@ const PublicRoute = ({
   user: { isAuthenticated },
   ...rest
 }) => {
-
   const result = (props) => {
     if (!userLoaded) {
       return <Spinner />;
