@@ -101,16 +101,28 @@ const ListItem = (props) => {
 
       </td>
       <td className="toolbar">
-        <button type="button" className="icon" onClick={(event) => handleClick(event)}>
-          Details
+        <button
+          aria-label="Details"
+          type="button"
+          className="icon"
+          onClick={(event) => handleClick(event)}
+        >
           <FontAwesomeIcon icon={faSearch} size="1x" />
         </button>
-        <button type="button" className="icon" onClick={(event) => onEdit(event)}>
-          Edit
+        <button
+          aria-label="Edit"
+          type="button"
+          className="icon"
+          onClick={(event) => onEdit(event)}
+        >
           <FontAwesomeIcon icon={faEdit} size="1x" />
         </button>
-        <button type="button" className="icon" onClick={(event) => { event.stopPropagation(); onDelete(); }}>
-          Delete
+        <button
+          aria-label="Delete"
+          type="button"
+          className="icon"
+          onClick={(event) => { event.stopPropagation(); onDelete(); }}
+        >
           <FontAwesomeIcon icon={faTrashAlt} size="1x" />
         </button>
       </td>
