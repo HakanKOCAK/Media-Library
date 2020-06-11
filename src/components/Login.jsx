@@ -119,6 +119,7 @@ const Login = () => {
             placeholder="Password"
             name="userPassword"
             minLength="6"
+            required
             value={password}
             onChange={(event) => onChange(event)}
           />
