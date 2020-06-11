@@ -323,16 +323,7 @@ const FileList = (props) => {
       );
     }
 
-    if (noMore) {
-      return (
-        <span
-          style={{ fontSize: '10px', display: 'block', textAlign: 'center' }}
-        >
-          No more files
-        </span>
-      );
-    }
-    if (filesArray.length > 6) {
+    if (limitAndOffset.limit < filesArray.length) {
       return (
         <span
           style={{ fontSize: '10px', display: 'block', textAlign: 'center' }}
@@ -342,8 +333,13 @@ const FileList = (props) => {
       );
     }
 
-    return null;
-
+    return (
+      <span
+        style={{ fontSize: '10px', display: 'block', textAlign: 'center' }}
+      >
+        No more files
+      </span>
+    );
   };
 
   return (

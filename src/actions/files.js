@@ -29,7 +29,7 @@ export function getAllFiles(offset, limit) {
 
       const response = await getFiles(offset, limit);
 
-      if (response.success && !response.noMore) {
+      if (response.success) {
         dispatch({
           type: GET_FILES_SUCCESS,
           payload: response.data,

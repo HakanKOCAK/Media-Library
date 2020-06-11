@@ -12,14 +12,14 @@ export default async function getFiles(offset, limit) {
       },
     };
 
+    let noMore = false;
     const res = await axios.get(`https://api.jotform.com/form/${formId}/submissions`, config);
     if (res.data.responseCode === 200) {
       const content = [...res.data.content];
-      if (!content.length) {
-        return { success: true, noMore: true };
+      if (content.length < limit) {
+        noMore = true;
       }
       const answers = await getAnswers(content);
-
 
       const updatedAnswers = (data) => {
         const getFileName = (url) => {
@@ -35,8 +35,7 @@ export default async function getFiles(offset, limit) {
       };
 
       const answersWithNames = { ...updatedAnswers({ ...answers }) };
-
-      return { success: true, data: answersWithNames, noMore: false };
+      return { success: true, data: answersWithNames, noMore };
     }
     const errors = [];
     errors.push(res.data.message);
