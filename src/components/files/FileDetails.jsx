@@ -61,8 +61,7 @@ const FileDetails = (props) => {
     dispatch(setDialog('delete', {
       type: 'tag',
       name: tagName,
-      func: deleteTag({ submissionId: id, tagId }),
-      isAuthRequired: true,
+      func: deleteTag({ submissionId: id, tagId })
     }));
   };
 
